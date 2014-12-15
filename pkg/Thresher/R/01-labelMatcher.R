@@ -46,7 +46,7 @@ labelAccuracy <- function(data, labels) {
   labels <- as.factor(labels)
   nGroups <- length(levels(labels))
   accu <- sapply(metrics, function(m) {
-    hc <- hclust(distanceMatrix(data, m, p=1), "ward")
+    hc <- hclust(distanceMatrix(data, m, p=1), "ward.D2")
     tab <- table(labels, paste("K", cutree(hc, k=nGroups), sep=""))  
     countAgreement(tab)
   })

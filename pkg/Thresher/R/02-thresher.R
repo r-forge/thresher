@@ -62,7 +62,7 @@ Thresher <- function(data,
   loadings <- sweep(spca@components, 2, lambda, "*")
   delta  <- sqrt(apply(loadings[,1:deltaDim,drop=FALSE]^2, 1, sum))
   # clustering so we only do it once -- more or less
-  gc <- hclust(distanceMatrix(std, metric), "ward")
+  gc <- hclust(distanceMatrix(std, metric), "ward.D2")
   new("Thresher",
       name=nm, data=data, spca=spca, loadings=loadings,
       gc=gc, pcdim=pcdim, delta=delta, ag=ag)

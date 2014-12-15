@@ -110,9 +110,9 @@ setClass("SignalSet",
   }
   contSignal <- as.matrix(as.data.frame(signals))
   colnames(contSignal) <- paste("Sig", 1:length(signals), sep="")
-  conClust <- hclust(distanceMatrix(t(contSignal), "euclid"), "ward")
+  conClust <- hclust(distanceMatrix(t(contSignal), "euclid"), "ward.D2")
   binSignal <- 1*(contSignal > 0)
-  binClust <- hclust(dist.binary(binSignal, method=2), "ward")
+  binClust <- hclust(dist.binary(binSignal, method=2), "ward.D2")
   new("SignalSet",
       members=members,
       continuous=contSignal,
@@ -172,7 +172,7 @@ Reaper <- function(thresher,
     if (is.null(metric)) {
       pp <- factor(paste("G", predict(fit), sep=""))
       metric <- bestMetric(cleaned@data, pp)
-      cleaned@gc <- hclust(distanceMatrix(cleaned@data, metric, p=1), "ward")
+      cleaned@gc <- hclust(distanceMatrix(cleaned@data, metric, p=1), "ward.D2")
     }
     if (any(tab==0)) {
       sigset <- new("SignalSet")
