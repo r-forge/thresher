@@ -40,7 +40,7 @@ setClass("SignalSet",
            binaryClusters="hclust"
            ))
 
-.findSignals <- function(thresher, fit, nGroups) {
+.findSignals <- function(thresher, fit, nGroups, linkage="ward.D2") {
   gassign <- predict(fit) # groups of features defined by vMF mixture.
   # get feature names in each group
   featureNames <- lapply(1:nGroups, function(idx) {
@@ -110,9 +110,9 @@ setClass("SignalSet",
   }
   contSignal <- as.matrix(as.data.frame(signals))
   colnames(contSignal) <- paste("Sig", 1:length(signals), sep="")
-  conClust <- hclust(distanceMatrix(t(contSignal), "euclid"), "ward.D2")
+  conClust <- hclust(distanceMatrix(t(contSignal), "euclid"), linkage)
   binSignal <- 1*(contSignal > 0)
-  binClust <- hclust(dist.binary(binSignal, method=2), "ward.D2")
+  binClust <- hclust(dist.binary(binSignal, method=2), linkage)
   new("SignalSet",
       members=members,
       continuous=contSignal,
@@ -139,6 +139,7 @@ Reaper <- function(thresher,
                    useLoadings=FALSE,
                    cutoff=0.3,
                    metric=NULL,
+                   linkage="ward.D2",
                    maxSampleGroups=0,
                    verbose=TRUE,
                    ...) {
@@ -172,12 +173,12 @@ Reaper <- function(thresher,
     if (is.null(metric)) {
       pp <- factor(paste("G", predict(fit), sep=""))
       metric <- bestMetric(cleaned@data, pp)
-      cleaned@gc <- hclust(distanceMatrix(cleaned@data, metric, p=1), "ward.D2")
+      cleaned@gc <- hclust(distanceMatrix(cleaned@data, metric, p=1), linkage)
     }
     if (any(tab==0)) {
       sigset <- new("SignalSet")
     } else {
-      sigset <- .findSignals(cleaned, fit, ng)
+      sigset <- .findSignals(cleaned, fit, ng, linkage=linkage)
     }
   }
   new("Reaper", cleaned, useLoadings=useLoadings,

@@ -8,7 +8,9 @@ Thresher
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Thresher(data, nm = deparse(substitute(data)), FUZZ = 0.005, metric = "pearson", method = c("broken.stick", "auer.gervini"))
+Thresher(data, nm = deparse(substitute(data)), FUZZ = 0.005,
+         metric = "pearson", lonkage="ward.D2",
+         method = c("broken.stick", "auer.gervini"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +24,9 @@ Thresher(data, nm = deparse(substitute(data)), FUZZ = 0.005, metric = "pearson",
 %%     ~~Describe \code{FUZZ} here~~
 }
   \item{metric}{
+%%     ~~Describe \code{metric} here~~
+}
+  \item{linkage}{
 %%     ~~Describe \code{metric} here~~
 }
   \item{method}{

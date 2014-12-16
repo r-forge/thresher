@@ -13,7 +13,7 @@ Match Arbitrary Class Assignments Across Methods
 \usage{
 matchLabels(tab)
 labelMatcher(tab, verbose = FALSE)
-labelAccuracy(data, labels)
+labelAccuracy(data, labels, linkage="ward.D2")
 countAgreement(tab)
 bestMetric(data, labels)
 }
@@ -29,6 +29,9 @@ bestMetric(data, labels)
 %%     ~~Describe \code{data} here~~
 }
   \item{labels}{
+%%     ~~Describe \code{labels} here~~
+}
+  \item{linkage}{
 %%     ~~Describe \code{labels} here~~
 }
 }

@@ -48,6 +48,7 @@ Thresher <- function(data,
                      nm=deparse(substitute(data)),
                      FUZZ=0.005,
                      metric="pearson",
+                     linkage="ward.D2",
                      method=c("broken.stick", "auer.gervini")) {
   std <- scale(data)
   spca <- SamplePCA(t(std))
@@ -62,7 +63,7 @@ Thresher <- function(data,
   loadings <- sweep(spca@components, 2, lambda, "*")
   delta  <- sqrt(apply(loadings[,1:deltaDim,drop=FALSE]^2, 1, sum))
   # clustering so we only do it once -- more or less
-  gc <- hclust(distanceMatrix(std, metric), "ward.D2")
+  gc <- hclust(distanceMatrix(std, metric), linkage)
   new("Thresher",
       name=nm, data=data, spca=spca, loadings=loadings,
       gc=gc, pcdim=pcdim, delta=delta, ag=ag)

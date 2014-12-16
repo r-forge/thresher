@@ -37,7 +37,7 @@ countAgreement <- function(tab) {
   sum(diag( matchLabels(tab) ))
 }
 
-labelAccuracy <- function(data, labels) {
+labelAccuracy <- function(data, labels, linkage="ward.D2") {
   # order matters: we pick the first of 'most accurate' as best
   metrics <- c("pearson", "spearman", "euclidean",
                "uncentered correlation",  "absolute pearson",
@@ -46,7 +46,7 @@ labelAccuracy <- function(data, labels) {
   labels <- as.factor(labels)
   nGroups <- length(levels(labels))
   accu <- sapply(metrics, function(m) {
-    hc <- hclust(distanceMatrix(data, m, p=1), "ward.D2")
+    hc <- hclust(distanceMatrix(data, m, p=1), linkage)
     tab <- table(labels, paste("K", cutree(hc, k=nGroups), sep=""))  
     countAgreement(tab)
   })

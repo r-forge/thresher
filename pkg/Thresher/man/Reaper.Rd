@@ -8,7 +8,9 @@ Reaper
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-Reaper(thresher, useLoadings = FALSE, cutoff = 0.3, metric = NULL, maxSampleGroups = 0, verbose = TRUE, ...)
+Reaper(thresher, useLoadings = FALSE, cutoff = 0.3,
+       metric = NULL, linkage="ward.D2",
+       maxSampleGroups = 0, verbose = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +24,9 @@ Reaper(thresher, useLoadings = FALSE, cutoff = 0.3, metric = NULL, maxSampleGrou
 %%     ~~Describe \code{cutoff} here~~
 }
   \item{metric}{
+%%     ~~Describe \code{metric} here~~
+}
+  \item{LINKAGE}{
 %%     ~~Describe \code{metric} here~~
 }
   \item{maxSampleGroups}{
