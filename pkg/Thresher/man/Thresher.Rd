@@ -9,7 +9,7 @@ Thresher
 }
 \usage{
 Thresher(data, nm = deparse(substitute(data)), FUZZ = 0.005,
-         metric = "pearson", lonkage="ward.D2",
+         metric = "pearson", linkage="ward.D2",
          method = c("broken.stick", "auer.gervini"))
 }
 %- maybe also 'usage' for other objects documented here.

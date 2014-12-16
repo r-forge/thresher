@@ -26,7 +26,7 @@ Reaper(thresher, useLoadings = FALSE, cutoff = 0.3,
   \item{metric}{
 %%     ~~Describe \code{metric} here~~
 }
-  \item{LINKAGE}{
+  \item{linkage}{
 %%     ~~Describe \code{metric} here~~
 }
   \item{maxSampleGroups}{
