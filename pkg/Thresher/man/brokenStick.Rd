@@ -19,6 +19,11 @@ bsDimension(lambda, FUZZ = 0.005)
   \item{FUZZ}{}
 }
 \details{
+  The Broken Stick model is one proposed method for estimating the
+  number of statistically significant principal components.  The idea is
+  to model $N$ variances by taking a stick of unit length and breaking it
+  into $N$ pieces by randomly slecting break points from a uniform
+  distribution. 
 
 }
 \value{
