@@ -92,9 +92,22 @@ setMethod("getColors", "Thresher", function(object, K=NULL) {
   thresherPalette[cutree(object@gc, k=K)]
 })
 
+if (!isGeneric("getStyles"))
+  setGeneric("getStyles",
+             function(object, ...) { standardGeneric("getStyles") }
+             )
+
+setMethod("getStyles", "Thresher", function(object, K=NULL) {
+  if (is.null(K)) K <- 1 + trunc(log2(ncol(object@data)))
+  gps <- cutree(object@gc, k=K) 
+  L <- length(thresherPalette)
+  1 + trunc(gps/L)
+})
+
 setMethod("plot", c("Thresher", "missing"), function(x, y, ij=1:2, ...) {
   if (length(ij) < 2) ij <- 1:2 # TODO: something better?
   abcols <- getColors(x)
+  abstys <- getStyles(x)
   xx <- x@loadings[,ij[1]]
   yy <- x@loadings[,ij[2]]
   plot(xx, yy, type='n', main=x@name,
@@ -102,9 +115,8 @@ setMethod("plot", c("Thresher", "missing"), function(x, y, ij=1:2, ...) {
        xlab=paste("PC", ij[1], sep=""),
          ylab=paste("PC", ij[2], sp=""))
   for (kdx in 1:nrow(x@loadings)) {
-    sty <- 1 + trunc(kdx/length(thresherPalette))
     lines(c(0, xx[kdx]), c(0, yy[kdx]), lwd=3,
-          col=abcols[kdx], lty=sty) # here be monsters
+          col=abcols[kdx], lty=abstys[kdx]) # here be monsters
   }
   text(xx, yy, rownames(x@loadings), col='black')
   invisible(x)

@@ -44,7 +44,7 @@ export("Reaper")
 exportMethods("plot", "image", "screeplot")
 
 # novel generic functions
-exportMethods("makeFigures", "getColors", "getSplit", "scatter", "heat")
+exportMethods("makeFigures", "getColors", "getStyles", "getSplit", "scatter", "heat")
 
 
 #importFrom(stats, "anova")

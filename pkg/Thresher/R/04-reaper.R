@@ -243,6 +243,12 @@ setMethod("getColors", "Reaper", function(object, K=NULL) {
   thresherPalette[abnum]
 })
 
+setMethod("getStyles", "Reaper", function(object, K=NULL) {
+  if(is.null(K)) K <- object@nGroups
+  abnum <- predict(object@fit)
+  1 +  trunc(abnum/length(thresherPalette))
+})
+
 unitize <- function(mat) {
   enorm <- sqrt(apply(mat^2, 2, sum))
   sweep(mat, 2, enorm, "/")
