@@ -1,0 +1,571 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{hyperref}
+\pagestyle{myheadings}
+\markright{reaper}
+
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+
+\def\rcode#1{\texttt{#1}}
+\def\fref#1{\textbf{Figure~\ref{#1}}}
+\def\tref#1{\textbf{Table~\ref{#1}}}
+\def\sref#1{\textbf{Section~\ref{#1}}}
+
+\title{Reaper: More Simulations for the ``Thresher'' Paper}
+\author{Kevin R. Coombes}
+\date{29 November 2013}
+
+\SweaveOpts{prefix.string=Figures/reaper}
+<<setOptions,echo=FALSE>>=
+options(width=88)
+options(SweaveHooks = list(fig = function() par(bg='white')))
+@ 
+
+<<makeFiguresDirectory,echo=FALSE>>=
+if (!file.exists("Figures")) {
+  dir.create("Figures")
+}
+@ 
+
+\begin{document}
+\maketitle
+\tableofcontents
+\listoffigures
+
+\section{Executive Summary}
+\subsection{Introduction}
+This report describes the (second) analysis of simulated data sets to
+test the behavior of our proposed methods for analyzing continuous
+pathway data.
+
+\subsubsection{Aims/Objectives}
+We want to see whether the methods can identify the correct number of
+protein clusters (which should be between $1$ and $4$ in our simulated
+datasets).
+
+\subsection{Methods}
+
+\subsubsection{Description of the Data}
+In the previous report, we simulated and saved $2500$ datasets with a
+few proteins (around $10$--$20$) and many samples (median: $304$,
+range: $126$--$506$).  Each dataset exhibits either one or two
+independent correlated signals.  Each signal can be unsigned (all
+proteins are positively correlated, so a reasonable summary would be a
+simple average of all proteins) or signed (including both positively
+and negatively correlated proteins, so a reasonable summary requires
+looking at a difference between two group averages).  Each dataset
+also contains two ``noise'' genes that are not correlated with any of
+the simulated signals.
+
+\subsubsection{Statistical Methods}
+We use the ``Thresher'' algorithm described in the previous report,
+with a cutoff $\Delta \le 0.3$, to detect outliers or ``noise''
+proteins.  We use the Auer-Gervini approach to estimate the number $K$
+of signfiicant principal components.  We fit a mixture of von Mises -
+Fisher distributions to cluster the protein directions (on a unit
+sphere) into $N= K$, $K+1$, \ldots, $2K+1$ protein groups.  To select
+the optimal number of protein groups, we compute the Bayesian
+Information Criterion (BIC) for each $N$; the best number corresponds
+to the minimum BIC.
+
+\subsection{Results}
+\begin{itemize}
+\item The estimated number of principal components is (a) always
+  correct if the true dimension equals $1$ and (b) is correct $94\%$
+  of the time when the true dimension equals $2$ (\sref{pcdim}).
+\item When clustering in the space of principal component loadings,
+  the estimated number of protein groups is correct $73\%$ of the time
+  (\sref{pcload}). If you only consider situations where the PC
+  dimenion was correctly estimated, then the number of protein groups
+  is correct $75\%$ or the time.
+\item When clustering in the complete protein-sample space, the
+  estimated number of protein groups is correct $86\%$ of the time
+  (\sref{fullspace}).  If you only consider situations where the PC
+  dimenion was correctly estimated, then the number of protein groups
+  is correct $89\%$ or the time.
+\item After removing outliers and estimating the number of protien
+  groups, the plots give a clearer idea of the true underlying
+  structure. (For loadings, compare \fref{loadings} to
+  \fref{cleaned-loadings}. For heatmaps, compare \fref{heatmap} to
+  \fref{cleaned-heatmap}.  For samples in principal component space,
+  compare \fref{spca} to \fref{cleaned-spca}.)
+\end{itemize}
+
+\subsection{Conclusions}
+The Thresher-Reaper methods provide effective tools for removing
+outliers and detemineing the correct number of protein groups in
+(simulated) data sets containing  about $10$--$20$ proteins.
+
+\section{Preliminaries / Methods}
+\subsection{Library Packages}
+We start by loading all of the R library packages that we need for this
+analysis. 
+<<libraries>>=
+library(Thresher)
+library(RColorBrewer)   # for sensible color schemes
+@ 
+
+\subsection{The Data Sets}
+Next, we load the simulated datasets from the first report.
+<<load>>=
+load("savedSims.rda")
+class(savedSims)
+length(savedSims)
+@ 
+
+\section{Three Examples}
+\label{eg3}
+We run the following loop of code to create the five standard figures
+for several different sample datasets.
+<<do.loop,results=hide>>=
+if (!file.exists("SimFigs")) {
+  dir.create("SimFigs")
+  for (idx in 1:40) { # really, do not do 2500 of these ...
+    makeFigures(savedSims[[idx]], DIR="SimFigs")
+  }
+}
+@ 
+<<hideme,echo=FALSE,results=hide>>=
+makeFigures(savedSims[[150]], DIR="SimFigs")
+#makeFigures(savedSims[[150]])
+@ 
+
+We now plot a series of standard figures for a (related) trio of
+example datasets. \fref{ss} shows the (true) correlation matrices that
+were used to simulate the data.  All three datasets contain two groups
+of proteins, and these are the same size in each dataset.  In the
+dataset on top, all proteins within a group are positively correlated;
+in the datasets in the middle and on the bottom, some proteins are
+positively and some are negatively correlated.
+
+\fref{heatmap} presents clustered heatmaps of the three simulated
+datasets.  In all cases, simulated proteins P21 and P22 are outliers
+or ``noise'' proteins (which are forced to cluster somewhere).  For
+the samples, however, the main structure seems to be the ``off'' or
+``on'' status of different sets of genes. Interestingly, the top two
+figures look similar \textit{even though we know the underlying
+  structure is different}.  In the top dataset, all proteins within a
+``signal group'' are positively correlated, so we expect the
+``blue''-or-``red'' and ``green'' proteins to mark the two clusters of
+``signal'' proteins.  In the middle dataset, by contrast, we expect to
+have both postive and negative correlation. So, we expect to see four
+clusters of proteins (one for the positive and one for the negative of
+each of the two signal groups).  While there are apparently four
+protein clusters, it is not clear how to get the correlation
+information from this plot.  The bottom ``mixed'' dataset correctly
+shows three groups of proteins, with the ``blue'' and ``red'' being
+negatively correlated and the ``green'' being independent of the
+others. 
+
+\fref{bayes} shows the Auer-Gervini step function that was used to
+determine the number of significant principal components.
+
+\fref{scree} contains scree plots for the PCA on each of the three
+datasets.  The overlaid blue curve shows the expected values from the
+broken stick model.  As expected from how we know the data were
+simulated, we see two significant components in each dataset.
+
+\fref{spca} is a plot of the samples from the PCA on each dataset.
+Colors assigned to the samples in this plot are the same as the color
+bars in the heatmaps (\fref{heatmap}).  How to interperet the
+structure from these plots is not clear.
+
+\fref{loadings} illustrates the loadings of each protein on the first
+two principal ccomponents.  This figure gives us the clearest picture
+of the known structure.  The top plot (of the unsigned dataset) shows
+two independent groups of proteins; the middle plot, four groups; the
+bottom plot, three groups.  In the middle and bottom plots, we see
+that a contrast between the ``positive -- blue'' group and ``negative
+-- red'' group represents one factor.  The other factor comes from
+either the ``green'' group alone (bottom) or a contgrast between the
+``green'' and ``purple'' groups (middle), 
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-00-ss}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-00-ss}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-00-ss}
+\caption{Covariance matrices for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{ss}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-05-heatmap}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-05-heatmap}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-05-heatmap}
+\caption{Clustered heatmaps for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{heatmap}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-02-bayes}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-02-bayes}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-02-bayes}
+\caption{; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{bayes}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-01-scree}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-01-scree}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-01-scree}
+\caption{Screeplots for example datasets with two groups of proteins;
+  \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{scree}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-03-spca}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-03-spca}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-03-spca}
+\caption{Principal components scatterplot for example datasets with
+  two groups of proteins; \textbf{(top)} unsigned, \textbf{(middle)}
+  signed, and \textbf{(bottom)} mixed.}
+\label{spca}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-04A-loadings}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-04A-loadings}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-04A-loadings}
+\caption{PCA loadings plots for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{loadings}
+\end{center}
+\end{figure}
+
+\clearpage
+\section{Finding Protein Groups}
+We repeat the following block of code from the previous report in
+order to have a vector defining the true ``type'' of each simulated
+dataset.
+<<simType>>=
+nSimSets <- length(savedSims)/5
+simpleType <- paste(rep(c("OneGroup", "TwoGroups"), times=2),
+                    rep(c("Unsigned", "Signed"), each=2), sep="")
+simpleType <- c(simpleType, "TwoGroupsMixed")
+rt <- rep(1:5, nSimSets)
+simType <- factor(simpleType[rt], levels=simpleType)
+typer <- rep(simType, each=2)
+evens <- sort(c(seq(2, 5*nSimSets, 5), 
+                seq(4, 5*nSimSets, 5),
+                seq(5, 5*nSimSets, 5)))
+sim.type <- factor(simType[evens])
+rm(rt)
+summary(simType)
+summary(sim.type)
+@ 
+
+
+We first apply the \texttt{reaper}  algorithm to the directions in PC space.
+<<pc.mixture>>=
+f <- "vmfMixturesLoaded.rda"
+if(file.exists(f)) {
+  load(f)
+} else {
+  set.seed(743634)
+  vmfMixturesLoaded <- lapply(savedSims, Reaper, useLoadings=TRUE,
+                              method="auer.gervini")
+  save(vmfMixturesLoaded, file=f)
+}
+rm(f)
+@ 
+Next, we apply the algorithm in the full protein-sample space.
+<<protein>>=
+f <- "vmfMixtures.rda"
+if(file.exists(f)) {
+  load(f)
+} else {
+  set.seed(115234)
+  vmfMixtures <- lapply(savedSims, Reaper, useLoadings=FALSE,
+                        method="auer.gervini")
+  save(vmfMixtures, file=f)
+}
+rm(f)
+@ 
+
+\subsection{Number of Principal Components}
+\label{pcdim}
+Since both applications use the same code to determine the correct PC
+dimension, $K$, we want to see how this compares both to the value
+before removing outliers. and to the true value. 
+<<outlier.effect>>=
+pcDimension <- sapply(vmfMixtures, function(x) x@pcdim)
+pcDimension0 <- sapply(savedSims, function(x) x@pcdim)
+table(pcDimension, pcDimension0)
+@ 
+None of the $2500$ simulated datasets have the estimated dimension
+changed when removing outliers.  This finding is not terribly
+surprising, since we saw in the previous report that the main
+explanation of the failure to find the correct dimension was
+attributable to few signal proteins or few samples, neither of
+which has anything to do with the outliers.
+
+Here are the ``true'' dimensions, which we know because we have
+simulated these datasets.
+<<trued>>=
+trueDim <- c(1, 2, 1, 2, 2)
+names(trueDim) <- simpleType
+trueDim
+trueDimensions <- trueDim[as.character(simType)]
+@ 
+We can also compare the estimated dimensions to the true dimensions
+as a function of the type of simulated dataset.
+<<tabular>>=
+table(simType, pcDimension)
+@ 
+Here we compute the accuracy rate for each type.
+<<accudim>>=
+accuDim <- sapply(simpleType, function(s) {
+  results <- pcDimension[simType==s]
+  mean(results == trueDim[s])
+})
+accuDim
+mean(accuDim)
+mean(ok <- trueDimensions==pcDimension)
+@ 
+So, the accuracy when the correct dimension is $1$ is $100\%$, while
+the accuracy when the correct dimension is $2$ is approximately $94\%$.
+
+\subsection{Number of Protein Groups: PC Loadings}
+\label{pcload}
+Now we explore how often clustering the proteins (using a mixture of
+von Mises - Fisher distributions) in principal component space gets
+the correct number of protein groups.
+<<ngl>>=
+ngL <- sapply(vmfMixturesLoaded, function(x) x@nGroups)
+table(simType, ngL)
+@ 
+Of course, we want to compare this formally to the true values, which
+are given by:
+<<trueGroups>>=
+trueGroups <- c(1, 2, 2, 4, 3)
+names(trueGroups) <- simpleType
+trueGroups
+@ 
+We need to measure ``accuracy'' in two ways.  First, we look at the
+complete method (which is likely to work poorly when it gets the PC
+dimension wrong).
+<<accurall>>=
+accurall <- sapply(simpleType, function(s) {
+  results <- ngL[simType==s]
+  sum(results == trueGroups[s], na.rm=TRUE)/length(results)
+})
+accurall
+mean(accurall)
+@ 
+So, the overall accuracy is about $73\%$.  But the accuracy is
+slightly higher when there is only one group, and declines when there
+are more true groups. Since getting the dimension wrong only happens
+when there are more groups, we can compute the ``conditional
+accuracy'', which meaures how often we get the number of groups
+right after knowing that we have gotten the PC dimension right.
+<<condaccu>>=
+condaccu <- sapply(simpleType, function(s) {
+  results <- ngL[ok & simType==s]
+  sum(results == trueGroups[s], na.rm=TRUE)/length(results)
+})
+condaccu
+mean(condaccu)
+@ 
+This is slightly better, but still only yields an accuracy of $75\%$.
+It is, however, consistent across the simulation types, suggesting
+that the clustering works equally well in all types provided the
+dimension is identified correctly.
+
+\subsection{Number of Protein Groups: Protein-Sample Space}
+\label{fullspace}
+The alternative method performs the clustering in the full
+protein-sample space, not just in the truncated principal component
+space. The overall perfomance clearly looks better:
+<<ng>>=
+ng <- sapply(vmfMixtures, function(x) x@nGroups)
+table(simType, ng)
+@ 
+as does the (full) accuracy:
+<<accurall>>=
+accurall <- sapply(simpleType, function(s) {
+  results <- ng[simType==s]
+  sum(results == trueGroups[s], na.rm=TRUE)/length(results)
+})
+accurall
+mean(accurall)
+@ 
+
+Using this method, the overall accuracy is about $86\%$.  Again, the
+accuracy is slightly higher when there is only one group, and declines
+when there are more groups.
+<<condaccu>>=
+condaccu <- sapply(simpleType, function(s) {
+  results <- ng[ok & simType==s]
+  sum(results == trueGroups[s], na.rm=TRUE)/length(results)
+})
+condaccu
+mean(condaccu)
+@ 
+This is slightly better, yielding a conditional accuracy of $89\%$,
+which is consistent across the simulation types.
+
+\section{Examples Revisited}
+We now return to our earlier set of examples, and generate new figures
+after removing outliers and estimating the ``true'' number of protein
+groups.  We plot the loadings (\fref{cleaned-loadings}), the revised
+heatmap (\fref{cleaned-heatmap}) and the samples in principal
+component space (\fref{cleaned-spca}).
+<<mf>>=
+for (idx in 31:35) {
+  makeFigures(vmfMixtures[[idx]], "SimFigs")
+}
+@ 
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-cleaned-04A-loadings}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-cleaned-04A-loadings}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-cleaned-04A-loadings}
+\caption{PCA loadings plots, after ``reaping'', for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{cleaned-loadings}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-cleaned-05-heatmap}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-cleaned-05-heatmap}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-cleaned-05-heatmap}
+\caption{Heatmaps, after "reaping",  for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{cleaned-heatmap}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma2-32-cleaned-03-spca}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma4-34-cleaned-03-spca}\\
+\includegraphics[height=2.75in, keepaspectratio=true]{SimFigs/sigma5-35-cleaned-03-spca}
+\caption{PCA scatter plots, afte "reaping", for example datasets with two groups of
+  proteins; \textbf{(top)} unsigned, \textbf{(middle)} signed, and
+  \textbf{(bottom)} mixed.}
+\label{cleaned-spca}
+\end{center}
+\end{figure}
+
+<<echo=FALSE,eval=FALSE>>=
+x <- vmfMixtures[[34]]
+screeplot(x)
+plot(x)
+scatter(x)
+heat(x)
+
+y <- savedSims[[34]]
+heat(y)
+
+@ 
+
+\section{More Detailed Methods}
+Now we have the function that actually performs the main analysis.
+<<reaper>>=
+Reaper
+@ 
+
+The algorithm used by the \texttt{reaper} function is as follows:
+\begin{enumerate}
+\item We start by using the \texttt{Thresher} method from the previous
+  report.  We use the cutoff determined there ($\Delta \le 0.3$) to
+  identify and remove outliers. (Recall that, based on these datasets,
+  this cutoff should have a $2\%$ false negative rate and a $0.1\%$
+  false positive rate.)
+\item Next, we apply the broken-stick model to the dataset with
+  outliers removed to determine the correct number $K$ of principal
+  components to use to characterize the data.
+\item As noted in the examples in \sref{eg3}, the number of protein
+  groups should range between $K$ and $2K$, depending on how many of
+  the $K$ signal protein groups include negative correlation.  Because
+  the estimation of $K$ is likely to be slightly conservative, we
+  actually allow the upper bound to go to $2K+2$.
+\item We now use just the directions/angles of the proteins (in the
+  full space) of their loadings (in the $K$-dimensional principal
+  component space). Since these directions are points on a (possibly
+  high-dimensional) unit sphere, we model them as a mixture of von
+  Mises - Fisher distributions.  We use the Bayesian Information
+  Criterion (BIC) to select the optimal number $N$ of protein groups
+  out of the range of candidates ($K$\ldots$2K+2$). 
+\end{enumerate}  
+
+\subsubsection{Plotting routines}
+We have a series of plotting routines for both ``\texttt{Thresher}''
+and ``\texttt{Reaper}'' objects. This includes \texttt{makeFigures},
+which is a wrapper that produces a complete set of five plots:
+\begin{enumerate}
+\item \texttt{image}, which only applies to simulated datasets,
+  produces an image of the correlation matrix used in the simulations.
+\item \texttt{screeplot} produces a ``scree plot'' of the amount of
+  variance explained by each principal component (PC), with an overlay
+  of the expected values from the broken stick model.
+\item \texttt{plot} produces a plot of the loadings on each protein
+  feature in PC space.
+\item \texttt{scatter} produces a scatter plot of the samples in PC
+  space.
+\item \texttt{heat} produces a heatmap, in which the protein features
+  are clustered but the samples are ordered to highlight the strongest
+  signals in the data.
+\end{enumerate}
+
+The ordering routine is critical, and this is different for
+``Thresher'' objects than for ``Reaper'' objects.  For ``Threshers'',
+samples are simply sorted by the sign of the first two principal
+components. 
+<<getSplit.Thresher>>=
+getMethod("getSplit", "Thresher")
+@ 
+
+For ``Reapers'', the algorithm is more complex, since it uses the fact
+that protein features have already been clustered into groups (on a
+unit sphere in PC space, using mixtures of von Mises - Fisher
+distributions).  We average the protein loadings for each group, and
+identify pairs that point in opposite directions and thus correspond
+to positively and negatively correlated members of the same PC.
+<<getSplit.Reaper>>=
+getMethod("getSplit", "Reaper")
+@ 
+
+
+\section{Appendix}
+
+This analysis was run in the following directory:
+<<getwd>>=
+getwd()
+@ 
+
+This analysis was run in the following software environment:
+<<sessionInfo>>=
+sessionInfo()
+@ 
+
+\end{document}

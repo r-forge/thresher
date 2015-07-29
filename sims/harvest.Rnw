@@ -1,0 +1,344 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{hyperref}
+\pagestyle{myheadings}
+\markright{harvest}
+
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+
+\def\rcode#1{\texttt{#1}}
+\def\fref#1{\textbf{Figure~\ref{#1}}}
+\def\tref#1{\textbf{Table~\ref{#1}}}
+\def\sref#1{\textbf{Section~\ref{#1}}}
+
+\title{Harvest: Even More Simulations for the ``Thresher'' Paper}
+\author{Kevin R. Coombes}
+\date{7 January 2014}
+
+\SweaveOpts{prefix.string=Figures/harvest}
+<<setOptions,echo=FALSE>>=
+options(width=88)
+options(SweaveHooks = list(fig = function() par(bg='white')))
+@ 
+
+<<makeFiguresDirectory,echo=FALSE>>=
+if (!file.exists("Figures")) {
+  dir.create("Figures")
+}
+@ 
+
+\begin{document}
+\maketitle
+\tableofcontents
+\listoffigures
+
+\section{Executive Summary}
+\subsection{Introduction}
+This report describes the (second) analysis of simulated data sets to
+test the behavior of our proposed methods for analyzing continuous
+pathway data.
+
+\subsubsection{Aims/Objectives}
+We want to see whether the methods can identify the correct number of
+protein clusters (which should be between $1$ and $4$ in our simulated
+datasets).
+
+\subsection{Methods}
+
+\subsubsection{Description of the Data}
+In the previous report, we simulated and saved $2500$ datasets with a
+few proteins (around $10$--$20$) and many samples (median: $304$,
+range: $126$--$506$).  Each dataset exhibits either one or two
+independent correlated signals.  Each signal can be unsigned (all
+proteins are positively correlated, so a reasonable summary would be a
+simple average of all proteins) or signed (including both positively
+and negatively correlated proteins, so a reasonable summary requires
+looking at a difference between two group averages).  Each dataset
+also contains two ``noise'' genes that are not correlated with any of
+the simulated signals.
+
+\subsubsection{Statistical Methods}
+We use the ``Thresher'' algorithm described in the previous report,
+with a cutoff $\Delta \le 0.3$, to detect outliers or ``noise''
+proteins.  We use the Auer-Gervini approach to estimate the number $K$
+of signfiicant principal components.  We fit a mixture of von Mises -
+Fisher distributions to cluster the protein directions (on a unit
+sphere) into $N= K$, $K+1$, \ldots, $2K+1$ protein groups.  To select
+the optimal number of protein groups, we compute the Bayesian
+Information Criterion (BIC) for each $N$; the best number corresponds
+to the minimum BIC.
+
+\subsection{Results}
+\begin{itemize}
+\item The estimated number of principal components is (a) always
+  correct if the true dimension equals $1$ and (b) is correct $94\%$
+  of the time when the true dimension equals $2$ (\sref{pcdim}).
+\item When clustering in the space of principal component loadings,
+  the estimated number of protein groups is correct $73\%$ of the time
+  (\sref{pcload}). If you only consider situations where the PC
+  dimenion was correctly estimated, then the number of protein groups
+  is correct $75\%$ or the time.
+\item When clustering in the complete protein-sample space, the
+  estimated number of protein groups is correct $86\%$ of the time
+  (\sref{fullspace}).  If you only consider situations where the PC
+  dimenion was correctly estimated, then the number of protein groups
+  is correct $89\%$ or the time.
+\item After removing outliers and estimating the number of protien
+  groups, the plots give a clearer idea of the true underlying
+  structure. (For loadings, compare \fref{loadings} to
+  \fref{cleaned-loadings}. For heatmaps, compare \fref{heatmap} to
+  \fref{cleaned-heatmap}.  For samples in principal component space,
+  compare \fref{spca} to \fref{cleaned-spca}.)
+\end{itemize}
+
+\subsection{Conclusions}
+The Thresher-Reaper methods provide effective tools for removing
+outliers and detemineing the correct number of protein groups in
+(simulated) data sets containing  about $10$--$20$ proteins.
+
+\section{Preliminaries / Methods}
+\subsection{Library Packages}
+We start by loading all of the R library packages that we need for this
+analysis. 
+<<libraries>>=
+library(Thresher)
+library(RColorBrewer)   # for sensible color schemes
+@ 
+
+\subsection{The Data Sets}
+Next, we load the simulated datasets from the first report.
+<<load>>=
+nSimSets <- 500
+f <- "moreSavedSims.rda"
+if (file.exists(f)) {
+  load (f)
+} else {
+  set.seed(981079)
+  moreSavedSims <- list()
+  bsdim <- rep(NA, nSimSets)
+  sigProteins <- rep(NA, nSimSets)
+  for (idx in 1:nSimSets) {
+    cat(idx, "\n", file=stderr())
+# parameters
+    NGROUPS <- 5
+    nProtein <- 2*sample(40:70,1)
+    split <- sample(1:NGROUPS, nProtein, replace=TRUE)
+    nNoise <- max(10, round(rnorm(1, nProtein/3, 8)))
+    positive <- sample(nProtein, nProtein/2)
+    negative <- (1:nProtein)[!((1:nProtein) %in% positive)]
+    signed <- rep(-1, length=nProtein)
+    signed[positive] <- 1
+# unsigned
+    sigma1 <- matrix(0, ncol=nProtein, nrow=nProtein)
+    for (i in 1:NGROUPS) {
+      rho <- max(0.1, rnorm(1, 0.4, 0.15))
+      who <- split==i
+      sigma1[who,who] <- rho
+    }
+    diag(sigma1) <- 1
+# signed
+    sigma3 <- sigma1
+    sigma3[positive, negative] <- -sigma3[positive, negative]
+    sigma3[negative, positive] <- -sigma3[negative, positive]
+# reordered
+    os <- order(split, signed)
+    sigma4 <- sigma3[os,os]
+    
+# number of samples
+    nSample <- round(rnorm(1, 300, 60))
+# add noise
+    ss <- matrix(0, nProtein+nNoise, nProtein+nNoise)
+    diag(ss) <- 1
+    ss[1:nProtein, 1:nProtein] <- sigma4
+#    image(ss, col=blueyellow(64), zlim=c(-1,1))
+# basic analysis
+    value <- SimThresher(ss, nSample, 
+                         paste("newsim", idx, sep="."),
+                         method='auer.gervini')
+    moreSavedSims[[idx]] <- value
+    bsdim[idx] <- bsDimension(value@spca)
+    sigProteins[idx] <- nProtein
+  }
+  save(moreSavedSims, bsdim, sigProteins, file=f)
+}
+rm(f)
+
+@ 
+
+now we test whether the broken-stick model or the Auer-Gervini
+approach does a better job of recovering the true number of principal
+components. 
+<<tabs>>=
+pcdim <- unlist(lapply(moreSavedSims, function(x) x@pcdim))
+table(pcdim)
+table(bsdim)
+@ 
+Clearly, theh Auer-Gervini method works better: it gets the correct
+answer more than $99\%$ of the time, while the broken stick model
+underestimates the number of components almost $25\%$ of the time.
+
+\section{Three Examples}
+\label{eg3}
+We run the following loop of code to create the five standard figures
+for several different sample datasets.
+<<do.loop,results=hide>>=
+if (!file.exists("SimFigs")) {
+  dir.create("SimFigs")
+  for (idx in 1:40) { # really, do not do 2500 of these ...
+    makeFigures(moreSavedSims[[idx]], DIR="SimFigs")
+  }
+}
+@ 
+<<hideme,echo=FALSE,results=hide>>=
+makeFigures(moreSavedSims[[150]], DIR="SimFigs")
+#makeFigures(moreSavedSims[[150]])
+@ 
+
+
+\clearpage
+\section{Finding Protein Groups}
+
+We first apply the \texttt{reaper}  algorithm to the directions in PC space.
+<<pc.mixture>>=
+f <- "moreVmfMixturesLoaded.rda"
+if(file.exists(f)) {
+  load(f)
+} else {
+  set.seed(473643)
+  vmfMixturesLoaded <- lapply(moreSavedSims, Reaper, useLoadings=TRUE,
+                              method="auer.gervini")
+  save(vmfMixturesLoaded, file=f)
+}
+rm(f)
+@ 
+Next, we apply the algorithm in the full protein-sample space.
+<<protein>>=
+f <- "moreVmfMixtures.rda"
+if(file.exists(f)) {
+  load(f)
+} else {
+  set.seed(521143)
+  vmfMixtures <- lapply(moreSavedSims, Reaper, useLoadings=FALSE,
+                        method="auer.gervini")
+  save(vmfMixtures, file=f)
+}
+rm(f)
+@ 
+
+\subsection{Number of Principal Components}
+\label{pcdim}
+Since both applications use the same code to determine the correct PC
+dimension, $K$, we want to see how this compares both to the value
+before removing outliers. and to the true value. 
+<<outlier.effect>>=
+pcDimension <- sapply(vmfMixtures, function(x) x@pcdim)
+table(pcDimension, pcdim)
+@ 
+None of the $2500$ simulated datasets have the estimated dimension
+changed when removing outliers.  This finding is not terribly
+surprising, since we saw in the previous report that the main
+explanation of the failure to find the correct dimension was
+attributable to few signal proteins or few samples, neither of
+which has anything to do with the outliers.
+
+\subsection{Outlier Detection}
+
+<<>>=
+temp <- as.data.frame(t(sapply(1:length(vmfMixtures), function(idx) {
+  found <- vmfMixtures[[idx]]@keep
+  truth <- rep(FALSE, length(found))
+  truth[1:sigProteins[idx]] <- TRUE
+  c(TP=sum(truth&found),
+    FP=sum(!truth&found),
+    FN=sum(truth&!found),
+    TN=sum(!truth&!found),
+    sens=sum(truth&found)/sum(truth),
+    spec=sum(!truth&!found)/sum(!truth))
+})))
+summary(temp)
+plot(sort(temp$sens))
+plot(sort(temp$spec))
+plot(1-temp$spec, temp$sens)
+which(temp$sens < 0.9)
+mean(temp$spec == 1 & temp$sens==1)
+mean(temp$sens < 0.9 | temp$spec < 0.9)
+odd <- which(temp$sens < 0.9 | temp$spec < 0.9)
+temp[odd,]
+
+nrho <- sapply(moreSavedSims, function(x) length(x@rho))
+bod <- which(nrho<5)
+rose <- t(sapply(moreSavedSims, function(x) {
+  fog <- x@rho
+  if (length(fog) < 5) fog <- c(0.1, fog)
+  fog
+}))
+
+rose[bod,]
+rose[odd,]
+
+
+@ 
+
+\subsection{Number of Protein Groups: PC Loadings}
+\label{pcload}
+Now we explore how often clustering the proteins (using a mixture of
+von Mises - Fisher distributions) in principal component space gets
+the correct number of protein groups.
+<<ngl>>=
+ngL <- sapply(vmfMixturesLoaded, function(x) x@nGroups)
+table(ngL)
+@ 
+
+\subsection{Number of Protein Groups: Protein-Sample Space}
+\label{fullspace}
+The alternative method performs the clustering in the full
+protein-sample space, not just in the truncated principal component
+space. The overall perfomance clearly looks better:
+<<ng>>=
+ng <- sapply(vmfMixtures, function(x) x@nGroups)
+table(ng)
+table(ng, ngL)
+bodkins <- which(ng==5 & ngL==10)
+
+summary(rose[bodkins,])
+summary(temp[bodkins,])
+b <- bodkins[1]
+@ 
+
+<<do.loop,results=hide>>=
+if (!file.exists("MoreSimFigs")) {
+  dir.create("MoreSimFigs")
+  for (idx in 1:50) {
+    makeFigures(vmfMixturesLoaded[[idx]], DIR="MoreSimFigs")
+  }
+}
+@ 
+
+<<do.loop,results=hide>>=
+if (!file.exists("OddSimFigs")) {
+  dir.create("OddSimFigs")
+  for (idx in sort(unique(c(odd, bodkins)))) {
+    makeFigures(vmfMixturesLoaded[[idx]], DIR="OddSimFigs")
+  }
+}
+@ 
+
+
+\section{Appendix}
+
+This analysis was run in the following directory:
+<<getwd>>=
+getwd()
+@ 
+
+This analysis was run in the following software environment:
+<<sessionInfo>>=
+sessionInfo()
+@ 
+
+\end{document}

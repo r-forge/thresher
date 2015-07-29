@@ -1,0 +1,137 @@
+\documentclass{nature}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{hyperref}
+
+\def\rcode#1{\texttt{#1}}
+\def\fref#1{\textbf{Figure~\ref{#1}}}
+\def\tref#1{\textbf{Table~\ref{#1}}}
+\def\sref#1{\textbf{Section~\ref{#1}}}
+
+\title{Clustering Biological Data Sets}
+\author{Kevin R. Coombes$^1$, Gerard Lozanski$^2$, Steven M. Kornblau$^3$}
+\date{7 January 2014}
+
+\begin{document}
+\maketitle
+\begin{affiliations}
+\item Department of Biomedical Informatics, The Ohio State University
+  Wexner Medical Center, Columbus, OH 43210
+\item Department of Pathology, The Ohio State University Wexner
+  Medical Center, Columbus, OH 43210
+\item Department of Bone Marrow Transplantation, The University of
+  Texas M.D. Anderson Cancer Center, Houston, TX 77030
+\end{affiliations}
+
+\section{abstract}
+something should go here
+\subsection{Keywords}
+
+hierarchical clustering, principal components analysis
+
+Since the earliest days of gene expression microarrays, two-way
+clustered heatmaps have been a standard feature of most papers
+studying genome-wide biological datasets \cite{weinstein97,eisen98}.
+Such heatmaps remain ubiquitous, in spite of numerous difficulties in
+interpretation, reproducibility, and in assigning statistical
+significance.
+
+In this article, we present a comprehensive method for combining
+principal comnponents analysis (PCA) with hierachical clustering to
+analyze biological datasets. This method includes
+\begin{itemize}
+\item Statistical tools for removing ``outlier'' features (i.e.,
+  genes, proteins, etc.) that do not contribute to clustering.
+\item Statistical tools for determining the significant number of
+  principal components and the number of feature clusters.
+\item A method for automatically selecting the metric for hierarchical
+  clustering features that best matches the clusters derived from PCA.
+\item more cool stuff
+\end{itemize}
+
+To deermine the theoretical performance characteristics of the method,
+we perform two sets of simulations.  In the first set of simulations,
+each data set includes approximately 15 proteins, belonging to one or
+two significant principal components (PCs) and between one and four
+feaure clusters, and two outlier features. In the second set of
+simulations, each data set contains approximately 100 features,
+belonging to five signifcant PCs and ten feature clusters, and
+approximately 30 outlier features. We then apply the method to two
+actual biological datasets. The first consists of protein expression
+data collected on samples from patients with acute myelogenous
+leukemia (AML) using reverse phase protein lysate arrays (RPPA).  The
+second consists of complex flow cytometry data from either peripheral
+blood or apheresis samples of patients with a variety of conditions
+and treatments.
+
+\section{Results}
+
+\subsection{First Simuklation}
+We simulated 
+
+\subsection{Second Simulation}
+
+\subsection{RPPA Data From AML Patients}
+
+\subsection{Flow Cytometry Data}
+
+\section{Methods}
+All analyses were performed using vesion 3.0.0 of the R statistical
+software environment \cite{R} with version 1.0.0 of the
+\texttt{Thresher} package, which we developed.
+
+Here we describe the \texttt{Thresher} algorithms that we use to
+cluster biological datasets. Throughout, we assume that previous
+feature selection methods have reduced the number of features to less
+than the number of independent samples in the data set.  (The feature
+selection step may be statistical or biological in nature. For
+example, one could use only the genes or proteins that are part of a
+knwon biological pathway.)  The data from each feature are then
+standardized to have mean zero and standard deviation one.
+
+\subsection{Number of Principal Components}
+To determine the number of significant PCs, we begin with the visual
+Bayesian method proposed by Auer and Gervini \cite{auer-gervini}.
+Briefly, they place an exponential prior on the number of signficant
+components. This prior distribution depends on a hyperparameter,
+$\theta \in[0, \infty]$, that governs how quickly the distribution
+decays.  When $\theta=0$, the prior is flat, and the maximum a
+posteriori (MAP) estimate of the number of PCs is always equal to the
+number of features.  As $\theta\mapsto\infty$, the prior drops off
+more rapidly, and the MAP estimate of the number of PCs will
+$\mapsto0$. Auer and Gervini propose plotting the MAP estimate as a
+(step) function of $\theta$, and then selecting the highest step whose
+length is ``nontrivial''.
+
+We have operationalized the final subjective step in their approach by
+putting an upper bound on the largest reasonable value of $\theta$
+(specifically, BLAH) and then defining ``nontrivial'' to mean at
+least twice the median length of a step.
+
+\subsection{Outlier Detection}
+Having established the number $N$ of significant PCs, we work in the
+principal component space containing the first $N$ PCs.  Each feature
+$F$ is given a ``loading'' that describes its contribution to each PC,
+and so can be represented by an $N$-dimensional vector. The length,
+$||F||$, of this vector (in the sense of Euclidean distance in PC
+space) summarizes the full extent of its contributions to describing
+any structure present in the data. Based on the result of simulations,
+we identify a feature to be an outlier if $||F|| < 0.3$.
+
+\subsection{Number of Feature Clusters by PCA}
+After removing outliers, we repeat PCA on the reduced data set, and
+normalize the features in $N$-dimensional PC space to have unit length
+($F_{(1)} = F/||F||$); each normalized vector records the direction of
+a feature as a point on a unit hypersphere. We cluster these points
+using a mixture of von Mises-Fisher distributions
+\cite{banerjee05,hornik13} as implemented in version 0.1-2 of the
+\texttt{movMF} package for the R statistcial software environment.
+
+\section{Conclusions}
+
+
+\bibliography{01-methods}
+\bibliographystyle{nature}{}
+
+
+\end{document}
