@@ -1,10 +1,10 @@
 Package: Thresher
-Version: 0.9.11
+Version: 0.9.13
 Date: 2015-10-27
 Title: Threshing and Reaping for Principal Components
 Author: Kevin R. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
-Description: This package defines the classes used to identify
+Description: The Thresher package defines the classes used to identify
   outliers (threshing) and compute the number of significant principal
   components and number of clusters (reaping) in a joint application
   of PCA and hierarchical clustering.
