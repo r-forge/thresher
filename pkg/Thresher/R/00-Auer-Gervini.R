@@ -94,7 +94,16 @@ AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
 }
 
 estimateTop <- function(object) {
-  max(-2*log(0.01)/length(object@Lambda),
+  oldAndCrude <- -2*log(0.01)/length(object@Lambda) # in case we want to revert
+  n <- object@dimensions[1] # nrows
+  m <- object@dimensions[1] # ncolumns
+  delta <- 1 # why do we do it this way?
+  magic <- 18.8402+1.9523*m-0.0005*m^2 # from a linear model fit on simulated data
+  modelBased <- ifelse(n >= m,
+                       magic/n,
+                       magic*n/m^2) # please explain why
+  max(oldAndCrude,
+      modelBased,
       1.03*object@changePoints)
 }
 
