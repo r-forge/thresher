@@ -52,7 +52,7 @@ ng <- c(1, 2, 1, 2, 2)[idx]
 
 s1 <- savedSims[[idx]]
 vars <- s1@spca@variances
-obj <- AuerGervini(vars)
+obj <- AuerGervini(vars, dd=dim(s1@spca@scores))
 summary(obj)
 
 plot(obj, main=paste(idx, ";  True Groups =", ng))
@@ -70,7 +70,7 @@ for (i in 1:5) {
   simData <- matrix(rnorm(nSam*nProtein), ncol=nProtein)
   spca <- SamplePCA(simData)
   vars <- spca@variances[-nProtein]
-  obj <- AuerGervini(vars)
+  obj <- AuerGervini(vars, dd=dim(spca@scores))
   plot(obj)
   abline(h=0, lty=3, col='pink')
 }

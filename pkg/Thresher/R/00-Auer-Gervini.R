@@ -67,15 +67,17 @@ bsDimension <- function(lambda, FUZZ=0.005) {
 setClass("AuerGervini",
          representation=list(
            Lambda="numeric",
+           dimensions="numeric",
            dLevels="numeric",
            changePoints="numeric",
            lowerBounds="numeric",
            upperBounds="numeric"
            ))
 
-AuerGervini <- function(Lambda, epsilon=2e-16) {
+AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
   if (inherits(Lambda, "SamplePCA")) {
-    Lambda <- Lambda@variances    
+    dd <- dim(Lambda@scores)
+    Lambda <- Lambda@variances
   }
   if (epsilon > 0) {
     Lambda <- Lambda[Lambda > epsilon]
@@ -86,7 +88,7 @@ AuerGervini <- function(Lambda, epsilon=2e-16) {
   upperBounds <- sapply(rg, thetaUpper, Lambda=Lambda)
   dLevels <- rev(rg[lowerBounds <= upperBounds])
   changePoints <- rev(lowerBounds[lowerBounds <= upperBounds])[-1]
-  new("AuerGervini", Lambda=Lambda,
+  new("AuerGervini", Lambda=Lambda, dimensions = dd,
       dLevels=dLevels, changePoints=changePoints,
       lowerBounds=lowerBounds, upperBounds=upperBounds)
 }

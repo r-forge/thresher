@@ -14,12 +14,16 @@ components.  We have implemented their method in the \code{AuerGervini}
 class, and enhanced it by automating the final selection.
 }
 \usage{
-AuerGervini(Lambda, epsilon = 2e-16)
+AuerGervini(Lambda, dd=NULL, epsilon = 2e-16)
 agDimension(object)
 }
 \arguments{
   \item{Lambda}{Either a \code{SamplePCA} object or a numerical vector
     of variances from a principal components analysis.}
+  \item{dd}{A vector of length 2 containing the dimensiosn of the data
+    used to created the Auer-Gervini object. If \code{Lambda} is a
+    \code{SamplePCA} object, then the dimensions are taken from it,
+    ignoring the \code[dd} argument.}
   \item{epsilon}{A numeric value.  Used to remove any variances that are
   less than \code{epsilon}; defaults to 2e-16.  Should only be needed in
   rare cases where negative variances show up because of round-off error.}
@@ -32,6 +36,8 @@ Objects should be created using the \code{AuerGervini} constructor.
   \describe{
     \item{\code{Lambda}:}{Object of class \code{"numeric"}, containing
       the vector of explained variances. }
+    \item{\code{dimensions}}{Numeric vecdtor of length 2 containing the
+      dimnesions of the underlying data matrix.}
     \item{\code{dLevels}:}{Object of class \code{"numeric"}; see details }
     \item{\code{changePoints}:}{Object of class \code{"numeric"}; see details }
     \item{\code{lowerBounds}:}{Object of class \code{"numeric"}; see details  }
@@ -68,7 +74,7 @@ showClass("AuerGervini")
 # simulate variances
 lambda <- rev(sort(diff(sort(c(0, 1, runif(9))))))
 # apply the Auer-Gervini method
-ag <- AuerGervini(lambda)
+ag <- AuerGervini(lambda, dd=c(3,10))
 # Review the results
 summary(ag)
 agDimension(ag)
