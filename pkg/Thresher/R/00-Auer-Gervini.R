@@ -122,7 +122,7 @@ setMethod("plot", c("AuerGervini", "list"), function(x, y,
      main=main, xlim=c(0, top), ...)
   if (!missing(y)) {
     lapply(y, function(agfun) {
-      abline(h=agfun(x), lty=2, lwd=2, col='pink')
+      abline(h=agDimension(x, agfun), lty=2, lwd=2, col='pink')
     })
   }
   invisible(x)
@@ -144,24 +144,21 @@ agDimension <- function(object, agfun=agDimNaive, logtransform=FALSE) {
   } else {
     magic <- (stepLength == max(stepLength))
   }
-  object@dLevels[1+which(magic)[1]]
-}
-
-agdFunction <- function() {
-  switch(
-    )
+  ifelse(any(magic),
+         object@dLevels[1+which(magic)[1]],
+         0)
 }
 
 agDimNaive <- function(stepLength) {
   (stepLength > 2*mean(stepLength))
 }
 
-# k-means criterion (4 different versions)
+# k-means criterion (3 different versions)
 # version 1: centers are max. and min. (select highest in large group)
 agDimKmeans <- function(stepLength) {
   kmeanfit <- kmeans(stepLength, centers=c(min(stepLength), 
                                            max(stepLength)))
-  kmeanfit$cluster==2
+  (stepLength >= max(kmeanfit$centers))
 }
 
 # version 2: centers are second max. and second min. (select highest large)
@@ -169,32 +166,23 @@ agDimKmeans2 <- function(stepLength) {
   sortsl <- sort(stepLength, decreasing=FALSE)
   kmeanfit <- kmeans(stepLength, centers=c(sortsl[2], 
                                            sortsl[length(sortsl)-1]))
-  (kmeanfit$cluster==2)
-}
-
-# version 3: centers are max. and min. (select highest one with step
-# length greater than mean step length of the large group)
-agDimKmeans3 <- function(stepLength) {
-  kmeanfit <- kmeans(stepLength, centers=c(min(stepLength), 
-                                           max(stepLength)))
   (stepLength >= max(kmeanfit$centers))
 }
 
-# version 4: choose k=3 if more features (select highest largest)
-agDimKmeans4 <- function(stepLength) {
+# version 3: choose k=3 if more features (select highest largest)
+agDimKmeans3 <- function(stepLength) {
   # choose k = 3 if there are many features (extra center is median)
   if (ceiling(log(length(stepLength))/2)>2) {
-    kmeanfit <- kmeans(stepLength, centers=c(min(stepLength), 
-                                             median(stepLength),
-                                             max(stepLength)))
-    magic <- (kmeanfit$cluster==3)
+    kcenters <- c(min(stepLength), 
+                  median(stepLength),
+                  max(stepLength))
   } else {
-    kmeanfit <- kmeans(stepLength, centers=c(min(stepLength), 
-                                             max(stepLength)))
-    magic <- (kmeanfit$cluster==2)
+    kcenters <- c(min(stepLength), 
+                  max(stepLength))
   }
-  magic
-} 
+  kmeanfit <- kmeans(stepLength, centers=kcenters)
+  (stepLength >= max(kmeanfit$centers))
+}
 
 #-------------------------------------------------------------------------
 # spectral clustering criterion
@@ -214,7 +202,8 @@ agDimSpectral <- function(stepLength) {
 # difference of sorted step lengths (t-based method)
 # TO DO: include significance level alpha in arguments, currently
 # set significance level to be 0.01
-agDimTtest <- function(stepLength) {
+# for version 2, set extra=1
+agDimTtest <- function(stepLength, extra=0) {
   sort1 <- sort(stepLength, decreasing=FALSE, method="qu", 
                 index.return=TRUE)
   diffsl <- diff(sort1$x)
@@ -224,14 +213,16 @@ agDimTtest <- function(stepLength) {
   pvec <- NULL
   repeat {
     if (iter == meannum-1) break
-    sdvalue <- sd(diffsl[1:(3+iter)]-meanlist[iter+1])
-    pvalue <- 1 - pt((meanlist[iter+2]-meanlist[iter+1])/(sdvalue/sqrt(3+iter)),
-                     3+iter)
+    b0 <- iter + 1 + extra
+    b1 <- b0 + 2
+    sdvalue <- sd(diffsl[1:(b0 + 2)] - meanlist[b0])
+    pvalue <- 1 - pt((meanlist[iter + 2] - meanlist[iter + 1]) / (sdvalue/sqrt(b1)),
+                     b1)
     pvec <- c(pvec, pvalue)
     if (pvalue < 0.01) break
     iter <- iter + 1
   }
-  if (iter < meannum-1) {
+  if (iter < meannum - 1) {
     slset <- sort1$ix[(iter+4):length(stepLength)]
     magic <- (1:length(stepLength) %in% slset)
   }  else { 
@@ -242,37 +233,8 @@ agDimTtest <- function(stepLength) {
   magic
 }
 
-# version 2: naive idea to detect the significant change point in  
-# difference of sorted step lengths (variant t-based method)
-# to do: include significance level alpha in arguments, currently
-# set significance level to be 0.01
-agdimttest2 <- function(steplength) {
-  sort1 <- sort(steplength, decreasing=false, method="qu", 
-                index.return=true)
-  diffsl <- diff(sort1$x)
-  meanlist <- cumsum(diffsl)[3:length(diffsl)]/(3:length(diffsl))
-  meannum <- length(meanlist)
-  iter <- 0
-  pvec <- null
-  repeat {
-    if (iter == meannum-1) break
-    sdvalue <- sd(diffsl[1:(4+iter)]-meanlist[iter+2])
-      # include one more step length to make std. larger
-    pvalue <- 1 - pt((meanlist[iter+2]-meanlist[iter+1])/(sdvalue/sqrt(4+iter)),
-                     4+iter)
-    pvec <- c(pvec, pvalue)
-    if (pvalue < 0.01) break
-    iter <- iter + 1
-  }
-  if (iter < meannum-1) {
-    slset <- sort1$ix[(iter+4):length(steplength)]
-    magic <- (1:length(steplength) %in% slset)
-  }  else { 
-    pt <- which.min(pvec) 
-    slset <- sort1$ix[(pt+4):length(steplength)]
-    magic <- (1:length(steplength) %in% slset)
-  }
-  magic
+agDimTtest2 <- function(stepLength) {
+  agDimTtest(stepLength, extra=1)
 }
 
 #-------------------------------------------------------------------------
@@ -282,7 +244,7 @@ agDimCPT <- function(stepLength) {
                 index.return=TRUE)
   fit <- cpt.mean(sort1$x, Q=2)
   cp <- cpts(fit)
-  if (length(cp)!=0) {
+  if (length(cp) != 0) {
     slset <- sort1$ix[(cp+1):length(stepLength)]
     magic <- (1:length(stepLength) %in% slset)
   } else {
@@ -295,26 +257,17 @@ agDimCPT <- function(stepLength) {
 # cpm criterion (use detectChangePointBatch function in cpm package)
 # use detectChangePointBatch function to detect the significant change 
 # point in sorted step lengths, cpmethod is cpmType in the function
-agDimCPM <- function(stepLength, logtransform, cpmethod) {
-  if (logtransform) {
-    stepLength <- log(stepLength)
-    if (cpmethod=="Exponential" || cpmethod=="ExponentialAdjusted") {
-      stop("CPM type is not appropriate after log transformation. Try other 
-      CPM types.")
-    }
-  }
-  if (length(stepLength) > 3) { 
-    sort1 <- sort(stepLength, decreasing=FALSE, method="qu", 
-             index.return=TRUE)
-    fit <- detectChangePointBatch(sort1$x, cpmethod, alpha=0.05,
-             lambda=NA)
-    cp <- fit$changePoint
-    if (fit$changeDetected) {
-        slset <- sort1$ix[(cp+1):length(stepLength)]
-        magic <- (1:length(stepLength) %in% slset)
-    } else { magic <- (stepLength == max(stepLength)) }
+agDimCPM <- function(stepLength, cpmethod) {
+  sort1 <- sort(stepLength, decreasing=FALSE, method="qu", 
+                index.return=TRUE)
+  fit <- detectChangePointBatch(sort1$x, cpmethod, alpha=0.05,
+                                lambda=NA)
+  cp <- fit$changePoint
+  if (fit$changeDetected) {
+    slset <- sort1$ix[(cp+1):length(stepLength)]
+    magic <- (1:length(stepLength) %in% slset)
   } else {
-      magic <- (stepLength == max(stepLength))
+    magic <- (stepLength == max(stepLength))
   }
   magic
 }

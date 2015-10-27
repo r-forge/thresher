@@ -8,6 +8,8 @@ import(MASS)
 import(colorspace)
 import(movMF)
 import(ade4)
+import(changepoint)
+import(kernlab)
 
 import(oompaBase)
 import(ClassDiscovery)
@@ -22,6 +24,11 @@ export(brokenStick, bsDimension)
 # compute number of PCs using Auer-Gervini method
 exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
+
+export(agDimNaive,
+       agDimKmeans, agDimKmeans3, agDimKmeans3,
+       agDimSpectral, agDimTtest, agDimTtest2,
+       agDimCPT)
 
 # match labels in two different cluster assignments
 export(labelMatcher, matchLabels,

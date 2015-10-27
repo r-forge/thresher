@@ -58,6 +58,10 @@ summary(obj)
 plot(obj, main=paste(idx, ";  True Groups =", ng))
 abline(h=ng, lty=3)
 
+plot(obj, list(agDimNaive, agDimKmeans,
+               agDimTtest, agDimTtest2, agDimCPT),
+     main=paste(idx, ";  True Groups =", ng))
+
 #par(ask=T)
 for (i in 1:5) {
   s1 <- savedSims[[i]]
