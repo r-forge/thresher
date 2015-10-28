@@ -50,7 +50,8 @@ Thresher <- function(data,
                      metric="pearson",
                      linkage="ward.D2",
                      method=c("broken.stick", "auer.gervini"),
-                     scale=TRUE) {
+                     scale=TRUE,
+                     agfun=agDimTwiceMean) {
   # always center; by default, also 'scale' to standardize
   std <- scale(data, scale=scale)
   spca <- SamplePCA(t(std))
@@ -58,7 +59,7 @@ Thresher <- function(data,
   method <- match.arg(method)
   pcdim <- switch(method,
                   broken.stick=bsDimension(spca),
-                  auer.gervini=agDimension(ag))
+                  auer.gervini=agDimension(ag, agfun))
   deltaDim <- max(1, pcdim)
   # distance from origin using loadings
   lambda <- sqrt(spca@variances)
