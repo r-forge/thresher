@@ -58,8 +58,9 @@ summary(obj)
 plot(obj, main=paste(idx, ";  True Groups =", ng))
 abline(h=ng, lty=3)
 
+f <- makeAgCpmFun("Exponential")
 plot(obj, list(agDimTwiceMean, agDimKmeans,
-               agDimTtest, agDimTtest2, agDimCPT),
+               agDimTtest, agDimTtest2, agDimCPT, f),
      main=paste(idx, ";  True Groups =", ng))
 
 #par(ask=T)

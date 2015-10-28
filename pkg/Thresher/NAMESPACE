@@ -10,6 +10,7 @@ import(movMF)
 import(ade4)
 import(changepoint)
 import(kernlab)
+import(cpm)
 
 import(oompaBase)
 import(ClassDiscovery)
@@ -28,7 +29,7 @@ export(AuerGervini, agDimension)
 export(agDimTwiceMean,
        agDimKmeans, agDimKmeans2, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
-       agDimCPT)
+       agDimCPT, makeAgCpmFun)
 
 # match labels in two different cluster assignments
 export(labelMatcher, matchLabels,

@@ -49,8 +49,10 @@ Thresher <- function(data,
                      FUZZ=0.005,
                      metric="pearson",
                      linkage="ward.D2",
-                     method=c("broken.stick", "auer.gervini")) {
-  std <- scale(data)
+                     method=c("broken.stick", "auer.gervini"),
+                     scale=TRUE) {
+  # always center; by default, also 'scale' to standardize
+  std <- scale(data, scale=scale)
   spca <- SamplePCA(t(std))
   ag <- AuerGervini(spca)
   method <- match.arg(method)

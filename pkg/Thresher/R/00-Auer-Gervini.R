@@ -268,3 +268,9 @@ agDimCPM <- function(stepLength, cpmethod) {
   }
   magic
 }
+
+makeAgCpmFun <- function(method) {
+  function(stepLength) {
+    agDimCPM(stepLength, method)
+  }
+}
