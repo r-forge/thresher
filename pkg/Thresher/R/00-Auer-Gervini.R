@@ -134,11 +134,8 @@ setMethod("summary", "AuerGervini", function(object, ...) {
 })
 
 
-agDimension <- function(object, agfun=agDimNaive, logtransform=FALSE) {
+agDimension <- function(object, agfun=agDimTwiceMean) {
   stepLength <- diff(c(object@changePoints, estimateTop(object)))
-  if (logtransform) {
-    stepLength <- log(stepLength)
-  }
   if (length(stepLength) > 4) {
     magic <- agfun(stepLength)
   } else {
@@ -149,7 +146,7 @@ agDimension <- function(object, agfun=agDimNaive, logtransform=FALSE) {
          0)
 }
 
-agDimNaive <- function(stepLength) {
+agDimTwiceMean <- function(stepLength) {
   (stepLength > 2*mean(stepLength))
 }
 

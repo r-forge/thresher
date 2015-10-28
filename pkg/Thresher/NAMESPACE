@@ -25,8 +25,8 @@ export(brokenStick, bsDimension)
 exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
 
-export(agDimNaive,
-       agDimKmeans, agDimKmeans3, agDimKmeans3,
+export(agDimTwiceMean,
+       agDimKmeans, agDimKmeans2, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
        agDimCPT)
 
