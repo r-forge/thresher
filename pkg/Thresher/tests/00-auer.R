@@ -58,7 +58,7 @@ summary(obj)
 plot(obj, main=paste(idx, ";  True Groups =", ng))
 abline(h=ng, lty=3)
 
-plot(obj, list(agDimNaive, agDimKmeans,
+plot(obj, list(agDimTwiceMean, agDimKmeans,
                agDimTtest, agDimTtest2, agDimCPT),
      main=paste(idx, ";  True Groups =", ng))
 
