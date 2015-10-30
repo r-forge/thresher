@@ -25,7 +25,7 @@ export(brokenStick, bsDimension)
 # compute number of PCs using Auer-Gervini method
 exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
-
+# lots of ways to automate the count
 export(agDimTwiceMean,
        agDimKmeans, agDimKmeans2, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
@@ -52,10 +52,5 @@ export("Reaper")
 exportMethods("plot", "image", "screeplot")
 
 # novel generic functions
-exportMethods("makeFigures", "getColors", "getStyles", "getSplit", "scatter", "heat")
-
-
-#importFrom(stats, "anova")
-#exportMethods("show")
-#exportClasses("Bum")
-#export("Bum")
+exportMethods("makeFigures", "getColors", "getStyles",
+              "getSplit", "scatter", "heat")

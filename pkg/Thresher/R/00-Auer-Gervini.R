@@ -69,10 +69,8 @@ setClass("AuerGervini",
            Lambda="numeric",
            dimensions="numeric",
            dLevels="numeric",
-           changePoints="numeric",
-           lowerBounds="numeric",
-           upperBounds="numeric"
-           ))
+           changePoints="numeric"
+         ))
 
 AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
   if (inherits(Lambda, "SamplePCA")) {
@@ -89,8 +87,7 @@ AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
   dLevels <- rev(rg[lowerBounds <= upperBounds])
   changePoints <- rev(lowerBounds[lowerBounds <= upperBounds])[-1]
   new("AuerGervini", Lambda=Lambda, dimensions = dd,
-      dLevels=dLevels, changePoints=changePoints,
-      lowerBounds=lowerBounds, upperBounds=upperBounds)
+      dLevels=dLevels, changePoints=changePoints)
 }
 
 estimateTop <- function(object) {
