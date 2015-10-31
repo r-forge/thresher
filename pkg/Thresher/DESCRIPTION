@@ -1,8 +1,8 @@
 Package: Thresher
-Version: 0.9.28
-Date: 2015-10-30
+Version: 0.9.30
+Date: 2015-10-31
 Title: Threshing and Reaping for Principal Components
-Author: Kevin R. Coombes
+Author: Kevin R. Coombes, Min Wang
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: The Thresher package defines the classes used to identify
   outliers (threshing) and compute the number of significant principal

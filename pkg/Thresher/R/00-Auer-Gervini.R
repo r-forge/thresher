@@ -155,14 +155,6 @@ agDimKmeans <- function(stepLength) {
   (stepLength >= max(kmeanfit$centers))
 }
 
-# version 2: centers are second max. and second min. (select highest large)
-agDimKmeans2 <- function(stepLength) {
-  sortsl <- sort(stepLength, decreasing=FALSE)
-  kmeanfit <- kmeans(stepLength, centers=c(sortsl[2], 
-                                           sortsl[length(sortsl)-1]))
-  (stepLength >= max(kmeanfit$centers))
-}
-
 # version 3: choose k=3 if more features (select highest largest)
 agDimKmeans3 <- function(stepLength) {
   # choose k = 3 if there are many features (extra center is median)
@@ -175,7 +167,7 @@ agDimKmeans3 <- function(stepLength) {
                   max(stepLength))
   }
   kmeanfit <- kmeans(stepLength, centers=kcenters)
-  (stepLength >= max(kmeanfit$centers))
+  (stepLength >= median(kmeanfit$centers))
 }
 
 #-------------------------------------------------------------------------

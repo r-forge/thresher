@@ -27,7 +27,7 @@ exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
 # lots of ways to automate the count
 export(agDimTwiceMean,
-       agDimKmeans, agDimKmeans2, agDimKmeans3,
+       agDimKmeans, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
        agDimCPT, makeAgCpmFun)
 

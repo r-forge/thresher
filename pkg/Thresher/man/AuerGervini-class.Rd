@@ -111,3 +111,4 @@ agDimension(ag, agDimKmeans)
 plot(ag, agfun=list(agDimTwiceMean, agDimKmeans))
 }
 \keyword{classes}
+\keyword{models}
