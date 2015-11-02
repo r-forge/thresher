@@ -1,5 +1,5 @@
 Used to force RForge to rebuild the package for newer R versions when
 nothing else in the package has changed.
 
-Last Bumped: 2015-06-02
+Last Bumped: 2015-11-02
 R Version: 3.2.0
