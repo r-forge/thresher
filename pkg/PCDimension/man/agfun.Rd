@@ -1,7 +1,8 @@
 \name{agDimFunction}
+\alias{agDimFunction}
 \alias{agDimTwiceMean}
-\alias{agDimKMeans}
-\alias{agDimKMeans3}
+\alias{agDimKmeans}
+\alias{agDimKmeans3}
 \alias{agDimSpectral}
 \alias{agDimTtest}
 \alias{agDimTtest2}
@@ -23,8 +24,8 @@
 }
 \usage{
   agDimTwiceMean(stepLength)
-  agDimKMeans(stepLength)
-  agDimKMeans3(stepLength)
+  agDimKmeans(stepLength)
+  agDimKmeans3(stepLength)
   agDimSpectral(stepLength)
   agDimTtest(stepLength, extra=0)
   agDimTtest2(stepLength)
@@ -37,13 +38,13 @@
     \code{\link{detectChangePointBatch}} function in the \code{cpm}
     package.}
   \item{extra}{Just ignore this. Don't use it. It's a hack to avoid
-    having to maintain two differfent versiosn of the same code.}
+    having to maintain two differfent versions of the same code.}
 }
 \details{
   The \code{agDimTwiceMean} function implements a simple and naive rule:
   a step is considered long if it as least twice the mean length.
 
-  The \code{agDimKMeans} uses the \code{\link{kmeans}} algorithm with
+  The \code{agDimKmeans} uses the \code{\link{kmeans}} algorithm with
   \eqn{k=2} to divide the step lengths into two classes.  Starting
   centers for the groups are taken to be the minimum and maximum
   values.
@@ -77,8 +78,8 @@
   package.
 }
 \value{
-  Each of the functions \code{agDimTwiceMean}, \code{agDimKMeans},
-  \code{agDimKMeans3}, \code{agDimSpectral}, \code{agDimTtest},
+  Each of the functions \code{agDimTwiceMean}, \code{agDimKmeans},
+  \code{agDimKmeans3}, \code{agDimSpectral}, \code{agDimTtest},
   \code{agDimTtest2}, and \code{agDimCPT} returns a logical vector whose
   length is equal to the input \code{stepLength}.  \code{TRUE} values
   identify "long" steps and \code{FALSE} values identify "short"

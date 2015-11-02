@@ -4,17 +4,14 @@
 import(methods)
 import(stats)
 import(graphics)
+import(oompaBase)
+import(ClassDiscovery)
 importFrom(kernlab, specc)
 importFrom(changepoint, cpt.mean, cpts)
 importFrom(cpm, detectChangePointBatch)
-import(colorspace)
-
-import(oompaBase)
-import(ClassDiscovery)
 
 # redefined S3 methods
-importMethodsFrom(oompaBase, "summary", "plot", "image")
-importMethodsFrom(ClassDiscovery, "screeplot")
+importMethodsFrom(oompaBase, "summary", "plot")
 
 # compute number of PCs using broken-stick model
 export(brokenStick, bsDimension)

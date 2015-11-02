@@ -72,7 +72,7 @@ Objects should be created using the \code{AuerGervini} constructor.
   automatically deciding what is "long" enough.  The simplest (but
   fairly naive) approach   is to take anything that is longer than twice
   the mean; other algorithms are described in
-  \code{\link{agDimFunctions}}.
+  \code{\link{agDimFunction}}.
 }
 \value{
   The \code{AuerGervini} function constructs and returns an object of
@@ -93,7 +93,7 @@ Objects should be created using the \code{AuerGervini} constructor.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
 \seealso{
-  \code{\link{agDimFunctions}} to get a complete list of the functions
+  \code{\link{agDimFunction}} to get a complete list of the functions
   implementing different algorithms to separate the step lengths into
   two classes.
 }
