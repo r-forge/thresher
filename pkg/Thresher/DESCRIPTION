@@ -1,16 +1,15 @@
 Package: Thresher
-Version: 0.9.30
-Date: 2015-10-31
+Version: 0.10.0
+Date: 2015-11-02
 Title: Threshing and Reaping for Principal Components
-Author: Kevin R. Coombes, Min Wang
+Author: Kevin R. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: The Thresher package defines the classes used to identify
   outliers (threshing) and compute the number of significant principal
   components and number of clusters (reaping) in a joint application
   of PCA and hierarchical clustering.
-Depends: R (>= 3.1), ClassDiscovery
-Imports: methods, stats, graphics, MASS, colorspace, movMF, ade4,
-  oompaBase, kernlab, changepoint, cpm
+Depends: R (>= 3.1), ClassDiscovery, PCDimension
+Imports: methods, stats, graphics, MASS, colorspace, movMF, ade4, oompaBase
 License: Apache License (== 2.0)
 biocViews: Clustering
 URL: http://oompa.r-forge.r-project.org/

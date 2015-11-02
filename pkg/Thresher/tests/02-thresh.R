@@ -1,22 +1,5 @@
 library(Thresher)
 
-######################################################
-# Test some internal routines
-
-# Theory says that fhat is non-decreasing
-fh <- sapply(rg, Thresher:::fhat, Lambda=lam)
-all( diff(fh) >= 0 ) # should be 'TRUE'
-
-plot( rg, fh, type='b', pch=16 )
-
-# Theory says that dhat is non-increasing
-thetas <- seq(0, 0.2, by=0.01)
-dset <- sapply(thetas, Thresher:::dhat, Lambda=lam)
-all( diff(dset) <= 0 ) # should be 'TRUE'
-
-plot(thetas, dset, type='l')
-
-######################################################
 # color palette
 M <- length(thresherPalette)
 pts <- barplot(rep(1, M), col=thresherPalette)
