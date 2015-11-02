@@ -11,6 +11,22 @@ lam <- spca@variances[1:(NC-1)] # remove 0 eigenvalue
 rg <- 0:(NC-2)
 
 ######################################################
+# Test some internal routines
+
+# Theory says that fhat is non-decreasing
+fh <- sapply(rg, PCDimension:::fhat, Lambda=lam)
+all( diff(fh) >= 0 ) # should be 'TRUE'
+
+plot( rg, fh, type='b', pch=16 )
+
+# Theory says that dhat is non-increasing
+thetas <- seq(0, 0.2, by=0.01)
+dset <- sapply(thetas, PCDimension:::dhat, Lambda=lam)
+all( diff(dset) <= 0 ) # should be 'TRUE'
+
+plot(thetas, dset, type='l')
+
+######################################################
 # test external interface on random data
 
 # Auer-Gervini Bayesian method
