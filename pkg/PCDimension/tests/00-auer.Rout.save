@@ -84,10 +84,16 @@ An 'AuerGervini' object that estimates the number of principal components to be 
 > plot(obj)
 > 
 > f <- makeAgCpmFun("Exponential")
-> plot(obj, list(agDimTwiceMean, agDimKmeans,
-+                agDimTtest, agDimTtest2, agDimCPT, f))
+> agfuns <- list(twice=agDimTwiceMean,
++                km=agDimKmeans, km3=agDimKmeans3, 
++                tt=agDimTtest, tt2=agDimTtest2,
++                cpt=agDimCPT, cpm=f, leap=agDimLeap)
+> plot(obj, agfuns)
 > 
+> compareAgDimMethods(obj, agfuns)
+twice    km   km3    tt   tt2   cpt   cpm  leap 
+    1     1     1     3     1     1     3     8 
 > 
 > proc.time()
    user  system elapsed 
-   1.49    0.17    1.66 
+   1.79    0.12    1.93 

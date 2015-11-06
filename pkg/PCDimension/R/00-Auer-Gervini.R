@@ -130,6 +130,9 @@ setMethod("summary", "AuerGervini", function(object, ...) {
       "principal components to be ", agDimension(object), ".\n", sep="")
 })
 
+compareAgDimMethods <- function(object, agfuns) {
+  unlist(lapply(agfuns, function(f) agDimension(object, f)))
+}
 
 agDimension <- function(object, agfun=agDimTwiceMean) {
   stepLength <- diff(c(object@changePoints, estimateTop(object)))
@@ -152,7 +155,8 @@ agDimTwiceMean <- function(stepLength) {
 agDimKmeans <- function(stepLength) {
   kmeanfit <- kmeans(stepLength, centers=c(min(stepLength), 
                                            max(stepLength)))
-  (stepLength >= max(kmeanfit$centers))
+  i <- which.max(kmeanfit$centers)
+  kmeanfit$cluster == i
 }
 
 # version 3: choose k=3 if more features (select highest largest)
@@ -167,7 +171,9 @@ agDimKmeans3 <- function(stepLength) {
                   max(stepLength))
   }
   kmeanfit <- kmeans(stepLength, centers=kcenters)
-  (stepLength >= median(kmeanfit$centers))
+  # treats intermediate as long and says "don't include short"
+  i <- which.min(kmeanfit$centers)
+  kmeanfit$cluster != i
 }
 
 #-------------------------------------------------------------------------
@@ -179,7 +185,7 @@ agDimSpectral <- function(stepLength) {
   scmean1 <- mean(stepLength[scfit==1])
   scmean2 <- mean(stepLength[scfit==2])
   scnum <- ifelse(scmean1>scmean2, 1, 2)
-  (scfit==scnum)
+  scfit == scnum
 }
 
 #------------------------------------------------------------------------
@@ -262,4 +268,28 @@ makeAgCpmFun <- function(method) {
   function(stepLength) {
     agDimCPM(stepLength, method)
   }
+}
+
+#------------------------------------------------------------------------
+# another novel emthod
+agDimLeap <- function(stepLength) {
+  N <- length(stepLength)
+  sorted <- sort(stepLength)
+  cummean <- cumsum(sorted)/(1:N)
+  cumsd <- sapply(1:N, function(i) sd(sorted[1:i]))
+  p <- 1 - pnorm(sorted[4:N], cummean[3:(N-1)], cumsd[3:(N-1)])
+  if (any( p < 0.01)) { # magic number
+    w <- 3 + which(p < 0.01)[1]
+    magic <- stepLength >= sorted[w]
+  } else {
+    magic <- (stepLength == max(stepLength))
+  }
+  magic
+}
+
+if(0) {
+  plot(sorted, type='b')
+  lines(cummean, col='red', type='b')
+  lines(cummean+3*cumsd, col='blue', type='b')
+  points(4:20, p, pch=16)
 }

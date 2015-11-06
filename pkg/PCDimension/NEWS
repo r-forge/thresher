@@ -1,6 +1,25 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
+	*	       1.1 SERIES NEWS			 *
+	*						 *
+	**************************************************
+
+
+NEW FEATURES
+
+    o	Added agDimLeap, a new algorithm to find long steps.
+
+    o	Added a new function, compareAgDimMethods, to report the
+        different dimensions reported by different algorithms.
+
+BUG FIXES
+
+    o	Fixed an error in aDimKeans and agDoimKmeans3 that only
+        flagged half of the "long" steps. 
+
+	**************************************************
+	*						 *
 	*	       1.0 SERIES NEWS			 *
 	*						 *
 	**************************************************

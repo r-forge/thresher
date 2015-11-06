@@ -20,8 +20,9 @@ export(brokenStick, bsDimension)
 exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
 # lots of ways to automate the count
+export(compareAgDimMethods)
 export(agDimTwiceMean,
        agDimKmeans, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
-       agDimCPT, makeAgCpmFun)
+       agDimCPT, makeAgCpmFun, agDimLeap)
 

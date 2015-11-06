@@ -3,6 +3,7 @@
 \alias{agDimTwiceMean}
 \alias{agDimKmeans}
 \alias{agDimKmeans3}
+\alias{agDimLeap}
 \alias{agDimSpectral}
 \alias{agDimTtest}
 \alias{agDimTtest2}
@@ -26,6 +27,7 @@
   agDimTwiceMean(stepLength)
   agDimKmeans(stepLength)
   agDimKmeans3(stepLength)
+  agDimLeap(stepLength)
   agDimSpectral(stepLength)
   agDimTtest(stepLength, extra=0)
   agDimTtest2(stepLength)
@@ -57,16 +59,16 @@
   by the \code{\link{specc}} function from the \code{kernlab} package)
   to divide the steps lengths into two groups.
 
-  The \code{agDimTtest} and \code{agDimTtest2} functions implement two
-  variants of a novel algorithm specialized for this particular task.
-  The idea is to start by sorting the step lengths so that
-  \deqn{L_1 \le L_2 \le \dots \le L_n.}
-  Then, for each \eqn{i \in 3,\dots, N-1}, we compute the mean and
-  standard deviation of the first \eqn{i} step lengths.  Finally, one
-  computes the likelhood that \eqn{L_{i+1}} comes from the normal
-  distribution defined by the first  \eqn{i} lengths. If the probability
-  that \eqn{L_{i+1}} is larger is less than \eqn{0.01}, then it is chosen
-  as the "smallest long step".
+  The \code{agDimLeap}, \code{agDimTtest}, and \code{agDimTtest2}
+  functions implement two variants of a novel algorithm specialized for
+  this particular task.  The idea is to start by sorting the step
+  lengths so that \deqn{L_1 \le L_2 \le \dots \le L_n.}  Then, for each
+  \eqn{i \in 3,\dots, N-1}, we compute the mean and standard deviation
+  of the first \eqn{i} step lengths.  Finally, one computes the
+  likelhood that \eqn{L_{i+1}} comes from the normal distribution
+  defined by the first \eqn{i} lengths. If the probability that
+  \eqn{L_{i+1}} is larger is less than \eqn{0.01}, then it is chosen as
+  the "smallest long step".
 
   The novel method just described can also be viewed as a way to detect
   a particular kind of change point.  So, we also provide the

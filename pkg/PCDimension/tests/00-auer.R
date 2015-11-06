@@ -56,6 +56,10 @@ summary(obj)
 plot(obj)
 
 f <- makeAgCpmFun("Exponential")
-plot(obj, list(agDimTwiceMean, agDimKmeans,
-               agDimTtest, agDimTtest2, agDimCPT, f))
+agfuns <- list(twice=agDimTwiceMean,
+               km=agDimKmeans, km3=agDimKmeans3, 
+               tt=agDimTtest, tt2=agDimTtest2,
+               cpt=agDimCPT, cpm=f, leap=agDimLeap)
+plot(obj, agfuns)
 
+compareAgDimMethods(obj, agfuns)
