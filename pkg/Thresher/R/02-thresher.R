@@ -211,7 +211,7 @@ setMethod("makeFigures", "Thresher", function(object, DIR=NULL, ...) {
 # fig2
   if(!is.null(DIR)) png(file.path(DIR, paste(fname, "-02-bayes.png", sep="")),
                width=800, height=600, bg="white")
-  plot(object@ag, object@agfun, lwd=3, main=paste(object@name, "(Bayesian Anaysis)"))
+  plot(object@ag, list(object@agfun), lwd=3, main=paste(object@name, "(Bayesian Anaysis)"))
   if(!is.null(DIR)) dev.off()
 # fig3
   if(!is.null(DIR)) png(file.path(DIR, paste(fname, "-03-spca.png", sep="")),
