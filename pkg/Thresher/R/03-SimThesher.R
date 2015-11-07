@@ -9,7 +9,8 @@ setMethod("image", "SimThresher", function(x, ...) {
   image(x@covariance, ...)
 })
 
-SimThresher <- function(ss, nSample, nm=deparse(substitute(ss)), rho=NULL, ...) {
+SimThresher <- function(ss, nSample, nm=deparse(substitute(ss)), rho=NULL,
+                        agfun=agDimTwiceMean, ...) {
   if (is.null(rho)) {
     rho <- sort(unique(abs(ss[upper.tri(ss)])))[-1]
   }
@@ -17,7 +18,7 @@ SimThresher <- function(ss, nSample, nm=deparse(substitute(ss)), rho=NULL, ...) 
   mu <- rep(0, nFeature)
   simdata <- mvrnorm(nSample, mu, ss)
   colnames(simdata) <- paste("Pr", 1:ncol(simdata), sep='')
-  new("SimThresher", Thresher(simdata, nm, ...),
+  new("SimThresher", Thresher(simdata, nm, agfun=agfun, ...),
       nSample=nSample,
       covariance = ss,
       rho=rho)

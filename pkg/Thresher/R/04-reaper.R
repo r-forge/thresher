@@ -149,6 +149,7 @@ Reaper <- function(thresher,
   cleaned <- Thresher(thresher@data[, keep],
                       paste(thresher@name, "cleaned", sep='.'),
                       metric=m,
+                      agfun=thresher@agfun,
                       ...)
   tab <- 0
   counter <- 0

@@ -41,7 +41,8 @@ setClass("Thresher",
            gc="hclust",
            pcdim="numeric",
            delta="numeric",
-           ag="AuerGervini"
+           ag="AuerGervini",
+           agfun='function'
            ))
 
 Thresher <- function(data,
@@ -69,7 +70,7 @@ Thresher <- function(data,
   gc <- hclust(distanceMatrix(std, metric), linkage)
   new("Thresher",
       name=nm, data=data, spca=spca, loadings=loadings,
-      gc=gc, pcdim=pcdim, delta=delta, ag=ag)
+      gc=gc, pcdim=pcdim, delta=delta, ag=ag, agfun=agfun)
 }
 
 setMethod("screeplot", "Thresher", function(x, col="skyblue", lcol="blue", ...) {
@@ -210,7 +211,7 @@ setMethod("makeFigures", "Thresher", function(object, DIR=NULL, ...) {
 # fig2
   if(!is.null(DIR)) png(file.path(DIR, paste(fname, "-02-bayes.png", sep="")),
                width=800, height=600, bg="white")
-  plot(object@ag, lwd=3, main=paste(object@name, "(Bayesian Anaysis)"))
+  plot(object@ag, object@agfun, lwd=3, main=paste(object@name, "(Bayesian Anaysis)"))
   if(!is.null(DIR)) dev.off()
 # fig3
   if(!is.null(DIR)) png(file.path(DIR, paste(fname, "-03-spca.png", sep="")),
