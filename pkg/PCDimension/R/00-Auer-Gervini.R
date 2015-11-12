@@ -91,9 +91,9 @@ AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
 }
 
 estimateTop <- function(object) {
-  oldAndCrude <- -2*log(0.01)/length(object@Lambda) # in case we want to revert
   n <- object@dimensions[1] # nrows
-  m <- object@dimensions[1] # ncolumns
+  m <- object@dimensions[2] # ncolumns
+  oldAndCrude <- -2*log(0.01)/n # in case we want to revert
   delta <- 1 # why do we do it this way?
   magic <- 18.8402+1.9523*m-0.0005*m^2 # from a linear model fit on simulated data
   modelBased <- ifelse(n >= m,
@@ -181,7 +181,7 @@ agDimKmeans3 <- function(stepLength) {
 agDimSpectral <- function(stepLength) {
   # project 1D step length sequence onto a 2D line (y=x)
   dat <- cbind(X1=stepLength, X2=stepLength)
-  scfit <- specc(dat, centers=2)
+  scfit <- specc(dat, centers=2, mod.sample=1)
   scmean1 <- mean(stepLength[scfit==1])
   scmean2 <- mean(stepLength[scfit==2])
   scnum <- ifelse(scmean1>scmean2, 1, 2)
@@ -209,7 +209,7 @@ agDimTtest <- function(stepLength, extra=0) {
     b1 <- b0 + 2
     sdvalue <- sd(diffsl[1:(b0 + 2)] - meanlist[b0])
     pvalue <- 1 - pt((meanlist[iter + 2] - meanlist[iter + 1]) / (sdvalue/sqrt(b1)),
-                     b1)
+                     b1 - 1)
     pvec <- c(pvec, pvalue)
     if (pvalue < 0.01) break
     iter <- iter + 1
