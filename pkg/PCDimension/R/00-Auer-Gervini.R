@@ -61,6 +61,52 @@ bsDimension <- function(lambda, FUZZ=0.005) {
   which(fracVar - bs < FUZZ)[1] - 1
 }
 
+# randomization based model
+matPermutate <- function(data) {
+  n <- nrow(data)
+  m <- ncol(data)
+  permat <- data
+  for (i in 1:m) {
+    new <- sample(n, n, replace=FALSE)
+    permat[,i] <- data[,i][new]
+  }
+  permat
+}
+
+# randomization based model to get dimension
+# B is total repeat times for randomization, alpha is significance
+# level for p-values
+rndLambdaF <- function(data, B=1000, alpha = 0.05, ...) {
+  if (class(data[1,1])!="numeric") {
+    stop('data elements are not numeric')
+  }
+  if (sum(is.na(data))>0) {
+    stop('data contains missing values')
+  }
+  m <- ncol(data)
+  Lambda <- F <- matrix(1e-6, B, m)   
+  spca <- SamplePCA(t(data))
+  lambda <- sqrt(spca@variances)
+  lambda < ifelse(length(lambda)==m, lambda, c(lambda,rep(1e-6,m-length(lambda))))
+  rescum <- cumsum(sort(lambda, decreasing=FALSE))[1:(m-1)]
+  Lambda[1, ] <- lambda
+  F[1,1:(m-1)] <- lambda[1:(m-1)]/sort(rescum, decreasing=TRUE)
+  for (i in 1:(B-1)) {
+    rndmat <- matPermutate(data)
+    spca <- SamplePCA(t(rndmat))
+    lambda <- sqrt(spca@variances)
+    lambda < ifelse(length(lambda)==m, lambda, c(lambda,rep(1e-6,m-length(lambda))))
+    rescum <- cumsum(sort(lambda, decreasing=FALSE))[1:(m-1)]
+    Lambda[i+1, ] <- lambda
+    F[i+1, 1:(m-1)] <- lambda[1:(m-1)]/sort(rescum, decreasing=TRUE)
+  }
+  p1 <- apply(Lambda, 2, function(v) {sum(v>=v[1])/length(v)})
+  p2 <- apply(F, 2, function(v) {sum(v>=v[1])/length(v)})
+  res <- c(rndLambda=which(p1>alpha)[1]-1, rndF=which(p2>alpha)[1]-1)
+  return(res)
+}
+
+
 #######################################################
 # S4 interface
 
