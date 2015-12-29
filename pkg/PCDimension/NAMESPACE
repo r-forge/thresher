@@ -16,6 +16,9 @@ importMethodsFrom(oompaBase, "summary", "plot")
 # compute number of PCs using broken-stick model
 export(brokenStick, bsDimension)
 
+# compute number of PCs using randomization-based model
+export(rndLambdaF)
+
 # compute number of PCs using Auer-Gervini method
 exportClasses("AuerGervini")
 export(AuerGervini, agDimension)
