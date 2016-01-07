@@ -27,5 +27,5 @@ export(compareAgDimMethods)
 export(agDimTwiceMean,
        agDimKmeans, agDimKmeans3,
        agDimSpectral, agDimTtest, agDimTtest2,
-       agDimCPT, makeAgCpmFun, agDimLeap)
+       agDimCPT, makeAgCpmFun)
 

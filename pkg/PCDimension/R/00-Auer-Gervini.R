@@ -318,21 +318,21 @@ makeAgCpmFun <- function(method) {
 
 #------------------------------------------------------------------------
 # another novel method
-agDimLeap <- function(stepLength) {
-  N <- length(stepLength)
-  sorted <- sort(stepLength)
-  cummean <- cumsum(sorted)/(1:N)
-  cumsd <- sapply(1:N, function(i) sd(sorted[1:i]))
-  p <- 1 - pnorm(sorted[4:N], cummean[3:(N-1)], cumsd[3:(N-1)])
-  p <- (N-3)*p # Bonferroni
-  if (any( p < 0.01)) { # magic number
-    w <- 3 + which(p < 0.01)[1]
-    magic <- stepLength >= sorted[w]
-  } else {
-    magic <- (stepLength == max(stepLength))
-  }
-  magic
-}
+# agDimLeap <- function(stepLength) {
+#   N <- length(stepLength)
+#   sorted <- sort(stepLength)
+#   cummean <- cumsum(sorted)/(1:N)
+#   cumsd <- sapply(1:N, function(i) sd(sorted[1:i]))
+#   p <- 1 - pnorm(sorted[4:N], cummean[3:(N-1)], cumsd[3:(N-1)])
+#   p <- (N-3)*p # Bonferroni
+#   if (any( p < 0.01)) { # magic number
+#     w <- 3 + which(p < 0.01)[1]
+#     magic <- stepLength >= sorted[w]
+#   } else {
+#     magic <- (stepLength == max(stepLength))
+#   }
+#   magic
+# }
 
 if(0) {
   plot(sorted, type='b')
