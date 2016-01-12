@@ -44,6 +44,9 @@ pts <- screeplot(spca, ylim=c(0, 0.2))
 lines(pts, bs, type='b', col='blue', lwd=2, pch=16)
 lines(pts[-NC], bs0, type='b', col='red', lwd=2, pch=16)
 
+# randomization based model
+rndLambdaF(ranData)
+
 rm(spca)
 ######################################################
 # get the previously computed simulated SamplePCA object
@@ -59,7 +62,7 @@ f <- makeAgCpmFun("Exponential")
 agfuns <- list(twice=agDimTwiceMean,
                km=agDimKmeans, km3=agDimKmeans3, 
                tt=agDimTtest, tt2=agDimTtest2,
-               cpt=agDimCPT, cpm=f, leap=agDimLeap)
+               cpt=agDimCPT, cpm=f)
 plot(obj, agfuns)
 
 compareAgDimMethods(obj, agfuns)
