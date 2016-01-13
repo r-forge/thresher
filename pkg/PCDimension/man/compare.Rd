@@ -49,7 +49,7 @@ ag <- AuerGervini(lambda, dd=c(3,10))
 # try different methods
 agfuns <- list(twice=agDimTwiceMean,
                km=agDimKmeans,
-               leap=agDimLeap)
+               cpt=agDimCPT)
 compareAgDimMethods(ag, agfuns)
 }
 \keyword{models}
