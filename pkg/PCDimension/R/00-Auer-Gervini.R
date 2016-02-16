@@ -76,7 +76,7 @@ matPermutate <- function(data) {
 # randomization based model to get dimension
 # B is total repeat times for randomization, alpha is significance
 # level for p-values
-rndLambdaF <- function(data, B=1000, alpha = 0.05, ...) {
+rndLambdaF <- function(data, B=1000, alpha=0.05, ...) {
   if (class(data[1,1]) != "numeric") {
     stop('data elements are not numeric')
   }
@@ -87,7 +87,9 @@ rndLambdaF <- function(data, B=1000, alpha = 0.05, ...) {
   Lambda <- F <- matrix(1e-6, B, m)   
   spca <- SamplePCA(t(data))
   lambda <- sqrt(spca@variances)
-  lambda < ifelse(length(lambda) == m, lambda, c(lambda, rep(1e-6, m - length(lambda))))
+  if (length(lambda) < m) {
+    lambda <- c(lambda, rep(1e-6, m - length(lambda)))
+  }
   rescum <- cumsum(sort(lambda, decreasing=FALSE))[1:(m-1)]
   Lambda[1, ] <- lambda
   F[1,1:(m-1)] <- lambda[1:(m-1)]/sort(rescum, decreasing=TRUE)
@@ -95,7 +97,9 @@ rndLambdaF <- function(data, B=1000, alpha = 0.05, ...) {
     rndmat <- matPermutate(data)
     spca <- SamplePCA(t(rndmat))
     lambda <- sqrt(spca@variances)
-    lambda < ifelse(length(lambda)==m, lambda, c(lambda,rep(1e-6, m - length(lambda))))
+    if (length(lambda) < m) {
+      lambda <- c(lambda, rep(1e-6, m - length(lambda)))
+    }
     rescum <- cumsum(sort(lambda, decreasing=FALSE))[1:(m-1)]
     Lambda[i+1, ] <- lambda
     F[i+1, 1:(m-1)] <- lambda[1:(m-1)]/sort(rescum, decreasing=TRUE)
