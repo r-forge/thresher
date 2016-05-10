@@ -155,7 +155,7 @@ estimateTop <- function(object) {
 }
 
 setMethod("plot", c("AuerGervini", "missing"), function(x, y, ...) {
-  plot(x, list())
+  plot(x, list(), ...)
 })
 
 # y is an optional argument containing a list of "agDimension"
