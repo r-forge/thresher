@@ -50,7 +50,7 @@ Thresher <- function(data,
                      FUZZ=0.005,
                      metric="pearson",
                      linkage="ward.D2",
-                     method=c("broken.stick", "auer.gervini"),
+                     method=c("auer.gervini", "broken.stick"),
                      scale=TRUE,
                      agfun=agDimTwiceMean) {
   # always center; by default, also 'scale' to standardize
