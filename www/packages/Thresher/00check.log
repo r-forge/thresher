@@ -1,0 +1,315 @@
+* using log directory 'C:/Users/Kevin/Desktop/RForge/thresher/pkg/Thresher.Rcheck'
+* using R version 3.4.0 (2017-04-21)
+* using platform: x86_64-w64-mingw32 (64-bit)
+* using session charset: ISO8859-1
+* using option '--as-cran'
+* checking for file 'Thresher/DESCRIPTION' ... OK
+* this is package 'Thresher' version '0.11.0'
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Kevin R. Coombes <krc@silicovore.com>'
+
+New submission
+
+Strong dependencies not in mainstream repositories:
+  ClassDiscovery, PCDimension, oompaBase
+
+The Date field is over a month old.
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'Thresher' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+.makeColorScheme: no visible global function definition for 'colors'
+makeFigures,Reaper: no visible global function definition for 'png'
+makeFigures,Reaper: no visible global function definition for 'dev.off'
+makeFigures,SimThresher: no visible global function definition for
+  'png'
+makeFigures,SimThresher: no visible global function definition for
+  'dev.off'
+makeFigures,Thresher: no visible global function definition for 'png'
+makeFigures,Thresher: no visible global function definition for
+  'dev.off'
+Undefined global functions or variables:
+  colors dev.off png
+Consider adding
+  importFrom("grDevices", "colors", "dev.off", "png")
+to your NAMESPACE file.
+* checking Rd files ... WARNING
+prepare_Rd: Reaper-class.Rd:10-12: Dropping empty section \description
+prepare_Rd: Reaper-class.Rd:54-56: Dropping empty section \note
+prepare_Rd: Reaper-class.Rd:51-53: Dropping empty section \author
+prepare_Rd: Reaper-class.Rd:48-50: Dropping empty section \references
+prepare_Rd: Reaper-class.Rd:60-63: Dropping empty section \seealso
+checkRd: (5) Reaper-class.Rd:0-68: Must have a \description
+prepare_Rd: Reaper.Rd:7-9: Dropping empty section \description
+prepare_Rd: Reaper.Rd:42-44: Dropping empty section \details
+prepare_Rd: Reaper.Rd:45-51: Dropping empty section \value
+prepare_Rd: Reaper.Rd:58-60: Dropping empty section \note
+prepare_Rd: Reaper.Rd:55-57: Dropping empty section \author
+prepare_Rd: Reaper.Rd:52-54: Dropping empty section \references
+prepare_Rd: Reaper.Rd:64-66: Dropping empty section \seealso
+checkRd: (5) Reaper.Rd:0-124: Must have a \description
+prepare_Rd: SignalSet-class.Rd:7-9: Dropping empty section \description
+prepare_Rd: SignalSet-class.Rd:32-34: Dropping empty section \note
+prepare_Rd: SignalSet-class.Rd:29-31: Dropping empty section \author
+prepare_Rd: SignalSet-class.Rd:26-28: Dropping empty section \references
+prepare_Rd: SignalSet-class.Rd:38-41: Dropping empty section \seealso
+checkRd: (5) SignalSet-class.Rd:0-46: Must have a \description
+prepare_Rd: SimThresher-class.Rd:9-11: Dropping empty section \description
+prepare_Rd: SimThresher-class.Rd:46-48: Dropping empty section \note
+prepare_Rd: SimThresher-class.Rd:43-45: Dropping empty section \author
+prepare_Rd: SimThresher-class.Rd:40-42: Dropping empty section \references
+prepare_Rd: SimThresher-class.Rd:52-55: Dropping empty section \seealso
+checkRd: (5) SimThresher-class.Rd:0-60: Must have a \description
+prepare_Rd: SimThresher.Rd:7-9: Dropping empty section \description
+prepare_Rd: SimThresher.Rd:31-33: Dropping empty section \details
+prepare_Rd: SimThresher.Rd:34-40: Dropping empty section \value
+prepare_Rd: SimThresher.Rd:47-49: Dropping empty section \note
+prepare_Rd: SimThresher.Rd:44-46: Dropping empty section \author
+prepare_Rd: SimThresher.Rd:41-43: Dropping empty section \references
+prepare_Rd: SimThresher.Rd:53-55: Dropping empty section \seealso
+checkRd: (5) SimThresher.Rd:0-81: Must have a \description
+prepare_Rd: Thresher-class.Rd:14-16: Dropping empty section \description
+prepare_Rd: Thresher-class.Rd:50-52: Dropping empty section \note
+prepare_Rd: Thresher-class.Rd:47-49: Dropping empty section \author
+prepare_Rd: Thresher-class.Rd:44-46: Dropping empty section \references
+prepare_Rd: Thresher-class.Rd:56-59: Dropping empty section \seealso
+checkRd: (5) Thresher-class.Rd:0-64: Must have a \description
+prepare_Rd: Thresher-package.Rd:41-42: Dropping empty section \examples
+prepare_Rd: Thresher.Rd:7-9: Dropping empty section \description
+prepare_Rd: Thresher.Rd:36-38: Dropping empty section \details
+prepare_Rd: Thresher.Rd:39-45: Dropping empty section \value
+prepare_Rd: Thresher.Rd:52-54: Dropping empty section \note
+prepare_Rd: Thresher.Rd:49-51: Dropping empty section \author
+prepare_Rd: Thresher.Rd:46-48: Dropping empty section \references
+prepare_Rd: Thresher.Rd:58-60: Dropping empty section \seealso
+checkRd: (5) Thresher.Rd:0-90: Must have a \description
+prepare_Rd: fit-or-miss-class.Rd:7-9: Dropping empty section \description
+prepare_Rd: fit-or-miss-class.Rd:20-22: Dropping empty section \note
+prepare_Rd: fit-or-miss-class.Rd:17-19: Dropping empty section \author
+prepare_Rd: fit-or-miss-class.Rd:14-16: Dropping empty section \references
+prepare_Rd: fit-or-miss-class.Rd:26-29: Dropping empty section \seealso
+checkRd: (5) fit-or-miss-class.Rd:0-34: Must have a \description
+prepare_Rd: matchLabels.Rd:10-12: Dropping empty section \description
+checkRd: (5) matchLabels.Rd:0-115: Must have a \description
+prepare_Rd: movMF-class.Rd:7-9: Dropping empty section \description
+prepare_Rd: movMF-class.Rd:29-31: Dropping empty section \note
+prepare_Rd: movMF-class.Rd:26-28: Dropping empty section \author
+prepare_Rd: movMF-class.Rd:23-25: Dropping empty section \references
+prepare_Rd: movMF-class.Rd:35-38: Dropping empty section \seealso
+checkRd: (5) movMF-class.Rd:0-43: Must have a \description
+prepare_Rd: number-or-miss-class.Rd:7-9: Dropping empty section \description
+prepare_Rd: number-or-miss-class.Rd:20-22: Dropping empty section \note
+prepare_Rd: number-or-miss-class.Rd:17-19: Dropping empty section \author
+prepare_Rd: number-or-miss-class.Rd:14-16: Dropping empty section \references
+prepare_Rd: number-or-miss-class.Rd:26-29: Dropping empty section \seealso
+checkRd: (5) number-or-miss-class.Rd:0-34: Must have a \description
+prepare_Rd: palettes.Rd:8-10: Dropping empty section \description
+prepare_Rd: palettes.Rd:21-23: Dropping empty section \details
+prepare_Rd: palettes.Rd:24-26: Dropping empty section \source
+prepare_Rd: palettes.Rd:27-29: Dropping empty section \references
+checkRd: (5) palettes.Rd:0-35: Must have a \description
+prepare_Rd: unitize.Rd:7-9: Dropping empty section \description
+prepare_Rd: unitize.Rd:19-21: Dropping empty section \details
+prepare_Rd: unitize.Rd:22-28: Dropping empty section \value
+prepare_Rd: unitize.Rd:35-37: Dropping empty section \note
+prepare_Rd: unitize.Rd:32-34: Dropping empty section \author
+prepare_Rd: unitize.Rd:29-31: Dropping empty section \references
+prepare_Rd: unitize.Rd:41-43: Dropping empty section \seealso
+checkRd: (5) unitize.Rd:0-60: Must have a \description
+* checking Rd metadata ... WARNING
+Rd files with duplicated alias 'Thresher':
+  'Thresher-package.Rd' 'Thresher.Rd'
+Rd files with duplicated alias 'getColors,Reaper-method':
+  'Reaper-class.Rd' 'getColors-methods.Rd'
+Rd files with duplicated alias 'getColors,Thresher-method':
+  'Thresher-class.Rd' 'getColors-methods.Rd'
+Rd files with duplicated alias 'getSplit,Reaper-method':
+  'Reaper-class.Rd' 'getSplit-methods.Rd'
+Rd files with duplicated alias 'getSplit,Thresher-method':
+  'Thresher-class.Rd' 'getSplit-methods.Rd'
+Rd files with duplicated alias 'heat,Thresher-method':
+  'Thresher-class.Rd' 'heat-methods.Rd'
+Rd files with duplicated alias 'image,SimThresher-method':
+  'SimThresher-class.Rd' 'image-methods.Rd'
+Rd files with duplicated alias 'makeFigures,Reaper-method':
+  'Reaper-class.Rd' 'makeFigures-methods.Rd'
+Rd files with duplicated alias 'makeFigures,SimThresher-method':
+  'SimThresher-class.Rd' 'makeFigures-methods.Rd'
+Rd files with duplicated alias 'makeFigures,Thresher-method':
+  'Thresher-class.Rd' 'makeFigures-methods.Rd'
+Rd files with duplicated alias 'plot,Thresher,missing-method':
+  'Thresher-class.Rd' 'plot-methods.Rd'
+Rd files with duplicated alias 'scatter,Thresher-method':
+  'Thresher-class.Rd' 'scatter-methods.Rd'
+Rd files with duplicated alias 'screeplot,Thresher-method':
+  'Thresher-class.Rd' 'screeplot-methods.Rd'
+* checking Rd line widths ... OK
+* checking Rd cross-references ... WARNING
+Missing link or links in documentation object 'Thresher-package.Rd':
+  '[PCDimension:PCDimesnion-package]{PCDimension}'
+
+See section 'Cross-references' in the 'Writing R Extensions' manual.
+
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  'getColors' 'getSplit' 'getStyles' 'heat' 'makeFigures' 'scatter'
+Undocumented data sets:
+  'bsdim' 'savedSims' 'vmfMixtures'
+Undocumented S4 methods:
+  generic 'getStyles' and siglist 'Reaper'
+  generic 'getStyles' and siglist 'Thresher'
+All user-level objects in a package (including S4 classes and methods)
+should have documentation entries.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking for code/documentation mismatches ... WARNING
+Data with usage in documentation object 'samplePalette' but not in code:
+  samplePalette thresherPalette
+
+Codoc mismatches from documentation object 'SimThresher':
+SimThresher
+  Code: function(ss, nSample, nm = deparse(substitute(ss)), rho = NULL,
+                 agfun = agDimTwiceMean, ...)
+  Docs: function(ss, nSample, nm = deparse(substitute(ss)), rho = NULL,
+                 ...)
+  Argument names in code not in docs:
+    agfun
+  Mismatches in argument names:
+    Position: 5 Code: agfun Docs: ...
+
+Codoc mismatches from documentation object 'Thresher':
+Thresher
+  Code: function(data, nm = deparse(substitute(data)), FUZZ = 0.005,
+                 metric = "pearson", linkage = "ward.D2", method =
+                 c("auer.gervini", "broken.stick"), scale = TRUE, agfun
+                 = agDimTwiceMean)
+  Docs: function(data, nm = deparse(substitute(data)), FUZZ = 0.005,
+                 metric = "pearson", linkage = "ward.D2", method =
+                 c("broken.stick", "auer.gervini"))
+  Argument names in code not in docs:
+    scale agfun
+  Mismatches in argument default values:
+    Name: 'method' Code: c("auer.gervini", "broken.stick") Docs: c("broken.stick", "auer.gervini")
+
+S4 class codoc mismatches from documentation object 'Thresher-class':
+Slots for class 'Thresher'
+  Code: ag agfun data delta gc loadings name pcdim spca
+  Docs: ag data delta gc loadings name pcdim spca
+
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of 'data' directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... WARNING
+  
+  Note: significantly better compression could be obtained
+        by using R CMD build --resave-data
+                old_size new_size compress
+  savedSims.rda    525Kb    408Kb       xz
+* checking examples ... OK
+* checking for unstated dependencies in 'tests' ... OK
+* checking tests ... OK
+  Running '01-label.R'
+  Comparing '01-label.Rout' to '01-label.Rout.save' ...3a4,24
+> 
+> Attaching package: 'ade4'
+> 
+> The following object is masked from 'package:base':
+> 
+>     within
+> 
+> Package 'mclust' version 4.0
+> 
+> Attaching package: 'Thresher'
+> 
+> The following object is masked from 'package:ade4':
+> 
+>     scatter
+> 
+> Warning messages:
+> 1: package 'colorspace' was built under R version 3.0.2 
+> 2: package 'movMF' was built under R version 3.0.2 
+> 3: package 'ade4' was built under R version 3.0.1 
+> 4: package 'ClassDiscovery' was built under R version 3.0.1 
+> 5: package 'oompaBase' was built under R version 3.0.1 
+  Running '02-thresh.R'
+  Comparing '02-thresh.Rout' to '02-thresh.Rout.save' ...3a4,24
+> 
+> Attaching package: 'ade4'
+> 
+> The following object is masked from 'package:base':
+> 
+>     within
+> 
+> Package 'mclust' version 4.0
+> 
+> Attaching package: 'Thresher'
+> 
+> The following object is masked from 'package:ade4':
+> 
+>     scatter
+> 
+> Warning messages:
+> 1: package 'colorspace' was built under R version 3.0.2 
+> 2: package 'movMF' was built under R version 3.0.2 
+> 3: package 'ade4' was built under R version 3.0.1 
+> 4: package 'ClassDiscovery' was built under R version 3.0.1 
+> 5: package 'oompaBase' was built under R version 3.0.1 
+17c38
+< 0.03966 0.19790 0.27636 0.31588 0.38754 0.65888 
+---
+> 0.03966 0.19790 0.27640 0.31590 0.38750 0.65890 
+  Running '04-reap.R'
+  Comparing '04-reap.Rout' to '04-reap.Rout.save' ...3a4,24
+> 
+> Attaching package: 'ade4'
+> 
+> The following object is masked from 'package:base':
+> 
+>     within
+> 
+> Package 'mclust' version 4.0
+> 
+> Attaching package: 'Thresher'
+> 
+> The following object is masked from 'package:ade4':
+> 
+>     scatter
+> 
+> Warning messages:
+> 1: package 'colorspace' was built under R version 3.0.2 
+> 2: package 'movMF' was built under R version 3.0.2 
+> 3: package 'ade4' was built under R version 3.0.1 
+> 4: package 'ClassDiscovery' was built under R version 3.0.1 
+> 5: package 'oompaBase' was built under R version 3.0.1 
+44a66,67
+> Warning message:
+> In acos(t(u) %*% u) : NaNs produced
+* checking PDF version of manual ... OK
+* DONE
+Status: 6 WARNINGs, 2 NOTEs
