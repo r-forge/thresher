@@ -1,4 +1,4 @@
-* using log directory 'C:/Users/Kevin/Desktop/RForge/thresher/pkg/Thresher.Rcheck'
+* using log directory 'C:/Users/coom05/Desktop/rforge/thresher/pkg/Thresher.Rcheck'
 * using R version 3.4.0 (2017-04-21)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: ISO8859-1
@@ -11,18 +11,27 @@ Maintainer: 'Kevin R. Coombes <krc@silicovore.com>'
 New submission
 
 Strong dependencies not in mainstream repositories:
-  ClassDiscovery, PCDimension, oompaBase
+  PCDimension
 
 The Date field is over a month old.
+
+Size of tarball: 11729715 bytes
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
 * checking if there is a namespace ... OK
 * checking for executable files ... OK
 * checking for hidden files and directories ... OK
-* checking for portable file names ... OK
+* checking for portable file names ... WARNING
+Found the following file with a non-portable file name:
+  inst/BreastCancer/Thresher GEO Datasets
+These are not fully portable file names.
+See section 'Package structure' in the 'Writing R Extensions' manual.
 * checking whether package 'Thresher' can be installed ... OK
-* checking installed package size ... OK
+* checking installed package size ... NOTE
+  installed size is 12.5Mb
+  sub-directories of 1Mb or more:
+    BreastCancer  11.6Mb
 * checking package directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... OK
@@ -312,4 +321,4 @@ Slots for class 'Thresher'
 > In acos(t(u) %*% u) : NaNs produced
 * checking PDF version of manual ... OK
 * DONE
-Status: 6 WARNINGs, 2 NOTEs
+Status: 7 WARNINGs, 3 NOTEs

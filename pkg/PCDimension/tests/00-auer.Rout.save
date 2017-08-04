@@ -1,6 +1,6 @@
 
-R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
-Copyright (C) 2015 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -20,9 +20,6 @@ Type 'q()' to quit R.
 Loading required package: ClassDiscovery
 Loading required package: cluster
 Loading required package: oompaBase
-Warning message:
-In .recacheSubclasses(def@className, def, doSubclasses, env) :
-  undefined subclass "externalRefMethod" of class "kfunction"; definition not updated
 > # simulate one unstructured dataset
 > set.seed(992500)
 > NC <- 15
@@ -71,6 +68,11 @@ An 'AuerGervini' object that estimates the number of principal components to be 
 > lines(pts, bs, type='b', col='blue', lwd=2, pch=16)
 > lines(pts[-NC], bs0, type='b', col='red', lwd=2, pch=16)
 > 
+> # randomization based model
+> rndLambdaF(ranData)
+rndLambda      rndF 
+        0         0 
+> 
 > rm(spca)
 > ######################################################
 > # get the previously computed simulated SamplePCA object
@@ -87,13 +89,13 @@ An 'AuerGervini' object that estimates the number of principal components to be 
 > agfuns <- list(twice=agDimTwiceMean,
 +                km=agDimKmeans, km3=agDimKmeans3, 
 +                tt=agDimTtest, tt2=agDimTtest2,
-+                cpt=agDimCPT, cpm=f, leap=agDimLeap)
++                cpt=agDimCPT, cpm=f)
 > plot(obj, agfuns)
 > 
 > compareAgDimMethods(obj, agfuns)
-twice    km   km3    tt   tt2   cpt   cpm  leap 
-    1     1     1     3     1     1     3     8 
+twice    km   km3    tt   tt2   cpt   cpm 
+    1     1     1     3     1     1     3 
 > 
 > proc.time()
    user  system elapsed 
-   1.79    0.12    1.93 
+   5.70    0.29    6.14 
