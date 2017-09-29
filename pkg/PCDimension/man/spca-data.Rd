@@ -4,9 +4,9 @@
 \docType{data}
 \title{Sample PCA Dataset}
 \description{
-  This data set contains an object of the class \code{link{SamplePCA}}.
+  This data set contains an object of the class \code{\link{SamplePCA}}.
   This object results from performing a principal components analysis on
-  a simulated data set where the true 
+  a simulated data set.
 }
 \usage{
 data(spca)

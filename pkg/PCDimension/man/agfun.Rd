@@ -17,8 +17,8 @@
   overview is included in the help for the \code{\link{AuerGervini}}
   class.  The output of their method is a step function that displays
   the maximum a posteriori (MAP) choice of \eqn{d} as a step function of
-  a one-parameter family of prior distributions, and thbey recommend
-  choosing the higest "long" step.  The functions described here help
+  a one-parameter family of prior distributions, and they recommend
+  choosing the highest "long" step.  The functions described here help
   automate the process of dividing the step lengths into "long" and
   "short" classes.
 }
@@ -38,7 +38,7 @@
     \code{\link{detectChangePointBatch}} function in the \code{cpm}
     package.}
   \item{extra}{Just ignore this. Don't use it. It's a hack to avoid
-    having to maintain two differfent versions of the same code.}
+    having to maintain two different versions of the same code.}
 }
 \details{
   The \code{agDimTwiceMean} function implements a simple and naive rule:
@@ -57,7 +57,7 @@
   by the \code{\link{specc}} function from the \code{kernlab} package)
   to divide the steps lengths into two groups.
 
-  The\code{agDimTtest} and \code{agDimTtest2} functions implement two
+  The \code{agDimTtest} and \code{agDimTtest2} functions implement two
   variants of a novel algorithm specialized for this particular task.
   The idea is to start by sorting the step lengths so that \deqn{L_1 \le
   L_2 \le \dots \le L_n.}  Then, for each \eqn{i \in 3,\dots, N-1}, we
@@ -87,6 +87,9 @@
   The \code{makeAgCpmFun} returns a function that takes one argument (a
   numeric \code{stepLength} vector) and returns a logical vector of the
   same length.
+
+  \emph{Note:} Our simulations suggest that "TwiceMean" and "CPM" give
+  the best results.
 }
 \references{
   P Auer, D Gervini.

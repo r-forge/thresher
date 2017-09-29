@@ -9,8 +9,8 @@
   overview is included in the help for the \code{\link{AuerGervini}}
   class.  The output of their method is a step function that displays
   the maximum a posteriori (MAP) choice of \eqn{d} as a step function of
-  a one-parameter family of prior distributions, and thbey recommend
-  choosing the higest "long" step.  The functions described here help
+  a one-parameter family of prior distributions, and they recommend
+  choosing the highest "long" step.  The functions described here help
   automate the process of dividing the step lengths into "long" and
   "short" classes.
 }

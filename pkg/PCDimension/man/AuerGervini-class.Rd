@@ -51,7 +51,7 @@ Objects should be created using the \code{AuerGervini} constructor.
 	 }
 }
 \details{
-  The Auer-Gervini method for determing the number of principal
+  The Auer-Gervini method for determining the number of principal
   components is based on a Bayesian model that assaerts that the
   vector of explained variances (eigenvalues) should have the form
   \deqn{a_1 \le a_2 \le \dots \le a_d < a_{d+1} = a_{d+2} = \dots a_n}
