@@ -1,0 +1,321 @@
+%\VignetteIndexEntry{PCDimension}
+%\VignetteKeywords{principal components analysis, dimension reduction, Bayes rule, Auer-Gervini, Broken-Stick, randomization based procedure}
+%\VignetteDepends{PCDimension,nFactors,ClassDiscovery,MASS}
+%\VignettePackage{PCDimension}
+\documentclass[12pt]{article}
+\usepackage{authblk}
+\usepackage{url}
+
+\setlength\parindent{0pt}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\parskip}{0.37em}%
+
+\newcommand{\quotes}[1]{``#1''}
+\def\rcode#1{\texttt{#1}}
+\def\fref#1{\textbf{Figure~\ref{#1}}}
+\def\tref#1{\textbf{Table~\ref{#1}}}
+\def\sref#1{\textbf{Section~\ref{#1}}}
+
+\title{Finding the Number of Principal Components}
+\date{\today}
+\author[1]{Min Wang}
+\author[2]{Steven M. Kornblau}
+\author[3]{Kevin R. Coombes}
+\affil[1]{Mathematical Biosciences Institute\\ The Ohio State University}
+\affil[2]{Dept. of Leukemia\\ The University of Texas MD Anderson Cancer Center}
+\affil[3]{Dept. of Biomedical Informatics\\ The Ohio State University}
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+%\listoffigures
+
+\section{Getting Started}
+\label{Implementation}
+
+In this section, we describe how to select significant number of PCs
+using the \textbf{PCDimension} R package. The latest version of the
+package is always available from the R-Forge webpage
+(\url{http://r-forge.r-project.org/R/?group_id=1900}); the latest
+stable version can be found on CRAN.  We illustrate the methods by
+exploring a small simulated data set.
+
+First, we load all of the R library packages that we need for this
+analysis. Note that \textbf{PCDimension} implements the Broken-Stick
+model, the randomization-based procedure of ter Brack [1,2], and the
+Auer-Gervini model [3], while \textbf{nFactors} (developed by Raiche and
+Magis) is used to run Bartlett's test and its variants.
+
+<<libraries>>=
+library(PCDimension)
+library(nFactors) # implements Bartlett's test
+library(MASS) # for mvrnorm to simulate data
+@ 
+
+\section{Testing on Unstructured Data}
+Next, we simulate an unstructured data set with random noise. That is,
+the variation of the data is isotropic and the number of significant
+PCs is 0.  The data is generated via the command:
+<<load>>=
+set.seed(12345)
+NC <- 15
+NS <- 200
+ranData <- matrix(rnorm(NS*NC, 6), ncol=NC)
+@ 
+
+\subsection{Bartlett's Test}
+Now, we apply Bartlett's test to the simulated data.  The required
+input includes the raw data and the number of subjects (rows).
+<<bart>>=
+nBartlett(data.frame(ranData), nrow(ranData))
+@ 
+The original version of Bartlett's test, and the Anderson variant,
+fail to return the correct number of components.  The Lawley variant
+does yield the correct value, $0$.
+
+\subsection{Randomization-Based Methods}
+The \textbf{PCDimension} package implements both of the
+randomization-based statistics that were identified as successful in a
+previous study [4]. The number of permutations
+(default, $B=1000$) and the significance level (default,
+$\alpha=0.05$) are optional input arguments in addition to the
+required data set.  The estimated number of PCs is the last point at
+which the p-value of the statistic of interest greater than the
+observed one is at least the threshold significance level.
+
+<<rnd>>=
+rndLambdaF(ranData) # input argument is data
+@ 
+The randomization-based procedure successfully recovers the true
+number of PCs.
+
+\subsection{Broken-Stick}
+The \textbf{PCDimension} package also implements the Broken-Stick
+model.  Both this model and the Auer-Gervini model require the
+eigenvalues from the singular value decomposition of the data matrix
+used to compute the principal components.  We compute the decomposition
+using the \texttt{SamplePCA} function from the \textbf{ClassDiscovery}
+package, and then extract the variances.
+<<spca>>=
+spca <- SamplePCA(t(ranData))
+lambda <- spca@variances[1:(NC-1)] 
+bsDimension(lambda)
+@ 
+In the Broken-Stick model, the individual percentages of variance of
+the components are compared with the values expected from the
+\quotes{broken stick} distribution.  The two distributions are
+compared element-by-element, and first value $d+1$ where the expected
+value is larger than the observed value determines the dimension.  The
+Broken-Stick model also correctly finds that there are zero
+significant PCs.
+
+Note: In our implementation of tbhe \texttt{bsDimension} function, we
+add an extra parameter (\texttt{FUZZ}, with default value 0.005) for
+this comparison to deal with numerical errors in the estimates of the
+eigenvalues.
+
+\subsection{Auer-Gervini}
+We now use the \texttt{SamplePCA} object to construct an Auer-Gervini
+object. 
+<<ag>>=
+ag.obj <- AuerGervini(spca)
+agDimension(ag.obj)
+@ 
+The \texttt{agDimension} function takes an optional argument,
+\texttt{agfun} that specifies the method used to automate the
+computation of the number of PCs. The default value uses the
+\textbf{TwiceMean} method, which correctly concludes that there are
+zero significant PCs.  We can also compare the results of multiple
+algorithms to automate the procedure.
+<<tabs>>=
+f <- makeAgCpmFun("Exponential")
+agfuns <- list(twice=agDimTwiceMean, specc=agDimSpectral,
+               km=agDimKmeans, km3=agDimKmeans3, 
+               tt=agDimTtest, tt2=agDimTtest2,
+               cpt=agDimCPT, cpm=f)
+compareAgDimMethods(ag.obj, agfuns) # compare the list of all criteria
+@ 
+
+Overall, the Auer-Gervini model does an excellent job in selecting the
+actual number of components since $7$ criteria out of $8$ return 0
+while only the \quotes{Ttest} procedure yields $1$. If the majority
+rule is applied, that is, the estimated number of PCs is the one
+selected in more than $4$ criteria in Auer-Gervini model, then we will
+definitely have $0$ as the estimated number of components.
+
+To get a more comprehensive understanding of the Broken-Stick method
+and the Auer-Gervini model, we use the command to generate the plots
+of these two models in Figures \ref{fig1} and \ref{fig2}:
+
+<<hideme>>=
+bs <- brokenStick(1:NC, NC)
+bs0 <- brokenStick(1:(NC-1), (NC-1))
+@ 
+\begin{figure}
+<<fig=TRUE>>=
+pts <- screeplot(spca, ylim=c(0, 0.2))
+lines(pts, bs, type='b', col='blue', lwd=2, pch=16)
+lines(pts[-NC], bs0, type='b', col='red', lwd=2, pch=16) 
+@ 
+\caption{Screeplot of the data and the Broken-Stick model.}
+\label{fig1}
+\end{figure}
+
+
+
+\begin{figure}
+<<fig=TRUE>>=
+plot(ag.obj, agfuns)
+@ 
+\caption{Auer-Gervini step function relating the prior hyperparameter
+ $\theta$ to the maximum posterior estimate of the number $K$ of 
+significant principal components.}
+\label{fig2}
+\end{figure}
+
+
+Figure \ref{fig1} shows the broken stick distributions and the
+relative proportions of the variation that are explained by all the
+components in the simulated data set.  The blue dotted line
+reprensents the broken stick distributions under the condition that
+$p$ equals the number of features, while the red one means the broken
+stick distributions after removing the $0$ eigenvalue with $p$
+equating with the number of features minus one. And there is almost no
+difference after removing the effect of eigenvalue $0$. The grey
+rectangles are the relative proportions of the variation explained by
+all PCs. This figure provides a clear illustration on how the relative
+proportions are compared with the broken stick distributions and how
+the estimated number of PCs is chosen from the Broken-Stick
+model. Figure \ref{fig2} illustrates how the Auer-Gervini model
+works. For the simulated data set, there are $NC=15$ features, so the
+possible models $\mathcal{M}_d$ range from $\mathcal{M}_0$ to
+$\mathcal{M}_{14}$. The values $d=0, 3, 4, 6, 7, 8, 11, 12, 13$
+and~$14$ should be retained since the step functions are flat on those
+vertical coordinates. From the plot, we can see that the highest
+dimension $d$ for which the step is significantly large is at
+$d=0$. So $\mathcal{M}_0$ is a reasonable model.
+
+%\clearpage
+\section{Testing on Data with Structure}
+Now we simulate another dataset, with two groups of correlated samples.
+<<struct>>=
+mu <- rep(0, 15)
+sigma <- matrix(0, 15, 15)
+sigma[1:8, 1:8] <- 0.7
+sigma[9:15, 9:15] <- 0.3
+diag(sigma) <- 1
+struct <- mvrnorm(200, mu, sigma)
+@ 
+
+\subsection{Bartlett's Test}
+As before, we start by applying Bartlett's test to the simulated data.
+<<bart>>=
+nBartlett(data.frame(struct), nrow(struct))
+@ 
+All three variants grossly overestimate the dimension.
+
+\subsection{Randomization-Based Methods}
+Next, we apply ter Braak's randomization procedures.  Here we again
+use the defaulkt values of the parametes, but include them explicitly
+to illustrate the function.
+<<rnd>>=
+rndLambdaF(struct, B = 1000, alpha = 0.05) # input argument is data
+@ 
+The randomization-based procedure \texttt{rndLambda} successfully
+recovers the true number of PCs, but the \texttt{rndF} procedure
+overestimates it. These results are consistent with a larger set of
+simulations that we have performed..
+
+\subsection{Broken-Stick}
+Next, we apply the broken-stick model.  As before, we first compute
+the singular value decomposition using the \texttt{SamplePCA} function
+from the \textbf{ClassDiscovery} package.
+<<spca>>=
+spca <- SamplePCA(t(struct))
+lambda <- spca@variances[1:(NC-1)] 
+bsDimension(lambda)
+@ 
+The scree-plot (Figure~\ref{fig3}) explains how the broken-stick model
+gets the correct answer.
+<<hideme>>=
+bs <- brokenStick(1:NC, NC)
+bs0 <- brokenStick(1:(NC-1), (NC-1))
+@ 
+\begin{figure}
+<<fig=TRUE>>=
+pts <- screeplot(spca)
+lines(pts, bs, type='b', col='blue', lwd=2, pch=16)
+lines(pts[-NC], bs0, type='b', col='red', lwd=2, pch=16) 
+@ 
+\caption{Screeplot of the structured data and the Broken-Stick model.}
+\label{fig3}
+\end{figure}
+
+\subsection{Auer-Gervini}
+We now use the \texttt{SamplePCA} object to construct an Auer-Gervini
+object. 
+<<ag>>=
+ag.obj <- AuerGervini(spca)
+agDimension(ag.obj)
+@ 
+The \texttt{agDimension} function takes an optional argument,
+\texttt{agfun} that specifies the method used to automate the
+computation of the number of PCs. The default value uses the
+\textbf{TwiceMean} method, which correctly concludes that there are
+zero significant PCs.  We can also compare the results of multiple
+algorithms to automate the procedure.
+<<tabs>>=
+f <- makeAgCpmFun("Exponential")
+agfuns <- list(twice=agDimTwiceMean, specc=agDimSpectral,
+               km=agDimKmeans, km3=agDimKmeans3, 
+               tt=agDimTtest, tt2=agDimTtest2,
+               cpt=agDimCPT, cpm=f)
+compareAgDimMethods(ag.obj, agfuns) # compare the list of all criteria
+@ 
+Again, most of the criteria used to automate the Auer-Gervni method
+get te right answer. Two of them (\texttt{Ttest} and \texttt{CPM}),
+however, grossly overestimate it.  Figure~\ref{fig4} shows the
+Auer-Gervini plot.
+
+\begin{figure}
+<<fig=TRUE>>=
+plot(ag.obj, agfuns)
+@ 
+\caption{Auer-Gervini step function relating the prior hyperparameter
+  $\theta$ to the maximum posterior estimate of the number $K$ of
+  significant principal components in the example with structured
+  data.}
+\label{fig4}
+\end{figure}
+
+\clearpage
+\section{References}
+
+[1] ter Braak CFJ.
+\newblock \emph{{CANOCO} -- a {F}ortran program for canonical community
+  ordination by [partial] [detrended] [canonical] correspondence analysis,
+  principal component analysis and redundancy analysis (version 2.1)}.
+\newblock Agricultural Mathematics Group, Report LWA-88-02, Wageningen, 1988.
+
+[2] ter Braak CFJ.
+\newblock \emph{Update notes: {CANOCO} (version 3.1)}.
+\newblock Agricultural Mathematics Group, Wageningen, 1990.
+
+[3] Auer P and Gervini D.
+\newblock Choosing principal components: {A} new graphical method based on
+  {Bayesian} model selection.
+\newblock \emph{Communications in Statistics - Simulation and Computation}
+  2008; 37: 962--977.
+
+[4] Peres-Neto PR, Jackson DA and Somers KM.
+\newblock How many principal components? {S}topping rules for determining the
+  number of non-trivial axes revisited.
+\newblock \emph{Computational Statistics and Data Analysis} 2005; 49: 974--997.
+
+
+\end{document}

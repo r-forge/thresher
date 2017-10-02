@@ -1,6 +1,6 @@
 Package: PCDimension
-Version: 1.1.5
-Date: 2017-09-29
+Version: 1.1.6
+Date: 2017-10-01
 Title: Finding the Number of Significant Principal Components
 Author: Kevin R. Coombes, Min Wang
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
@@ -8,6 +8,7 @@ Description: Implements methods for determining the number of
   significant principal components. 
 Depends: R (>= 3.1), ClassDiscovery
 Imports: methods, stats, graphics, oompaBase, kernlab, changepoint, cpm
+Suggests: MASS, nFactors
 License: Apache License (== 2.0)
 biocViews: Clustering
 URL: http://oompa.r-forge.r-project.org/
