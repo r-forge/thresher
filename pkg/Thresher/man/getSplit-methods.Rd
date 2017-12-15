@@ -3,9 +3,15 @@
 \alias{getSplit-methods}
 \alias{getSplit,Reaper-method}
 \alias{getSplit,Thresher-method}
-\title{ ~~ Methods for Function \code{getSplit}  ~~}
+\alias{getColors-methods}
+\alias{getColors,Reaper-method}
+\alias{getColors,Thresher-method}
+\title{Color Palettes for Threshing and Reaping}
 \description{
- ~~ Methods for function \code{getSplit}  ~~
+Both the \code{Thresher} an \code{Reaper} classes define default color
+schemes for the primary objects being clustered and for the features
+being used to cluster them. These color schemes are used to produce
+color bars on heatmaps produce using two-way clustering.
 }
 \section{Methods}{
 \describe{

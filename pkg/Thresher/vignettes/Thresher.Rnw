@@ -1,0 +1,250 @@
+%\VignetteIndexEntry{Thresher}
+%\VignetteKeywords{clustering,number of clusters,outliers,von Mises-Fisher mixture model}
+%\VignetteDepends{Thresher,NbClust,MASS}
+%\VignettePackage{Thresher}
+\documentclass[11pt]{article}
+\usepackage{authblk}
+\usepackage{url}
+
+%\usepackage{graphicx}
+%\usepackage{subfig}
+%\usepackage{cite}
+%\usepackage{caption}
+%\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs, amssymb}
+%\usepackage{amsthm}
+%\usepackage[hidelinks]{hyperref}
+%\pagestyle{myheadings}
+
+
+\setlength\parindent{0pt}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\parskip}{0.37em}%
+
+\newcommand{\quotes}[1]{``#1''}
+\def\rcode#1{\texttt{#1}}
+\def\fref#1{\textbf{Figure~\ref{#1}}}
+\def\tref#1{\textbf{Table~\ref{#1}}}
+\def\sref#1{\textbf{Section~\ref{#1}}}
+
+\title{Using the Thresher Package}
+\date{\today}
+\author[1]{Min Wang}
+\author[2]{Zachary B. Abrams}
+\author[3]{Steven M. Kornblau}
+\author[4]{Kevin R. Coombes}
+\affil[1]{Mathematical Biosciences Institute\\ The Ohio State University}
+\affil[2]{Dept. of Biomedical Informatics\\ The Ohio State University}
+\affil[3]{Dept. of Leukemia\\ The University of Texas MD Anderson Cancer Center}
+\affil[4]{Dept. of Biomedical Informatics\\ The Ohio State University}
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Implementation in Thresher}
+\label{Implementation}
+
+In this section, we describe how to calculate the number of clusters
+using the R package \texttt{Thresher}.  The latest stable version of
+\texttt{Thresher} is available form CRAN; the latest development
+version is available from the R-Forge webpage
+(\url{http://r-forge.r-project.org/R/?group_id=1900}).  We illustrate
+this method by exploring two small simulated datasets: an unstructured
+dataset that only contains random noise features, and a structured
+dataset with two groups of good features. First of all, we load all R
+library packages that are needed for this analysis. Note that
+\texttt{Thresher} implements our proposed clustering approach, while
+\texttt{NbClust} (developed by Charrad et al.) is used to run $30$
+existing indices including the gap statistics and the mean silhouette
+method.
+
+
+\subsection{Unstructured Dataset Example}
+\label{Unstructured}
+
+
+\subsubsection{Thresher Method}
+\label{ThresherMethod1}
+
+First we load the R library packages \texttt{Thresher},
+<<libraries>>=
+library(Thresher)
+@ 
+Next, we load the packages \texttt{MASS} and \texttt{NbClust}, which
+are only used for the examples. Actually, the main driver function in
+\texttt{NbClust} has a call to \texttt{set.seed} that complicates the
+simulations, so we provide a version that removes that call.
+<<nbc>>=
+library(MASS)
+library(NbClust)
+source("NbClust.txt")
+@ 
+
+Now we simulate an unstructured dataset with $12$ noise features and $100$
+samples. That is, there is no pattern of groups or clusters for all the 
+features in the data.
+<<load1>>=
+set.seed(3928270)
+ranData <- matrix(rnorm(100*12), ncol=12)
+colnames(ranData) <- paste("G", 1:12, sep='')
+@ 
+
+Next we apply the \quotes{Thresher} function to the unstructured data and 
+obtain the results of clustering in the saved \quotes{Thresher} and 
+\quotes{Reaper} objects.
+<<thresh1>>=
+thresh1 <- Thresher(ranData)
+reap1 <- Reaper(thresh1)
+@ 
+
+Notice that a filtering procedure is executed in the package, and the
+noise features that have contributed variation proportion less than the
+default threshold are removed. The noise features are
+<<noise1>>=
+colnames(ranData)[!reap1@keep]
+@ 
+
+The remaining $4$ features are treated as \quotes{good} ones, and
+their projections onto the Bayesian principal components (PCs) space
+are plotted in the following figure:
+<<plot1, fig.width=4, fig.height=3.5, fig.align='center', fig.pos='htp', fig.cap="Plot of Features on Projected PC Space in Unstructured Dataset">>=
+plot(reap1)
+@
+
+The optimal number of groups for the remaining $4$ features is 
+estimated to be
+<<nclust1>>=
+reap1@nGroups 
+@
+
+Finally we use the heatmap function on the \quotes{Reaper} object to look 
+at the heatmap of the unstructured dataset with only good features.
+<<heat1, fig.width=4, fig.height=3.5, fig.align='center', fig.pos='htp', fig.cap="Heatmap of Unstructured Dataset">>=
+heat(reap1)
+@
+
+To sum up, there are 12 features which are all noise in the unstructured 
+dataset. The Thresher method successfully identified $8$ out of $12$ noise
+features. For the remaining $4$ \quotes{good} features, the estimated 
+optimal number of clusters is $1$ which is reasonable, since the $4$ features
+are isotropically distributed which naturally form a large cluster.
+
+
+\subsubsection{NbClust Indices}
+\label{NbClustIndices1}
+
+Notice that not all indices in the \texttt{NbClust} package work for 
+this simulated dataset. We apply the usable Tracew index in \texttt{NbClust} 
+package to the unstructured dataset, and obtain the estimated number 
+of clusters to be $2$, which is a little different from the true number $1$ 
+of clusters.
+<<nbclust1>>=
+nbclust1 <- NbClust(t(ranData), distance="euclidean", min.nc=1, 
+         max.nc=10, method="ward.D2", index="trcovw")
+nbclust1$Best.nc
+@
+
+
+\subsection{Example Dataset with Specified Structure}
+\label{Structured}
+
+
+\subsubsection{Thresher Method}
+\label{ThresherMethod2}
+
+We use another example dataset with special correlation structures.
+In this dataset, $16$ features are generated and they are grouped into
+$2$ clusters. Within each cluster, the features are moderately
+correlated with strength $\rho=0.5$. The between-cluster correlation
+is set to be $0$; that is, the two clusters of features are
+uncorrelated with each other.
+<<load2>>=
+set.seed(3757871)
+rho <- 0.5
+nProtein <- 16
+splinter <- sample((nProtein/2) + (-3:3), 1)
+sigma1 <- matrix(rho, ncol=nProtein, nrow=nProtein)
+diag(sigma1) <- 1
+sigma2 <- sigma1
+sigma2[(1+splinter):nProtein, 1:splinter] <- 0
+sigma2[1:splinter, (1+splinter):nProtein] <- 0
+@ 
+
+The \quotes{SimThresher} function combines the example dataset generation and 
+first step of Thresher method. We again applied the Thresher method to this 
+structured data and obtain the results of clustering in the following 
+\quotes{Thresher} and \quotes{Reaper} objects. The true clustering of the 
+features is also displayed.
+<<thresh2>>=
+thresh2 <- SimThresher(sigma2, nSample=300)
+summary(thresh2@delta)
+reap2 <- Reaper(thresh2)
+colnames(reap2@data)[1:splinter]
+colnames(reap2@data)[(splinter+1):nProtein]
+@
+
+There are no noise features in the simulated dataset, and this is correctly 
+inferred by the Thresher method.
+<<noise2>>=
+colnames(reap2@data)[!reap2@keep]
+@ 
+
+The number of PCs is estimated to be $2$ which is the same as the known number 
+of groups in the structured dataset.
+<<pc2>>=
+reap2@pcdim
+@
+
+All features in the structured data are \quotes{good}.  Their
+projections onto the principal components (PCs) space are provided in
+Figure 3.
+
+<<plot2, fig.width=4, fig.height=3.5, fig.align='center', fig.pos='htp', fig.cap="Plot of Features on Projected PC Space in Structured Dataset">>=
+plot(reap2)
+@
+
+And the number of groups is estimated to be
+<<nclust2>>=
+reap2@nGroups
+@
+
+Finally we apply the heatmap function to the \quotes{Reaper} object to 
+obtain the heatmap of the structured dataset with all good features in 
+Figure 4. And it's clear to see that the clustering of the features is 
+performing fairly well. That is, all features are correctly grouped 
+together into the clusters where they are supposed to be.
+
+<<heat2, fig.width=4, fig.height=3.5, fig.align='center', fig.pos='htp', fig.cap="Heatmap of Structured Dataset">>=
+heat(reap2)
+@
+
+To conclude, for this simulated dataset with special structure, the
+Thresher method correctly identify the \quotes{good} features and the
+optimal number of groups for the features, which suggests that the
+Thresher method is viable and useful.
+
+
+\subsubsection{NbClust Indices}
+\label{NbClustIndices2}
+
+We apply the Tracew index in package \texttt{NbClust} to the structured
+dataset and obtain the estimated number of clusters to be $2$ which is the 
+same as the known number of clusters.
+<<nbclust2>>=
+nbclust2 <- NbClust(t(thresh2@data), distance="euclidean", min.nc=1, 
+         max.nc=10, method="ward.D2", index="tracew")
+nbclust2$Best.nc
+@
+
+
+
+\end{document}
+
+
