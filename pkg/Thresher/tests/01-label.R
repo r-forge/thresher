@@ -5,7 +5,7 @@ reap <- vmfMixtures[[5]]
 dset <- reap@data
 labels <- factor(paste("C", predict(reap@fit), sep=""))
 
-# use a different clustering algorityhm
+# use a different clustering algorithm
 hc <- hclust(distanceMatrix(dset, "uncentered"), "average")
 newLabels <- paste("New", cutree(hc, k=3), sep="")
 tab <- table(OLD=labels, NEW=newLabels)

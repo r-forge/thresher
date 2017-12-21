@@ -1,59 +1,31 @@
 \name{unitize}
 \alias{unitize}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
  Convert a Vector to Unit Length
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Rescales each column of a matrix to produce vectors of length one.
 }
 \usage{
 unitize(mat)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{mat}{
-%%     ~~Describe \code{mat} here~~
+  \item{mat}{A matrix of real numbers.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
+  A matrix of the same size as the input matrix.
 }
 \author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+Kevin R. Coombes <krc@silicovore.com>
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (mat) 
-{
-    enorm <- sqrt(apply(mat^2, 2, sum))
-    sweep(mat, 2, enorm, "/")
-  }
+simmat <- matrix(rnorm(12), 3, 4)
+U <- unitize(simmat)
+apply(U^2, 2, sum)  # check unit length
+simmat/U            # view normalization factors
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{array }

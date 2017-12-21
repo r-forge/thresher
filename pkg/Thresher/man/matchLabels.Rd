@@ -56,7 +56,7 @@ bestMetric(data, labels)
   of a row \eqn{i} and a column \eqn{j} where \eqn{N_{ij}} is the only
   nonzero entry in its row and column, so \eqn{F_{ij} = 1}. The largest
   value for \eqn{F_{ij}} (with ties broken simply by which entry is
-  closer to the upper-left corner of the mattrix) defines the best
+  closer to the upper-left corner of the matrix) defines the best
   match. The matched row and column are then removed from the matrix and
   the process repeats recursively.
 

@@ -12,22 +12,33 @@
 
 \title{Class \code{"Thresher"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+The \code{Thresher} class represents the first step of an algorithm that
+combines outlier detection with clustering.
 }
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("Thresher", ...)}.
-%%  ~~ describe objects here ~~ 
+  Objects should be defined using the \code{\link{Thresher}} constructor.
 }
 \section{Slots}{
   \describe{
-    \item{\code{name}:}{Object of class \code{"character"} ~~ }
-    \item{\code{data}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{spca}:}{Object of class \code{"SamplePCA"} ~~ }
-    \item{\code{loadings}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{gc}:}{Object of class \code{"hclust"} ~~ }
-    \item{\code{pcdim}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{delta}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{ag}:}{Object of class \code{"AuerGervini"} ~~ }
+    \item{\code{name}:}{Object of class \code{"character"}; the name of
+      this object. }
+    \item{\code{data}:}{Object of class \code{"matrix"}; the data that
+      was used for clustering. }
+    \item{\code{spca}:}{Object of class \code{"SamplePCA"}; represnts
+      the results of performing a principal components analysis ont he
+      original \code{data}.}
+    \item{\code{loadings}:}{Object of class \code{"matrix"}; the matrix
+      of loading vectors from the principal components analysis.}
+    \item{\code{gc}:}{Object of class \code{"hclust"}; the result of
+      hierarchical clustering the data columns.}
+    \item{\code{pcdim}:}{Object of class \code{"numeric"}; the number of
+      significant principal components.}
+    \item{\code{delta}:}{Object of class \code{"numeric"}; the lenth of
+      teh loading vector in the principal component space of dimension
+      \code{pcdim}.}
+    \item{\code{ag}:}{Object of class \code{"AuerGervini"}; represnts
+      the result of running the automated Auer-Gervini algorithm to
+      detemine the number of principal comonents.}
   }
 }
 \section{Methods}{
@@ -42,22 +53,18 @@ Objects can be created by calls of the form \code{new("Thresher", ...)}.
 	 }
 }
 \references{
-%%  ~~put references to the literature/web site here~~
+  Wang M, Abrams ZB, Kornblau SM, Coombes KR.
+  Thresher: determining the number of clusters while removing outliers.
+  BMC Bioinformatics, In press.
 }
 \author{
-%%  ~~who you are~~
+Kevin R. Coombes <krc@silicovore.com>
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+  \code{\link{Thresher}}, \code{\link{Reaper-class}}, \code{\link{AuerGervini-class}}
 }
 \examples{
 showClass("Thresher")
 }
 \keyword{classes}
+\keyword{cluster}
