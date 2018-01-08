@@ -36,7 +36,7 @@ Maintainer:  <krc@silicovore.com>
 }
 \keyword{ package }
 \seealso{
-  \code{\link[PCDimension:PCDimesnion-package]{PCDimension}}
+  \code{\link[PCDimension:PCDimension-package]{PCDimension}}
 }
 \examples{
 }

@@ -34,11 +34,14 @@ combines outlier detection with clustering.
     \item{\code{pcdim}:}{Object of class \code{"numeric"}; the number of
       significant principal components.}
     \item{\code{delta}:}{Object of class \code{"numeric"}; the lenth of
-      teh loading vector in the principal component space of dimension
+      the loading vector in the principal component space of dimension
       \code{pcdim}.}
     \item{\code{ag}:}{Object of class \code{"AuerGervini"}; represnts
       the result of running the automated Auer-Gervini algorithm to
       detemine the number of principal comonents.}
+    \item{\code{agfun}:}{A function, which is used as the default method
+      for computing the principal component dimension from the Auer-Gervini
+      plot.}
   }
 }
 \section{Methods}{

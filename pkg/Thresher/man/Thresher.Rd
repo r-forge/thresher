@@ -10,7 +10,8 @@ Thresher
 \usage{
 Thresher(data, nm = deparse(substitute(data)), FUZZ = 0.005,
          metric = "pearson", linkage="ward.D2",
-         method = c("broken.stick", "auer.gervini"))
+         method = c("auer.gervini", "broken.stick"),
+         scale = TRUE, agfun = agDimTwiceMean)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

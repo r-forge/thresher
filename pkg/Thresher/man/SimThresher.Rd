@@ -8,7 +8,8 @@ simt
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-SimThresher(ss, nSample, nm = deparse(substitute(ss)), rho = NULL, ...)
+SimThresher(ss, nSample, nm = deparse(substitute(ss)), rho = NULL,
+            agfun = agDimTwiceMean, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
