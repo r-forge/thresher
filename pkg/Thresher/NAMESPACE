@@ -6,6 +6,7 @@ import(stats)
 import(graphics)
 importFrom(MASS, mvrnorm)
 importFrom(ade4, dist.binary)
+importFrom(grDevices, colors, png, dev.off)
 import(colorspace)
 import(movMF)
 

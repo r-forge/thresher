@@ -1,6 +1,6 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,42 +16,17 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(Thresher)
-Loading required package: MASS
-Loading required package: colorspace
-Loading required package: movMF
-Loading required package: ade4
-
-Attaching package: 'ade4'
-
-The following object is masked from 'package:base':
-
-    within
-
 Loading required package: ClassDiscovery
 Loading required package: cluster
-Loading required package: mclust
-Package 'mclust' version 4.0
 Loading required package: oompaBase
-
-Attaching package: 'Thresher'
-
-The following object is masked from 'package:ade4':
-
-    scatter
-
-Warning messages:
-1: package 'colorspace' was built under R version 3.0.2 
-2: package 'movMF' was built under R version 3.0.2 
-3: package 'ade4' was built under R version 3.0.1 
-4: package 'ClassDiscovery' was built under R version 3.0.1 
-5: package 'oompaBase' was built under R version 3.0.1 
+Loading required package: PCDimension
 > # get saved data
 > data(savedSims)
 > reap <- vmfMixtures[[5]]
 > dset <- reap@data
 > labels <- factor(paste("C", predict(reap@fit), sep=""))
 > 
-> # use a different clustering algorityhm
+> # use a different clustering algorithm
 > hc <- hclust(distanceMatrix(dset, "uncentered"), "average")
 > newLabels <- paste("New", cutree(hc, k=3), sep="")
 > tab <- table(OLD=labels, NEW=newLabels)
@@ -94,4 +69,4 @@ uncentered correlation       absolute pearson           sqrt pearson
 > 
 > proc.time()
    user  system elapsed 
-   1.87    0.20    2.06 
+   1.87    0.26    2.12 

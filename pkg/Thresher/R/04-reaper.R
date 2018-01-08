@@ -266,7 +266,7 @@ setMethod("makeFigures", "Reaper", function(object, DIR=NULL, main=NULL, ...) {
   colsch <- .makeColorScheme(K)
 # fig6
   if (!is.null(DIR)) {
-    png(file=file.path(DIR, paste(fname, "-06-heat-cont.png", sep="")),
+    png(filename=file.path(DIR, paste(fname, "-06-heat-cont.png", sep="")),
         width=1930, height=640, pointsize=12, bg="white")
   }
   hc <- object@signalSet@continuousClusters
@@ -278,7 +278,7 @@ setMethod("makeFigures", "Reaper", function(object, DIR=NULL, main=NULL, ...) {
   if(!is.null(DIR)) dev.off()
 # fig7
   if (!is.null(DIR)) {
-    png(file=file.path(DIR, paste(fname, "-07-heat-bin.png", sep="")),
+    png(filename=file.path(DIR, paste(fname, "-07-heat-bin.png", sep="")),
         width=1920, height=640, pointsize=12, bg="white")
   }
   hc <- object@signalSet@binaryClusters

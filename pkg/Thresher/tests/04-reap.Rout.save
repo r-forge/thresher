@@ -1,6 +1,6 @@
 
-R version 3.0.0 (2013-04-03) -- "Masked Marvel"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
+Copyright (C) 2017 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,35 +16,10 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(Thresher)
-Loading required package: MASS
-Loading required package: colorspace
-Loading required package: movMF
-Loading required package: ade4
-
-Attaching package: 'ade4'
-
-The following object is masked from 'package:base':
-
-    within
-
 Loading required package: ClassDiscovery
 Loading required package: cluster
-Loading required package: mclust
-Package 'mclust' version 4.0
 Loading required package: oompaBase
-
-Attaching package: 'Thresher'
-
-The following object is masked from 'package:ade4':
-
-    scatter
-
-Warning messages:
-1: package 'colorspace' was built under R version 3.0.2 
-2: package 'movMF' was built under R version 3.0.2 
-3: package 'ade4' was built under R version 3.0.1 
-4: package 'ClassDiscovery' was built under R version 3.0.1 
-5: package 'oompaBase' was built under R version 3.0.1 
+Loading required package: PCDimension
 > 
 > # unstructured matrix
 > set.seed(9948489)
@@ -86,8 +61,6 @@ dumb
 > # create Reaper
 > reap <- Reaper(thresh)
 sigma2 
-Warning message:
-In acos(t(u) %*% u) : NaNs produced
 > reap@pcdim # two real components
 [1] 2
 > screeplot(reap, col=thresherPalette[5], lcol='black')
@@ -119,4 +92,4 @@ In if (is.na(Colv)) { :
 > 
 > proc.time()
    user  system elapsed 
-   3.94    0.20    4.18 
+   4.44    0.32    4.74 
