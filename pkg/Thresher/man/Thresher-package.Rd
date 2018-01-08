@@ -1,25 +1,24 @@
 \name{Thresher-package}
 \alias{Thresher-package}
-\alias{Thresher}
 \docType{package}
 \title{
-What the package does (short line)
 Threshing and Reaping for Principal Components
 }
 \description{
-  The Thresher package defines the classes used to identify
-  outliers (threshing) and compute the number of significant principal
-  components and number of clusters (reaping) in a joint application
-  of PCA and hierarchical clustering.
+  The \code{Thresher} package defines classes used to identify outliers
+  (threshing) and to compute the number of significant principal
+  components and number of clusters (reaping) in a joint application of
+  PCA and model-based clustering.
 }
 \details{
 \tabular{ll}{
 Package: \tab Thresher\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-11-20\cr
-License: \tab What license is it under?\cr
-Depends: \tab methods\cr
+Version: \tab 0.11.2\cr
+Date: \tab 2017-12-28\cr
+License: \tab Apache 2.0\cr
+Depends: \tab ClassDiscovery, PCDimension\cr
+Imports: \tab methods, stats, graphics, MASS, colorspace, movMF, ade4, oompaBase\cr
 }
 Standard usage is to apply the \code{Thresher} function to a data set in
 order to estimate the princiapl component dimension and identifty
@@ -32,7 +31,9 @@ Kevin R. Coombes and Min Wang
 Maintainer:  <krc@silicovore.com>
 }
 \references{
-  Submitted to some jounral.
+  Wang M, Abrams ZA, Kornblau SM, Coombes KR.
+  Thresher: detemining the number of clusters while removing outliers.
+  BMC Bioinformatics. 2018. In press.
 }
 \keyword{ package }
 \seealso{
