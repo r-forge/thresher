@@ -1,6 +1,6 @@
 Package: PCDimension
-Version: 1.1.7
-Date: 2017-12-14
+Version: 1.1.8
+Date: 2018-01-09
 Title: Finding the Number of Significant Principal Components
 Author: Kevin R. Coombes, Min Wang
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
@@ -9,7 +9,7 @@ Description: Implements methods to automate the Auer-Gervini graphical
   principal components. Automation uses clustering, change points, or
   simple statistical models to distinguish "long" from "short" steps
   in a graph showing the posterior number of components as a function
-  of a prior parameter.
+  of a prior parameter. See <doi:10.1101/237883>.
 Depends: R (>= 3.1), ClassDiscovery
 Imports: methods, stats, graphics, oompaBase, kernlab, changepoint, cpm
 Suggests: MASS, nFactors
