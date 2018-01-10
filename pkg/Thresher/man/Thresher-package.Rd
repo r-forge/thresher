@@ -14,8 +14,8 @@ Threshing and Reaping for Principal Components
 \tabular{ll}{
 Package: \tab Thresher\cr
 Type: \tab Package\cr
-Version: \tab 0.11.5\cr
-Date: \tab 2018-01-09\cr
+Version: \tab 0.12.0\cr
+Date: \tab 2018-01-10\cr
 License: \tab Apache 2.0\cr
 Depends: \tab ClassDiscovery, PCDimension\cr
 Imports: \tab methods, stats, graphics, MASS, colorspace, movMF, ade4, oompaBase\cr
@@ -31,9 +31,14 @@ Kevin R. Coombes and Min Wang
 Maintainer:  <krc@silicovore.com>
 }
 \references{
-  Wang M, Abrams ZA, Kornblau SM, Coombes KR.
-  Thresher: detemining the number of clusters while removing outliers.
-  BMC Bioinformatics. 2018. In press.
+  Wang M, Abrams ZB, Kornblau SM, Coombes KR.
+  Thresher: determining the number of clusters while removing outliers.
+  BMC Bioinformatics, 2018; 19(1):1-9. doi://10.1186/s12859-017-1998-9.
+
+  Wang M, Kornblau SM, Coombes KR.
+  Decomposing the Apoptosis Pathway Into Biologically Interpretable
+  Principal Components.
+  bioRxiv, 2017. doi://10.1101/237883.
 }
 \seealso{
   \code{\link{PCDimension}}

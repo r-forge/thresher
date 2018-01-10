@@ -37,7 +37,6 @@ Loading required package: PCDimension
 +          metric='pearson')
 > # now construct it for real
 > reap <- Reaper(thresh)
-dumb 
 > screeplot(reap)
 > plot(reap)
 > scatter(reap)
@@ -60,10 +59,9 @@ dumb
  0.7206  0.7506  0.7701  0.7666  0.7828  0.7991 
 > # create Reaper
 > reap <- Reaper(thresh)
-sigma2 
 > reap@pcdim # two real components
 [1] 2
-> screeplot(reap, col=thresherPalette[5], lcol='black')
+> screeplot(reap, col='gold', lcol='black')
 > reap@nGroups # should be just two feature-clusters
 [1] 2
 > plot(reap)
@@ -92,4 +90,4 @@ In if (is.na(Colv)) { :
 > 
 > proc.time()
    user  system elapsed 
-   4.44    0.32    4.74 
+   4.43    0.29    4.88 

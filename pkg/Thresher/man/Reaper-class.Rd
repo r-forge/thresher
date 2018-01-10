@@ -34,7 +34,7 @@ Reaper(thresher, useLoadings = FALSE, cutoff = 0.3,
     using von Mises-Fisher distributions be performed in the principal
     component space?}
   \item{cutoff}{A real number; what length loading vector should be used
-    to separate outliers from signficant contributers.}
+    to separate outliers from significant contributers.}
   \item{metric}{A character string containing the name of a clustering metric
     recognized by either \code{\link{dist}} or \code{\link{distanceMatrix}}.} 
   \item{linkage}{A character string containing the name of a linkage rule
@@ -77,9 +77,19 @@ Class \code{"\linkS4class{Thresher}"}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{getColors}{\code{signature(object = "Reaper")}: ... }
-    \item{getSplit}{\code{signature(object = "Reaper")}: ... }
-    \item{makeFigures}{\code{signature(object = "Reaper")}: ... }
+    \item{makeFigures}{\code{signature(object = "Reaper")}: This is a
+      convenience function to produce a standard set of figures. In
+      addition tot he plots preodcued for\code{Thresher} object, this
+      function also produces heatmaps where sample clustering depends
+      on either the continuous or binary signal sets.
+      If the \code{DIR} argument is
+      non-null, it is treated as the name of an existing directory where the
+      figures are stored as PNG files. Otherwise, the figures are
+      displayed interactively, one at a time, in a window on screen.}
+    \item{getColors}{\code{signature(object = "Reaper")}: Returns the
+      vector of colors assigned to the clustered columns in the data set.}
+    \item{getSplit}{\code{signature(object = "Reaper")}:  Returns the
+      vector of colors assigned to the clustered rows in the data set.}
 	 }
 }
 \details{

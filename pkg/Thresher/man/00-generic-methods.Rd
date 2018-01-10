@@ -33,14 +33,14 @@
 \details{
   The methods \code{getColors}, \code{getSplit}. and \code{getStyles}
   are used to extract the implicit color assignments used in standard
-  plots of objects of the \code{Thresher} or \code{Reepaer} classes.
+  plots of objects of the \code{Thresher} or \code{Reaper} classes.
 
   The \code{heat} and \code{scatter} methods represent generic heat maps
   and scatter plots, respectively.
 
   The \code{makeFigures} method is to generate a standard suite of
   figures for an object.  If the \code{DIR} argument is not NULL, then
-  the figures will be written to the indictaed directory in PNG
+  the figures will be written to the indicated directory in PNG
   format. Otherwise, the figures will be displayed interactivey on
   screen, waiting for user input to show each plot.
 }
@@ -55,7 +55,7 @@
   The \code{getSplit} method should return a vector of colors with
   length equal to the number of rows in a data set.
 
-  The \code{heat}, \code{scatter}, and \code{makeFiures} methods are
+  The \code{heat}, \code{scatter}, and \code{makeFigures} methods are
   called for their side effects of producing plots.
 }
 \author{

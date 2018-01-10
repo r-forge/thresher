@@ -43,8 +43,17 @@ Class \code{\linkS4class{Thresher}}, directly.
 }
 \section{Methods}{
   \describe{
-    \item{image}{\code{signature(x = "SimThresher")}: ... }
-    \item{makeFigures}{\code{signature(object = "SimThresher")}: ... }
+    \item{image}{\code{signature(x = "SimThresher")}: Produces an image
+      of the covariance matrix.}
+    \item{makeFigures}{\code{signature(object = "SimThresher")}: This is a
+      convenience function to produce a standard set of figures. In
+      addition tot he plots preodcued for\code{Thresher} object, this
+      function also produces an image of te covariance matrix used in
+      the simulations.
+      If the \code{DIR} argument is
+      non-null, it is treated as the name of an existing directory where the
+      figures are stored as PNG files. Otherwise, the figures are
+      displayed interactively, one at a time, in a window on screen.}
   }
 }
 \details{

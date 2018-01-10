@@ -22,7 +22,7 @@ Loading required package: oompaBase
 Loading required package: PCDimension
 > # get saved data
 > data(savedSims)
-> reap <- vmfMixtures[[5]]
+> reap <- savedReap[[5]]
 > dset <- reap@data
 > labels <- factor(paste("C", predict(reap@fit), sep=""))
 > 
@@ -33,40 +33,40 @@ Loading required package: PCDimension
 > tab
     NEW
 OLD  New1 New2 New3
-  C1    0    0    6
-  C2    0    2    0
-  C3    4    0    0
+  C1    0    0   10
+  C2    4    0    0
+  C3    0    6    0
 > 
 > # now test the methods
 > indices <- labelMatcher(tab)
 > tab[indices$ii, indices$jj]
     NEW
-OLD  New3 New2 New1
-  C1    6    0    0
-  C2    0    2    0
-  C3    0    0    4
+OLD  New3 New1 New2
+  C1   10    0    0
+  C2    0    4    0
+  C3    0    0    6
 > 
 > matchLabels(tab)
     NEW
-OLD  New3 New2 New1
-  C1    6    0    0
-  C2    0    2    0
-  C3    0    0    4
+OLD  New3 New1 New2
+  C1   10    0    0
+  C2    0    4    0
+  C3    0    0    6
 > 
 > countAgreement(tab)
-[1] 12
+[1] 20
 > 
 > labelAccuracy(dset, labels)
                pearson               spearman              euclidean 
-             1.0000000              1.0000000              1.0000000 
+                  1.00                   1.00                   1.00 
 uncentered correlation       absolute pearson           sqrt pearson 
-             1.0000000              0.8333333              1.0000000 
+                  1.00                   0.75                   1.00 
              minkowski                maximum                  weird 
-             1.0000000              1.0000000              1.0000000 
+                  1.00                   1.00                   1.00 
 > 
 > bestMetric(dset, labels)
 [1] "pearson"
 > 
 > proc.time()
    user  system elapsed 
-   1.87    0.26    2.12 
+   1.80    0.26    2.07 

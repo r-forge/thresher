@@ -92,10 +92,13 @@ Thresher(data, nm = deparse(substitute(data)),
       If the \code{DIR} argument is
       non-null, it is treated as the name of an existing directory where the
       figures are stored as PNG files. Otherwise, the figures are
-      dispolayed interactively, one at a time, in a window on screen.}
-    \item{getColors}{\code{signature(object = "Thresher")}: ... }
-    \item{getSplit}{\code{signature(object = "Thresher")}: ... }
-    \item{getStyles}{\code{signature(object = "Thresher")}: ... }
+      displayed interactively, one at a time, in a window on screen.}
+    \item{getColors}{\code{signature(object = "Thresher")}: Returns the
+      vector of colors assigned to the clustered columns in the data set.}
+    \item{getSplit}{\code{signature(object = "Thresher")}:  Returns the
+      vector of colors assigned to the clustered rows in the data set.}
+    \item{getStyles}{\code{signature(object = "Thresher")}: I refuse to
+      document this, since I am not convinced that it should actually exist.}
   }
 }
 \details{
