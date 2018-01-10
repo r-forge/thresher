@@ -15,21 +15,21 @@ data(savedSims)
 }
 \format{
   \enumerate{
-  \item{sigma}{A list of length five; each entry is a covariance matrix
+  \item \code{sigma}{: A list of length five; each entry is a covariance matrix
     used to simulate data.}
-  \item{savedSims}{A list of length five; each entry is a
+  \item \code{savedSims}{: A list of length five; each entry is a
     \code{\link{SimThresher}} object obtained by simulating data from
     one of the covariance matrices and running the \code{\link{Thresher}}
     algorithm.}
-  \item{savedReap}{A list of length five; each entry is a
+  \item \code{savedReap}{: A list of length five; each entry is a
     \code{\link{Reaper}} object obtained by applying the \code{Reaper}
     function.}
   }
 } 
 \source{
-  The simulated data se3ts were prepared by running the script
+  The simulated data sets were prepared by running the script
   \code{Examples/makeSims.R} that is installed along with the
-  \code{Thresher} package. The fivce covariance matrices vary in the
+  \code{Thresher} package. The five covariance matrices vary in the
   number of correlated subgroups (one or two) and whether they include
   both positively and negatively correlated variables, or just
   positively correlated ones. Each data set also includes two
