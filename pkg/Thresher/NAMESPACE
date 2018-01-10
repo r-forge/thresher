@@ -27,7 +27,7 @@ export(labelMatcher, matchLabels,
 export(unitize)
 
 # thresher
-export(thresherPalette, samplePalette)
+#export(thresherPalette, samplePalette)
 exportClasses("Thresher", "SimThresher")
 export(Thresher, SimThresher)
 

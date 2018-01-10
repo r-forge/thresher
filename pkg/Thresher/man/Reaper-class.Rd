@@ -2,37 +2,74 @@
 \Rdversion{1.1}
 \docType{class}
 \alias{Reaper-class}
+\alias{Reaper}
 \alias{getColors,Reaper-method}
 \alias{getSplit,Reaper-method}
+\alias{getStyles,Reaper-method}
 \alias{makeFigures,Reaper-method}
 
 \title{Class \code{"Reaper"}}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+The \code{Reaper} class implements the second step in the algorithm to
+combine outlier detection with cliustering.  The first step, implemented
+in the \link{Thresher-class}, performs principal components analysis an
+computes the PC dimension.  Features with short loading vectors are
+identified as outliers. Remaining features are clustering, based on the
+directions of the loading vectors, using mixtures of von Mises-Fisher
+distributions. 
 }
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("Reaper", ...)}.
-%%  ~~ describe objects here ~~ 
+  Objects should be defined using the \code{Reaper} constructor. In
+  the simplest case, you simply pass in a previously computed
+  \code{Thresher} object.
+}
+\usage{
+Reaper(thresher, useLoadings = FALSE, cutoff = 0.3,
+       metric = NULL, linkage="ward.D2",
+       maxSampleGroups = 0, ...)
+}
+\arguments{
+  \item{thresher}{A \code{Thresher} object.}
+  \item{useLoadings}{A logical value; should model-based clustering
+    using von Mises-Fisher distributions be performed in the principal
+    component space?}
+  \item{cutoff}{A real number; what length loading vector should be used
+    to separate outliers from signficant contributers.}
+  \item{metric}{A character string containing the name of a clustering metric
+    recognized by either \code{\link{dist}} or \code{\link{distanceMatrix}}.} 
+  \item{linkage}{A character string containing the name of a linkage rule
+    recognized by \code{\link{hclust}}.}
+  \item{maxSampleGroups}{An integer; the maximum number of sample groups
+    to be indicated by color in plots of the object.}
+  \item{\dots}{Additional arguments to be passed to the
+    \code{\link{Thresher}} function.}
 }
 \section{Slots}{
   \describe{
-    \item{\code{useLoadings}:}{Object of class \code{"logical"} ~~ }
-    \item{\code{keep}:}{Object of class \code{"logical"} ~~ }
-    \item{\code{nGroups}:}{Object of class \code{"number or miss"} ~~ }
-    \item{\code{fit}:}{Object of class \code{"fit or miss"} ~~ }
-    \item{\code{allfits}:}{Object of class \code{"list"} ~~ }
-    \item{\code{bic}:}{Object of class \code{"number or miss"} ~~ }
-    \item{\code{metric}:}{Object of class \code{"character"} ~~ }
-    \item{\code{signalSet}:}{Object of class \code{"SignalSet"} ~~ }
-    \item{\code{maxSampleGroups}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{name}:}{Object of class \code{"character"} ~~ }
-    \item{\code{data}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{spca}:}{Object of class \code{"SamplePCA"} ~~ }
-    \item{\code{loadings}:}{Object of class \code{"matrix"} ~~ }
-    \item{\code{gc}:}{Object of class \code{"hclust"} ~~ }
-    \item{\code{pcdim}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{delta}:}{Object of class \code{"numeric"} ~~ }
-    \item{\code{ag}:}{Object of class \code{"AuerGervini"} ~~ }
+    \item{\code{useLoadings}:}{Logical; should model-based clustering be
+      performed in PC space?}
+    \item{\code{keep}:}{Logical vector: which of the features (columns)
+      should be retained as meaningful signal instead of being removed
+      as outliers?}
+    \item{\code{nGroups}:}{Object of class \code{"number or miss"}; the
+      optimal number of groups/clusters found by the algorithm. If all
+      of the fits fail, this is NA. }
+    \item{\code{fit}:}{Object of class \code{"fit or miss"}; the best
+      mixture model fit.  Can be an NA if something goes wrong
+      when trying to fit mixture models.}
+    \item{\code{allfits}:}{Object of class \code{"list"}; a list, each
+      of whose entries should be the results of fitting a mixture model
+      with a different number of components.}
+    \item{\code{bic}:}{Object of class \code{"number or miss"}; the
+      optimal valus of the Bayes Information Criterion; can be NA if all
+      attempts to fit models fail.}
+    \item{\code{metric}:}{A character string; the preferred distance
+      metric for hierarchical clustering. If not specified by the user,
+      then this is computed using the \code{bestMetric} function.}
+    \item{\code{signalSet}:}{Object of class \code{\link{SignalSet}}}
+    \item{\code{maxSampleGroups}:}{An integer; the maximum number of
+      sample groups to be distinguished by color in plots of the
+      object.}
   }
 }
 \section{Extends}{
@@ -45,23 +82,67 @@ Class \code{"\linkS4class{Thresher}"}, directly.
     \item{makeFigures}{\code{signature(object = "Reaper")}: ... }
 	 }
 }
+\details{
+  Using the dimension computed when constructing the
+  \code{\link{Thresher}} object, we computed the lengths of the loading
+  vectors associated to features in the data set.  Features whose length
+  is less than a specified \code{cutoff} are identified as outliers and
+  removed. (Based on extensive simulations, the default cutoff is
+  taken to be 0.3.) We then refit the Thresher model on the remaining
+  features, which should, in theory, leave the PC dimension, \code{D},
+  unchanged.  We then rescale the remaining loading vectors to unit
+  length, so they can be viewed as points on a hypersphere. In order to
+  cluster points on a hypersphere, we use a model based on a mixture
+  of von Mises-Fisher distributions. We fit mixtures for every integer
+  in the range \eqn{D \le N \le 2D+1}{D <= N <= 2D+1}; this range accounts for the
+  possibility that each axis has both positively and negatively
+  correlated features.  The extra \eqn{+1}{+1} handles the degenerate case when
+  \eqn{D=0}{D = 0}.  The best fit is determined using the Bayes Information
+  Criterion (BIC). The final step is to compute a
+  \code{\link{SignalSet}}; see the description of that class for more
+  details.
+}
+\value{
+  The \code{Reaper} function returns an object of the Reaper class.
+}
 \references{
-%%  ~~put references to the literature/web site here~~
+  Wang M, Abrams ZB, Kornblau SM, Coombes KR.
+  Thresher: determining the number of clusters while removing outliers.
+  BMC Bioinformatics, 2018; 19(1):1-9. doi://10.1186/s12859-017-1998-9.
+
+  Wang M, Kornblau SM, Coombes KR.
+  Decomposing the Apoptosis Pathway Into Biologically Interpretable
+  Principal Components.
+  bioRxiv, 2017. doi://10.1101/237883.
+
+  Banerjee A, Dhillon IS, Ghosh J, Sra S.
+  Clustering on the unit hypersphere using von Mises-Fisher distributions.
+  Journal of Machine Learning Research, 2005; 6:1345--1382.
+
+  Kurt Hornik and Bettina Gr\"un.
+  movMF: An R Package for Fitting Mixtures of von Mises-Fisher Distributions.
+  Journal of Statistical Software, 2014; 58(10):1--31.
 }
 \author{
-%%  ~~who you are~~
+ Kevin R. Coombes <krc@silicovore.com>, Min Wang.
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
-%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+  \code{\link{PCDimension}}, \code{\link{SignalSet}}.
 }
 \examples{
-showClass("Reaper")
+# Simulate  a data set with some structure
+set.seed(250264)
+sigma1 <- matrix(0, ncol=16, nrow=16)
+sigma1[1:7, 1:7] <- 0.7
+sigma1[8:14, 8:14] <- 0.3
+diag(sigma1) <- 1
+st <- SimThresher(sigma1, nSample=300)
+# Threshing is completed; now we can reap
+reap <- Reaper(st)
+screeplot(reap, col='pink', lcol='red')
+scatter(reap)
+plot(reap)
+heat(reap)
 }
 \keyword{classes}
+\keyword{cluster}

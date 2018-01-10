@@ -141,9 +141,7 @@ Reaper <- function(thresher,
                    metric=NULL,
                    linkage="ward.D2",
                    maxSampleGroups=0,
-                   verbose=TRUE,
                    ...) {
-  if(verbose) cat(thresher@name, "\n", file=stderr())
   keep <- thresher@delta > cutoff
   m <- ifelse(is.null(metric), "pearson", metric)
   cleaned <- Thresher(thresher@data[, keep],

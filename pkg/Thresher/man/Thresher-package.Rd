@@ -14,16 +14,16 @@ Threshing and Reaping for Principal Components
 \tabular{ll}{
 Package: \tab Thresher\cr
 Type: \tab Package\cr
-Version: \tab 0.11.2\cr
-Date: \tab 2017-12-28\cr
+Version: \tab 0.11.5\cr
+Date: \tab 2018-01-09\cr
 License: \tab Apache 2.0\cr
 Depends: \tab ClassDiscovery, PCDimension\cr
 Imports: \tab methods, stats, graphics, MASS, colorspace, movMF, ade4, oompaBase\cr
 }
 Standard usage is to apply the \code{Thresher} function to a data set in
-order to estimate the princiapl component dimension and identifty
+order to estimate the principal component dimension and identifty
 outliers. You then apply the \code{Reaper} function to actually remove the
-outliers and asssign the remaining objects to clusters.
+outliers and assign the remaining objects to clusters.
 }
 \author{
 Kevin R. Coombes and Min Wang
@@ -35,9 +35,7 @@ Maintainer:  <krc@silicovore.com>
   Thresher: detemining the number of clusters while removing outliers.
   BMC Bioinformatics. 2018. In press.
 }
-\keyword{ package }
 \seealso{
-  \code{\link[PCDimension:PCDimension-package]{PCDimension}}
+  \code{\link{PCDimension}}
 }
-\examples{
-}
+\keyword{ package }

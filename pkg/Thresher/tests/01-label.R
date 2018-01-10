@@ -1,7 +1,7 @@
 library(Thresher)
 # get saved data
 data(savedSims)
-reap <- vmfMixtures[[5]]
+reap <- savedReap[[5]]
 dset <- reap@data
 labels <- factor(paste("C", predict(reap@fit), sep=""))
 

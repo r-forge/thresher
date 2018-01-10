@@ -37,7 +37,7 @@ summary(thresh@delta)
 # create Reaper
 reap <- Reaper(thresh)
 reap@pcdim # two real components
-screeplot(reap, col=thresherPalette[5], lcol='black')
+screeplot(reap, col='gold', lcol='black')
 reap@nGroups # should be just two feature-clusters
 plot(reap)
 scatter(reap)

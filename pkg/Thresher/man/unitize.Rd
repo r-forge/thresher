@@ -10,11 +10,11 @@ Rescales each column of a matrix to produce vectors of length one.
 unitize(mat)
 }
 \arguments{
-  \item{mat}{A matrix of real numbers.
-}
+  \item{mat}{A matrix of real numbers.}
 }
 \details{
-
+No details beyond the simple description are requires; it is implemented
+exactly the way you would suspect.
 }
 \value{
   A matrix of the same size as the input matrix.

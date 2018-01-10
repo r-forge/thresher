@@ -1,10 +1,5 @@
 library(Thresher)
 
-# color palette
-M <- length(thresherPalette)
-pts <- barplot(rep(1, M), col=thresherPalette)
-mtext(1:M, at=pts, side=1)
-
 # unstructured nmatrix
 set.seed(9948489)
 dumb <- matrix(rnorm(100*12), ncol=12)

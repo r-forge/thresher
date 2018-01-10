@@ -8,7 +8,9 @@
 Match Arbitrary Class Assignments Across Methods
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+These functions provide a set of tools to find the best match between
+the labels used by two different algorithms to cluster the same set of
+samples.
 }
 \usage{
 labelMatcher(tab, verbose = FALSE)
@@ -96,7 +98,7 @@ bestMetric(data, labels)
   to supply a list of distance metrics instead of relying on the
   hard-coded list internally.}
 \seealso{
-  Hierarchical clusteriung is implemented in the \code{\link{hclust}}
+  Hierarchical clustering is implemented in the \code{\link{hclust}}
   function.  We use the extended set of distance metrics provided by the
   \code{\link{distanceMatrix}} function from the ClassDiscovery package.
   This set includes all of the  metrics from the \code{\link{dist}}

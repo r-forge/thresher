@@ -47,7 +47,6 @@ setClass("Thresher",
 
 Thresher <- function(data,
                      nm=deparse(substitute(data)),
-                     FUZZ=0.005,
                      metric="pearson",
                      linkage="ward.D2",
                      method=c("auer.gervini", "broken.stick"),
@@ -202,7 +201,7 @@ if (!isGeneric("makeFigures"))
 
 setMethod("makeFigures", "Thresher", function(object, DIR=NULL, ...) {
   if (is.null(DIR)) opar <- par(ask=TRUE)
-  fname <- gsub("\\.", "-", object@name) # latex-safe
+  fname <- gsub("\\.", "-", object@name) # LaTeX-safe
 # fig1
   if(!is.null(DIR)) png(file.path(DIR, paste(fname, "-01-scree.png", sep="")),
                width=640, height=640, bg="white")
