@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R Under development (unstable) (2018-02-13 r74247) -- "Unsuffered Consequences"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -75,14 +75,8 @@ Loading required package: PCDimension
 > con.csc <- colsch[cutree(con.hc, k=4)]
 > heat(reap, Colv=as.dendrogram(bin.hc), ColSideColors=con.csc,
 +        main=paste(reap@name, "binary signals, continuous colors"))
-Warning message:
-In if (is.na(Colv)) { :
-  the condition has length > 1 and only the first element will be used
 > heat(reap, Colv=as.dendrogram(con.hc), ColSideColors=bin.csc,
 +        main=paste(reap@name, "continuous signals, binary colors"))
-Warning message:
-In if (is.na(Colv)) { :
-  the condition has length > 1 and only the first element will be used
 > 
 > if(FALSE) {
 +   makeFigures(reap)
@@ -90,4 +84,4 @@ In if (is.na(Colv)) { :
 > 
 > proc.time()
    user  system elapsed 
-   4.43    0.29    4.88 
+   3.29    0.29    3.55 

@@ -180,7 +180,7 @@ setMethod("heat", "Thresher", function(object, ncol=NULL,
   clipped[clipped > K] <- K
   clipped[clipped < -K] <- -K
   forshow <- t(clipped)
-  if (is.na(Colv)) {
+  if (any(is.na(Colv))) {
     forshow <- t(clipped[stuff$op,])
   }
 
