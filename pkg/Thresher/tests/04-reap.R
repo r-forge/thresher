@@ -31,6 +31,8 @@ diag(sigma1) <- 1
 sigma2 <- sigma1
 sigma2[(1+splinter):nProtein, 1:splinter] <- 0
 sigma2[1:splinter, (1+splinter):nProtein] <- 0
+nonsense <- matrix(rnorm(nProtein^2, 0, 0.001), nProtein)
+sigma2 <- sigma2 + nonsense + t(nonsense)
 # now simulate the data
 thresh <- SimThresher(sigma2, nSample=300)
 summary(thresh@delta)
