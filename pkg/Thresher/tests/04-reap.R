@@ -14,8 +14,10 @@ r <- new("Reaper", thresh,
          bic=NA,
          allfits=list(),
          metric='pearson')
+r@nGroups
 # now construct it for real
 reap <- Reaper(thresh)
+reap@nGroups
 screeplot(reap)
 plot(reap)
 scatter(reap)
@@ -31,16 +33,17 @@ diag(sigma1) <- 1
 sigma2 <- sigma1
 sigma2[(1+splinter):nProtein, 1:splinter] <- 0
 sigma2[1:splinter, (1+splinter):nProtein] <- 0
-nonsense <- matrix(rnorm(nProtein^2, 0, 0.001), nProtein)
-sigma2 <- sigma2 + nonsense + t(nonsense)
 # now simulate the data
 thresh <- SimThresher(sigma2, nSample=300)
-summary(thresh@delta)
+thresh@nSample # 300
+thresh@rho     # 0.5
+thresh@pcdim   # 2
+min(thresh@delta) > 0.5 # TRUE
 # create Reaper
 reap <- Reaper(thresh)
-reap@pcdim # two real components
+reap@pcdim   # two real components
+reap@nGroups # and two clusters
 screeplot(reap, col='gold', lcol='black')
-reap@nGroups # should be just two feature-clusters
 plot(reap)
 scatter(reap)
 heat(reap)
@@ -51,9 +54,9 @@ bin.csc <- colsch[cutree(bin.hc, k=4)]
 con.hc  <- reap@signalSet@continuousClusters
 con.csc <- colsch[cutree(con.hc, k=4)]
 heat(reap, Colv=as.dendrogram(bin.hc), ColSideColors=con.csc,
-       main=paste(reap@name, "binary signals, continuous colors"))
+       main=paste(reap@name, "binary signals, cont. colors"))
 heat(reap, Colv=as.dendrogram(con.hc), ColSideColors=bin.csc,
-       main=paste(reap@name, "continuous signals, binary colors"))
+       main=paste(reap@name, "cont. signals, binary colors"))
 
 if(FALSE) {
   makeFigures(reap)
