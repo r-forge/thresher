@@ -1,9 +1,9 @@
 setClass("SimThresher",
-         representation=list("Thresher",
-           nSample="numeric",
-           covariance="matrix",
-           rho="numeric"
-           ))
+         contains = "Thresher",
+         slots = c(nSample="numeric",
+                   covariance="matrix",
+                   rho="numeric"
+                   ))
 
 setMethod("image", "SimThresher", function(x, ...) {
   image(x@covariance, ...)

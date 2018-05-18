@@ -32,13 +32,12 @@ setClassUnion("number or miss", c("numeric", "logical"))
 
 
 setClass("SignalSet",
-         representation=list(
-           members="list",
-           continuous="matrix",
-           binary="matrix",
-           continuousClusters="hclust",
-           binaryClusters="hclust"
-           ))
+         slots = c(members="list",
+                   continuous="matrix",
+                   binary="matrix",
+                   continuousClusters="hclust",
+                   binaryClusters="hclust"
+                   ))
 
 .findSignals <- function(thresher, fit, nGroups, linkage="ward.D2") {
   gassign <- predict(fit) # groups of features defined by vMF mixture.
@@ -122,18 +121,17 @@ setClass("SignalSet",
 }
 
 setClass("Reaper",
-         representation=list(
-           "Thresher",
-           useLoadings="logical",
-           keep="logical",
-           nGroups="number or miss",
-           fit="fit or miss",
-           allfits="list",
-           bic="number or miss",
-           metric="character",
-           signalSet="SignalSet",
-           maxSampleGroups="numeric"
-           ))
+         contains = "Thresher",
+         slots = c(useLoadings="logical",
+                   keep="logical",
+                   nGroups="number or miss",
+                   fit="fit or miss",
+                   allfits="list",
+                   bic="number or miss",
+                   metric="character",
+                   signalSet="SignalSet",
+                   maxSampleGroups="numeric"
+                   ))
 
 Reaper <- function(thresher,
                    useLoadings=FALSE,

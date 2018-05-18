@@ -1,5 +1,6 @@
 \name{AuerGervini-class}
 \docType{class}
+\alias{PCDimension}
 \alias{AuerGervini-class}
 \alias{plot,AuerGervini,missing-method}
 \alias{summary,AuerGervini-method}

@@ -39,12 +39,12 @@ Thresher(data, nm = deparse(substitute(data)),
   \item{linkage}{A character string containing the name of a linkage rule
     recognized by \code{\link{hclust}}.}
   \item{method}{A character string describing the algorthim used from the
-    \code{\link{PCDimension}} package to compute the number of
+    \code{PCDimension} package to compute the number of
     significant components.}
   \item{scale}{A logical value; should the data be scaled before use?}
   \item{agfun}{A function that will be accepted by the
     \code{\link{AuerGervini}} function in the
-    \code{\link{PCDimension}} package.}
+    \code{PCDimension} package.}
 }
 \section{Slots}{
   \describe{
@@ -108,7 +108,7 @@ Thresher(data, nm = deparse(substitute(data)),
   default, though this can be overridden with the \code{scale}
   parameter) standardizes the data columns. It then performs a principal
   components analysis, and uses the Auer-Gervini method, as automated in
-  the \code{PCDimension} package, to determine the number, \code{D}, of
+  the \code{\link{PCDimension}} package, to determine the number, \code{D}, of
   statistically significant principal components. For each
   column-feature, it computes and remembers the length of its loading
   vector in D-dimensional space. (In case the Auer-Gervini method finds

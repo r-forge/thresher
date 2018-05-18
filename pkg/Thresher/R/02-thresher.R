@@ -33,17 +33,16 @@ samplePalette <- c("gray", "blue", "red", "purple",
 # S4 interface
 
 setClass("Thresher",
-         representation=list(
-           name="character",
-           data="matrix",
-           spca="SamplePCA",
-           loadings="matrix",
-           gc="hclust",
-           pcdim="numeric",
-           delta="numeric",
-           ag="AuerGervini",
-           agfun='function'
-           ))
+         slots = c(name="character",
+                   data="matrix",
+                   spca="SamplePCA",
+                   loadings="matrix",
+                   gc="hclust",
+                   pcdim="numeric",
+                   delta="numeric",
+                   ag="AuerGervini",
+                   agfun='function'
+                   ))
 
 Thresher <- function(data,
                      nm=deparse(substitute(data)),
