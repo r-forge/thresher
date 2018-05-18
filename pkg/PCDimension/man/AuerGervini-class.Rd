@@ -89,7 +89,14 @@ Objects should be created using the \code{AuerGervini} constructor.
 \references{
   [1] P Auer, D Gervini.
   Choosing principal components: a new graphical method based on Bayesian model selection.
-  Communications in Statistics-Simulation and Computation 37 (5), 962-977
+  Communications in Statistics-Simulation and Computation 37 (5),
+  962-977.
+
+  [2] Wang M, Kornbla SM, Coombes KR.
+  Decomposing the Apoptosis Pathway Into Biologically Interpretable
+  Principal Components.
+  Preprint: bioRxiv, 2017. <doi://10.1101/237883>.
+
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
 \seealso{

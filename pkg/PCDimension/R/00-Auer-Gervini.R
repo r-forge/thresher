@@ -115,12 +115,11 @@ rndLambdaF <- function(data, B=1000, alpha=0.05) {
 # S4 interface
 
 setClass("AuerGervini",
-         representation=list(
-           Lambda="numeric",
-           dimensions="numeric",
-           dLevels="numeric",
-           changePoints="numeric"
-         ))
+         slots = c(Lambda="numeric",
+                   dimensions="numeric",
+                   dLevels="numeric",
+                   changePoints="numeric"
+                   ))
 
 AuerGervini <- function(Lambda, dd=NULL, epsilon=2e-16) {
   if (inherits(Lambda, "SamplePCA")) {

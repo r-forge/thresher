@@ -6,6 +6,15 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 1.1.9
+
+UPDATES
+
+    o	Modified use of S4 classes to avoid deprecated and discouraged
+        elements. 
+
+		CHANGES IN R VERSION 1.1.0
+
 NEW FEATURES
 
     o	Added agDimLeap, a new algorithm to find long steps.
@@ -24,6 +33,7 @@ BUG FIXES
 	*						 *
 	**************************************************
 
+		CHANGES IN R VERSION 1.0.0
 
 NEW FEATURES
 

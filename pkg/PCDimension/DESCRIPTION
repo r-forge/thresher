@@ -1,6 +1,6 @@
 Package: PCDimension
-Version: 1.1.8
-Date: 2018-01-09
+Version: 1.1.9
+Date: 2018-05-17
 Title: Finding the Number of Significant Principal Components
 Author: Kevin R. Coombes, Min Wang
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
