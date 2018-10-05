@@ -1,5 +1,5 @@
 
-R version 3.4.4 (2018-03-15) -- "Someone to Lean On"
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
 Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -66,12 +66,17 @@ Loading required package: PCDimension
 [1] 2
 > min(thresh@delta) > 0.5 # TRUE
 [1] TRUE
+> round(det(thresh@covariance), 5) # 0.00117
+[1] 0.00117
 > # create Reaper
 > reap <- Reaper(thresh)
 > reap@pcdim   # two real components
 [1] 2
 > reap@nGroups # and two clusters
 [1] 2
+> reap@bic     # check the BIC levels
+     NC=2      NC=3      NC=4 
+-2563.702 -2076.876 -1711.335 
 > screeplot(reap, col='gold', lcol='black')
 > plot(reap)
 > scatter(reap)
@@ -93,4 +98,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-   4.75    0.32    5.07 
+   3.38    0.31    3.71 

@@ -39,10 +39,12 @@ thresh@nSample # 300
 thresh@rho     # 0.5
 thresh@pcdim   # 2
 min(thresh@delta) > 0.5 # TRUE
+round(det(thresh@covariance), 5) # 0.00117
 # create Reaper
 reap <- Reaper(thresh)
 reap@pcdim   # two real components
 reap@nGroups # and two clusters
+reap@bic     # check the BIC levels
 screeplot(reap, col='gold', lcol='black')
 plot(reap)
 scatter(reap)
