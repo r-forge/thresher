@@ -6,6 +6,25 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 1.0.2
+
+BUG FIXES
+
+    o	Simulation code works differently on different machines, even
+        when setting the same seed. The issue can be traced through
+        reliance on 'mvrnorm"' and 'eigen' to simulate multivariate
+        normal data. When there are repeated eigenvalues, different
+        linear alg=ebra routines can (legitimetaly) choose different
+        orthogonal bases for the correrspsoninf multidimensional
+        eigenspace. Have tried to refactor the test code so that this
+        doesn't matter.
+
+MAINTENANCE
+
+    o	Updated use of S4 class defintions to avod newly deprecated methods.
+
+		CHANGES IN R VERSION 1.0.0
+
 NEW FEATURES
 
     o	Initial version. Classes Thresher, Reaper, Auer-Gervini.
