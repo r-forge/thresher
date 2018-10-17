@@ -25,16 +25,7 @@ heat(reap)
 
 # matrices with structure
 set.seed(250264)
-rho <- 0.5
-nProtein <- 16
-splinter <- sample((nProtein/2) + (-3:3), 1)
-sigma1 <- matrix(rho, ncol=nProtein, nrow=nProtein)
-diag(sigma1) <- 1
-sigma2 <- sigma1
-sigma2[(1+splinter):nProtein, 1:splinter] <- 0
-sigma2[1:splinter, (1+splinter):nProtein] <- 0
-# now simulate the data
-thresh <- SimThresher(sigma2, nSample=300)
+load(system.file("Examples/thresh.Rda", package="Thresher"))
 thresh@nSample # 300
 thresh@rho     # 0.5
 thresh@pcdim   # 2
