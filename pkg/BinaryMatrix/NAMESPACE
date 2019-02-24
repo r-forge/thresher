@@ -1,0 +1,34 @@
+###
+### NAMESPACE
+###
+import(methods)
+
+importFrom("stats", "dist", "hclust")
+importFrom("cluster", "pam")
+importFrom("Rtsne", "Rtsne")
+importFrom("Thresher", "Thresher", "Reaper")
+# redefined S3 methods
+#importMethodsFrom(oompaBase, "summary", "plot", "image")
+
+
+# 01-metrics
+export("binaryDistance")
+
+# 02-binaryMatrix
+exportClasses("BinaryMatrix")
+export("BinaryMatrix", "removeDuplicateFeatures")
+
+exportMethods("[", "dim", "summary")
+
+# 03-thresh
+exportClasses("ThreshedBinaryMatrix")
+export("threshLGF")
+
+# 04-vis
+exportClasses("DistanceVis")
+export("DistanceVis", "addVisualization")
+
+
+
+# new methods for new classes
+# exportMethods("plot", "image", "screeplot")

@@ -1,0 +1,14 @@
+Package: BinaryMatrix
+Version: 0.0.2
+Date: 2019-02-18
+Title: Clustering and Visualizing Binary Matrices
+Author: Kevin R. Coombes
+Maintainer: Kevin R. Coombes <krc@silicovore.com>
+Description: Defines the classes used to identify explore, cluster and
+  visualize binary matrices.
+Depends: R (>= 3.1)
+Imports: methods, stats, graphics, cluster, Thresher, Rtsne, igraph
+Suggests: Polychrome
+License: Apache License (== 2.0)
+biocViews: Clustering
+URL: http://oompa.r-forge.r-project.org/

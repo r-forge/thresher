@@ -1,0 +1,4 @@
+Extend 'screeplot' method to take an argument restricting the number
+of component bars to display.  (Useful when the matrix dimension >>
+100.)
+
