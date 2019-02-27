@@ -9,7 +9,7 @@ nc <- nchar(as.character(chr))
 arm <- factor(substring(bands, 1, nc + 1))
 
 type <- rep(c("Loss", "Gain", "Fusion"), 916)
-label <- paste(type, rep(bands, 3), sep = "_")
+label <- paste(type, rep(bands, each = 3), sep = "_")
 
 length(label)
 length(type)

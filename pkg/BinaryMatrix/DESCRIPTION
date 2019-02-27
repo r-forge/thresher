@@ -1,6 +1,6 @@
 Package: BinaryMatrix
-Version: 0.0.2
-Date: 2019-02-18
+Version: 0.0.3
+Date: 2019-02-27
 Title: Clustering and Visualizing Binary Matrices
 Author: Kevin R. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
