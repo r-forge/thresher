@@ -1,7 +1,7 @@
 ---
 title: "Test 001: Creation of the BinaryMatrix object Class"
 author: "Cat Coombes"
-date: "February 27, 2019"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
@@ -55,11 +55,101 @@ Clearly, the BinaryMatrix object accepts input in the form of a matrix. Does it 
 t_df <- data.frame(matrix(as.numeric(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20))
 try(bm_df <- BinaryMatrix(t_df, f20))
 try(summary(bm_df))
-```
-Only the matrix class is accepted.
-data frame, factor, vector 400
 
-t_fac <- matrix(as.integer(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
-bm_int <- BinaryMatrix(t_int, f20)
+t_vec <- rbinom(400, 1, 0.5)
+try(bm_vec <- BinaryMatrix(t_vec, f20))
+try(summary(bm_vec))
+```
+Only the matrix class is accepted. Data frames and vectors are not.
+
+## Acceptable Feature Set
+The only components a BinaryMatrix must contain to be created are a matrix and a feature set, in the form of a data.frame.  
+The BinaryMatrix object cannot be created without a feature set.  
+For example, we know that we can load our small test matrix t_int inthe presence of the feature set f20, but we cannot load it alone.
+```{r}
+try(mybin <- BinaryMatrix(t_int))
+```
+
+We confirm that we cannot form the BinaryMatrix if our features are stored as a vector or a matrix:
+```{r}
+f_vec <- c(1:20)
+try(bm_vec <- BinaryMatrix(t_int, f_vec))
+
+f_mat <- matrix(f_vec)
+try(bm_mat <- BinaryMatrix(t_int, f_mat))
+```
+
+The features may include data of any class.
+```{r}
+char20 <- data.frame(as.character(c(1:20)))
+bm_char <- BinaryMatrix(t_int, char20)
+summary(bm_char)
+
+num20 <- data.frame(as.numeric(c(1:20)))
+bm_num <- BinaryMatrix(t_int, num20)
+summary(bm_num)
+
+int20 <- data.frame(as.integer(c(1:20)))
+bm_int <- BinaryMatrix(t_int, int20)
 summary(bm_int)
+
+log20 <- data.frame(as.logical(c(1:20)))
+bm_log <- BinaryMatrix(t_int, log20)
+summary(bm_log)
+
+fac20 <- data.frame(factor(c(1:20), levels = c("0", "1"), labels = c("zero", "one")))
+bm_fac <- BinaryMatrix(t_int, fac20)
+summary(bm_fac)
+```
+
+We confirm that the BinaryMatrix only accepts a feature set with a number of rows exactly equal to the number of columns in the matrix.
+```{r}
+t_rect <- matrix(rbinom(200, 1, 0.5), nrow = 5, ncol = 10)
+
+f10 <- data.frame(1:10)
+bm_10 <- BinaryMatrix(t_rect, f10)
+summary(bm_10)
+bm_10
+
+f9 <- data.frame(1:9)
+try(bm_9 <- BinaryMatrix(t_rect, f9))
+
+f11 <- data.frame(1:11)
+try(bm_11 <- BinaryMatrix(t_rect, f11))
+```
+
+## Acceptable Input
+
+We attempt this with a matrix containing only 2, but inappropriate values. BinaryMatrix accepts an input consisting of only 1s and 2s.
+```{r}
+t_10 <- matrix(rbinom(100, 1, 0.5), nrow = 10, ncol = 10)
+t_12 <- t_10 + 1
+bm_12 <- BinaryMatrix(t_12, f10)
+summary(bm_12)
+bm_12
+```
+
+BinaryMatrix will, in fact, create an inappropriate matrix containing any numerical values.
+```{r}
+t_norm <- matrix(rnorm(100, sd = 100), nrow = 10)
+bm_norm <- BinaryMatrix(t_norm, f10)
+summary(bm_norm)
+bm_norm
+```
+
+In fact, we can make a "BinaryMatrix" out of all sorts of things that are non-binary, including characters.
+```{r}
+mych <- c("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
+t_char <- rbind(mych, mych, mych, mych, mych, mych, mych, mych, mych, mych)
+dim(t_char)
+bm_char <- BinaryMatrix(t_char, f10)
+summary(bm_char)
+bm_char
+```
+
+### Takeaways: We need to define the input of the BinaryMatrix as consisting of only 0s and 1s in integer or numeric form.
+
+```{r}
+
+```
 ```
