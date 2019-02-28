@@ -1,0 +1,65 @@
+---
+title: "Test 001: Creation of the BinaryMatrix object Class"
+author: "Cat Coombes"
+date: "February 27, 2019"
+output: html_document
+---
+
+We assume that the input for all tests in the BinaryMatrix package should be in the form of the BinaryMatrix class.  
+The BinaryMatrix class builds a list containing at least 2 basic components:  
+1. A binary matrix of 0s and 1s.  
+2. A features set, in the form of a dataframe.  
+
+## Acceptable Matrix Input
+First, we must determine what class of matrix input the BinaryMatrix object accepts.  
+We assume our data are well-behaved in that they only consist of 0s and 1s.  
+We begin by creating a small, simple matrix (20x20) of randomly generated binary values (0 or 1, p = 0.5) in each class.  
+We create a meaningless feature set of class data.frame, which we will test further later.  
+
+```{r prep}
+library(BinaryMatrix)
+
+set.seed(1987)
+```
+```{r}
+f20 <- data.frame(as.character(c(1:20)))
+
+t_int <- matrix(as.integer(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
+bm_int <- BinaryMatrix(t_int, f20)
+summary(bm_int)
+
+t_num <- matrix(as.numeric(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
+bm_num <- BinaryMatrix(t_num, f20)
+summary(bm_num)
+
+t_char <- matrix(as.character(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
+bm_char <- BinaryMatrix(t_char, f20)
+summary(bm_char)
+
+t_log <- matrix(as.logical(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
+bm_log <- BinaryMatrix(t_log, f20)
+summary(bm_log)
+
+myfac <- factor(rbinom(400, 1, 0.5), levels = c("0","1"), labels = c("Zero", "One"))
+t_fac <- matrix(myfac, nrow = 200, ncol = 200, byrow = TRUE)
+try(bm_fac <- BinaryMatrix(t_fac, f20))
+try(summary(bm_fac))
+```
+
+The BinaryMatrix object will build with matrix input of 0s and 1s in integer, numeric, or character form, or as a matrix of logicals (true/false). The object fails to build with a factor.
+
+## Acceptable Object
+Clearly, the BinaryMatrix object accepts input in the form of a matrix. Does it accept other object structures?
+
+```{r}
+t_df <- data.frame(matrix(as.numeric(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20))
+try(bm_df <- BinaryMatrix(t_df, f20))
+try(summary(bm_df))
+```
+Only the matrix class is accepted.
+data frame, factor, vector 400
+
+t_fac <- matrix(as.integer(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20)
+bm_int <- BinaryMatrix(t_int, f20)
+summary(bm_int)
+```
