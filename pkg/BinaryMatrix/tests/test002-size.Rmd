@@ -1,0 +1,86 @@
+---
+title: "Test 002: Determining appropriate size of test matrix"
+author: "Cat Coombes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+### Goals
+The goal of these tests is to establish a size of matrix for which the BinaryMatrix package can complete all functions within ~90 seconds. A matrix of this size will then be used for further tests.
+
+### Assumptions
+1. We assume that an appropriate BinaryMatrix takes integer or numeric values of 0 and 1, with a feature set with a number of rows equal to the number of columns in the matrix.
+2. We assume that computational time is proportional to the number of items in a matrix, and not its orientation, so a square matrix will fill our purpose for these tests.
+
+```{r prep}
+library(BinaryMatrix)
+
+set.seed(1987)
+```
+
+## Test Function
+We create a function to run 4 computationally intensive, sample tests consisting of 4 randomly selected distance measures paired with all 4 visualizations (MDS, tsne, hierarchical clustering, and igraph). Instead of returning figures, the function returns runtime for each task.
+```{r}
+vistests <- function(n){
+  # Create a binary matrix of n dimensions
+  nmat <- matrix(rbinom(n*n, 1, 0.5), nrow = n)
+  fmat <- data.frame(1:n)
+  mybinmat <- BinaryMatrix(nmat, fmat)
+  
+  # set K
+  k <- n ^ 1/3
+  
+  # Test A
+  tA1 <- Sys.time()
+  Avis <- DistanceVis(mybinmat, "jaccard", "mds", K = k)
+  Aplot <- plot(Avis@view[[1]], col=Avis@colv, pch=Avis@symv)
+  tA2 <- Sys.time()
+  
+  # Test B
+  tB1 <- Sys.time()
+  Bvis <- DistanceVis(mybinmat, "russell", "hclust", K = k)
+  Bplot <- plot(Bvis@view[[1]], col=Bvis@colv, pch=Bvis@symv)
+  tB2 <- Sys.time()
+  
+  # Test C
+  tC1 <- Sys.time()
+  Cvis <- DistanceVis(mybinmat, "canberra", "tsne", K = k)
+  Cplot <- plot(Cvis@view[[1]]$Y, col=Cvis@colv, pch=Cvis@symv)
+  tC2 <- Sys.time()
+  
+  # Output
+  cat(
+    "Definitions: \n 
+    Test A = Jaccard Distance, MDS Plot \n 
+    Test B = Russell Rao Distance, Hierarchical Clustering \n 
+    Test C = Canberra Distance, TSNE Plot \n", "\n",
+    "Runtime for Test A: ", tA2 - tA1, "\n",
+    "Runtime for Test B: ", tB2 - tB1, "\n",
+    "Runtime for Test C: ", tC2 - tC1, "\n"
+  )
+  
+}
+```
+
+Now, we test it on matrices of varying sizes.  
+First, 100x100:
+```{r}
+vistests(100)
+```
+
+Next, 500x500:
+```{r}
+vistests(500)
+```
+
+1000x1000:
+```{r}
+vistests(1000)
+```
+
+3000x3000 runs long enough (>5 minutes) that we got tired of waiting:
+```{r}
+#vistests(3000)
+```
+
+## We conclude that a 500x500 test matrix is a good size for our purposes.
