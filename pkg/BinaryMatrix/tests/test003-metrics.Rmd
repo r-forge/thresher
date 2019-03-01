@@ -36,15 +36,7 @@ runmytests <- function(my.matrix){
   
 }
 ```
-
-We note that the binaryDistance function fails if the metric is not written in quotes.
-```{r}
-try(met1 <- binaryDistance(goodmat, jaccard))
-
-met2 <- binaryDistance(goodmat, "jaccard")
-plot(hclust(met2))
-```
-
+  
 ## A Simple Test
 Next, we explore acceptable input for the binaryDistance function. We begin by creating a well-behaved test matrix and BinaryMatrix of 500x500 dimensions with randomly generated 0s and 1s, with p = 0.5.
 ```{r}
