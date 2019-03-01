@@ -1,0 +1,202 @@
+---
+title: 'Test 003: Appropriate and Inappropriate Data'
+author: "Cat Coombes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Our Test Function
+We begin by creating a function that allows us to easily run a pre-made test matrix against a variety of metrics to return runtime and error. Because we know hierarchical clustering to be the fastest plot to compute, we will use it as the confirmatory plot of our output.
+```{r prep}
+library(BinaryMatrix)
+
+set.seed(1987)
+```
+```{r}
+mettest <- function(matrix, metric){
+  
+  t1 <- Sys.time()
+  #metchar <- cat("\"", metric , "\"" )
+  met <- binaryDistance(matrix, metric)
+  t2 <- Sys.time()
+  plot(hclust(met))
+  cat("Runtime for metric: ", t2-t1)
+  
+}
+
+my.mets <- c("jaccard", "sokalMichener", "hamming", "russellRao", "pearson", "goodmanKruskal", "manhattan", "canberra", "binary", "euclid")
+
+runmytests <- function(my.matrix){
+    
+  for(i in 1:length(my.mets)){
+    cat("Test ", i, ": ", my.mets[i], "\n")
+    try(mettest(my.matrix, my.mets[i]))
+    cat("\n")
+  }
+  
+}
+```
+
+We note that the binaryDistance function fails if the metric is not written in quotes.
+```{r}
+try(met1 <- binaryDistance(goodmat, jaccard))
+
+met2 <- binaryDistance(goodmat, "jaccard")
+plot(hclust(met2))
+```
+
+## A Simple Test
+Next, we explore acceptable input for the binaryDistance function. We begin by creating a well-behaved test matrix and BinaryMatrix of 500x500 dimensions with randomly generated 0s and 1s, with p = 0.5.
+```{r}
+goodmat <- matrix(rbinom(500*500, 1, 0.5), nrow = 500)
+
+goodf <- data.frame(1:500)
+goodbm <- BinaryMatrix(goodmat, goodf)
+```
+
+We use our function to confirm that we can run every metric (“jaccard”, “sokalMichener”, “hamming”, “russellRao”, “pearson”, “goodmanKruskal”, “manhattan”, “canberra”, “binary”, “euclid”) on our basic test matrix.
+```{r}
+runmytests(goodmat)
+```
+
+We find that none of the binaryDistance metrics take the simple BinaryMatrix object type as valid input.
+```{r}
+runmytests(goodbm)
+```
+
+However, we find that all of the binaryDistance metrics will take BinaryMatrix@binmat (the matrix component).
+```{r}
+runmytests(goodbm@binmat)
+```
+
+Since we accept that a binary matrix in the form of BinaryMatrix@binmat or a matrix will work, we will use a simple matrix for the remainder of these tests.
+
+## Binary Limits
+Next, we attempt to form a series of binary matrices to challenge the limits of the binaryDistance function.
+
+#### Proportion of 0s or 1s
+We begin by varying the proportion of 0s and 1s in the set: p = 0.01, 0.1, 0.3, 0.5, 0.7, 0.9, 0.99.
+
+The binaryDistance measures return error-free results at all levels. The hierarchical clustering visualization returns errors at p = 0.01 (pearson, canberra) and p = 0.99 (pearson and Goodman Kruskal).
+
+There is evidence that some of the visualizations may behave strangely at the poles. We will need to test visualizations at the extremes: 0.01, 0.1, 0.5, 0.9, and 0.99.
+```{r}
+ps <- c(0.01, 0.10, 0.30, 0.50, 0.70, 0.90, 0.99)
+
+for(i  in 1:length(ps)){
+  cat("p = ", ps[i], "% \n")
+  my.mat <- matrix(rbinom(500*500, 1, ps[i]), nrow = 500)
+  
+  runmytests(my.mat)
+}
+
+```
+
+#### Matrix Proportions
+Next, we vary the proportions of the matrix itself, continuing with a matrix the same size as we have been testing with. We create a long matrix (with very many columns) and a tall matrix (with very many rows).
+
+A very tall matrix is successful, but a very long matrix fails. It appears that a 0.002:1 ratio of rows to columns succeeds with a variety of matrix sizes.
+```{r}
+#For reference:
+runmytests(goodmat)
+
+verytall <- matrix(rbinom(500*500, 1, 0.5), ncol = 10)
+runmytests(verytall)
+
+verylong <- matrix(rbinom(500*500, 1, 0.5), nrow = 10)
+try(runmytests(verylong))
+
+lesslong <- matrix(rbinom(500*500, 1, 0.5), nrow = 50)
+runmytests(lesslong)
+
+differentlylong <- matrix(rbinom(100*100, 1, 0.5), nrow=10)
+runmytests(differentlylong)
+
+twoperlong <- matrix(rbinom(100*100, 1, 0.5), nrow = 0.002*100*100)
+runmytests(twoperlong)
+
+twoagainlong <- matrix(rbinom(1000*1000, 1, 0.5), nrow = 0.002*1000*1000)
+runmytests(twoagainlong)
+```
+
+#### Identical Rows and Identical Columns
+All the distance metrics tolerate a small number of duplicate rows or columns.
+```{r}
+duprows <- rbind(goodmat[1:300, ], goodmat[200, ], goodmat[301:499, ])
+runmytests(duprows)
+
+dupmanyrows <- rbind(goodmat[1:300, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[200, ], goodmat[301:499, ])
+runmytests(dupmanyrows)
+
+dupcols <- cbind(goodmat[ , 1:300], goodmat[ , 200], goodmat[ , 301:499])
+runmytests(dupcols)
+
+dupmanycols <- cbind(goodmat[ , 1:300], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 200], goodmat[ , 301:499])
+runmytests(dupmanycols)
+```
+
+#### Rows or Columns of all 0s or 1s
+All metrics could handle rows of all 0s or 1s. All metrics other than Pearson can tolerate columns of all 0s or 1s.
+```{r}
+all0 <- rep(0, 500)
+all1 <- rep(1, 500)
+
+row0 <- rbind(goodmat[1:300, ], all0, goodmat[301:499, ])
+runmytests(row0)
+
+row1 <- rbind(goodmat[1:300, ], all1, goodmat[301:499, ])
+runmytests(row1)
+
+col0 <- cbind(goodmat[ , 1:300], all0, goodmat[ , 301:499])
+runmytests(col0)
+
+col1 <- cbind(goodmat[ , 1:300], all1, goodmat[ , 301:499])
+runmytests(col1)
+```
+
+## Appropriate and Inappropriate Data Class
+A matrix (including the BinaryMatrix object) accepts multiple classes of data. The tests above confirm that all 10 distance metrics work with a matrix of integers. Below we test matrices of numeric, logical, and character class containing values of 0 and 1.
+
+All distance metrics work for binary numeric and logical matrices.
+
+Manhattan, Canberra, Binary, and Euclidean distance return ostensibly meaningful output to a binary matrix of character class.
+```{r}
+num.mat <- matrix(as.numeric(rbinom(500*500, 1, 0.5)), nrow = 500)
+runmytests(num.mat)
+
+log.mat <- matrix(as.logical(rbinom(500*500, 1, 0.5)), nrow = 500)
+runmytests(log.mat)
+
+char.matt <- matrix(as.character(rbinom(500*500, 1, 0.5)), nrow = 500)
+runmytests(char.matt)
+```
+
+## Non-Binary Data
+How do the various distance metrics fare in the face of non-binary data?
+
+#### 1s and 2s
+We begin with the common case of "binary" data store as 1s and 2s. 
+
+All distance metrics return output without error, but some hierarchical clustering patterns are unusual.
+```{r}
+two.mat <- goodmat + 1
+runmytests(two.mat)
+```
+
+#### Probabilities
+We take the case of a randomly generated set of probabilities between 0 and 1.
+
+All distance metrics return output without error, but some hierarchical clustering patterns are unusual.
+```{r}
+prob.mat <- matrix(runif(500*500, min = 0, max = 1), nrow = 500)
+runmytests(prob.mat)
+```
+
+#### A Wide Range of Numbers
+We take the final case of a randomly generated set of numbers with a wide range.
+
+All distance metrics return output without error, but some hierarchical clustering patterns are highly unusual.
+```{r}
+wide.mat <- matrix(rnorm(500*500, sd = 1000), nrow = 500)
+runmytests(wide.mat)
+```
