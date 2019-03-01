@@ -36,8 +36,13 @@ DistanceVis <- function(binaryMat, metric, method, K, ...) {
   view <- list()
   view[[method]] <- computeVisualization(DistMat, method, ...)
   poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
-  mycol <- rep(Dark24, 2)
-  mysym <- rep(c(15, 16), each=24)
+  R <- ifelse(K %% 24 == 0, K/24, 1 + trunc(K/24))
+  baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
+  if (R > length(baseSyms)) {
+    stop("Are you kidding me? You can't possibly want that many (", K, ") clusters.")
+  }
+  mycol <- rep(Dark24, R)
+  mysym <- rep(baseSyms[1:R], each=24)
   colv <- mycol[poof]
   symv <- mysym[poof]
   names(colv) <- names(symv) <- colnames(DistMat)
