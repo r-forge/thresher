@@ -21,7 +21,7 @@ importMethodsFrom(ClassDiscovery, "screeplot")
 # match labels in two different cluster assignments
 export(labelMatcher, matchLabels,
        countAgreement, labelAccuracy,
-       bestMetric)
+       bestMetric, remap)
 
 # misc
 export(unitize)

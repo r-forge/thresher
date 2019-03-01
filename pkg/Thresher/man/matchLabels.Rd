@@ -4,6 +4,7 @@
 \alias{labelAccuracy}
 \alias{countAgreement}
 \alias{bestMetric}
+\alias{remap}
 \title{
 Match Arbitrary Class Assignments Across Methods
 }
@@ -18,6 +19,7 @@ matchLabels(tab)
 countAgreement(tab)
 labelAccuracy(data, labels, linkage="ward.D2")
 bestMetric(data, labels)
+remap(fix, vary)
 }
 \arguments{
   \item{tab}{A contingency table, represented as a square \code{matrix}
@@ -35,6 +37,8 @@ bestMetric(data, labels)
     objects in the \code{data} matrix.}
   \item{linkage}{A linkage rule accepted by the \code{\link{hclust}}
     function.}
+  \item{fix}{A vector of cluater assignments.}
+  \item{vary}{A vector of cluater assignments.}
 }
 \details{
   In the most general sense, clustering can be viewed as a function from
@@ -91,7 +95,11 @@ bestMetric(data, labels)
   The \code{bestMetric} function is a user-friendly front-end to the
   \code{labelAccuracy} function.  It returns the name of the distance
   metric whose hierarchical clusters best match the prespecified
-  \code{labels}. 
+  \code{labels}.
+
+  The \code{remap} function takes two sets of integer cluster
+  assignments and returns a new set of labels for the target that best
+  matches the source.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
 \note{The \code{labelAccuracy} function should probably allow the user
@@ -110,6 +118,9 @@ factor2 <- rep(c("X", "Y", "Z"), each=10)
 tab <- table(factor1, factor2)
 matchLabels(tab)
 labelMatcher(tab)
+R <- remap(factor1, factor2)
+table(R, factor2) # remapping
+table(R, factor1) # cross-comparison
 }
 \keyword{ cluster }
 \keyword{ classif }

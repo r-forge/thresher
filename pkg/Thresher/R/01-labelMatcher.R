@@ -57,3 +57,17 @@ bestMetric <- function(data, labels) {
   accu <- labelAccuracy(data, labels)
   names(accu)[accu==max(accu)][1]
 }
+
+remap <- function(fix, vary) {
+  if(is.factor(vary)) { # need consistent names
+    V <- vary
+  } else {
+    V <- factor(vary)
+  }
+  tab <- table(fix, vary)
+  lem <- labelMatcher(tab)
+  oj <- order(lem$jj)
+  tricky <- lem$ii[oj]
+  names(tricky) <- levels(V)
+  levels(V)[tricky[vary]] # should swap the labels in "vary" to best match "fix"
+}
