@@ -1,0 +1,140 @@
+---
+title: "Test 005 - Removing Duplicate Features"
+author: "Cat Coombes"
+date: "r Sys.Date()"
+output: html_document
+---
+
+## Building a BinaryMatrix with Duplicates
+We create a binary matrix and introduce duplicate columns an duplicate rows.
+
+The Binary Matrix object class tolerates a matrix of all 0s or all 1s.
+```{r}
+dc.zero <- BinaryMatrix( (matrix(rep(0), ncol = 500, nrow = 500)), data.frame(1:500))
+dim(dc.zero)
+summary(dc.zero)
+
+dc.one <- BinaryMatrix( (matrix(rep(1), ncol = 500, nrow = 500)), data.frame(1:500))
+dim(dc.one)
+summary(dc.one)
+```
+
+BinaryMatrix and DistanceVis tolerate duplicate rows without a problem.
+```{r}
+base.mat <- matrix(rbinom(500*500, 1, 0.5), nrow = 500)
+
+duprows <- function(mat, mat2){
+  r <- mat[3, ]
+  mat2 <- rbind(mat[1:50, ], r, mat[51:250, ], r, mat[251:500, ])
+  s <- mat[8, ]
+  mat2 <- rbind(mat2[1:61, ], s, mat2[62:300, ], s, mat2[300:502, ])
+}
+
+dr.mat <- duprows(base.mat, dr.mat)
+dim(dr.mat)
+
+f.r <- data.frame(1:500)
+dr.bm <- BinaryMatrix(dr.mat, f.r)
+dim(dr.bm)
+summary(dr.bm)
+
+visrows <- DistanceVis(dr.bm, "euclid", "hclust", K = 15)
+plot(visrows@view[[1]])
+```
+
+The BinaryMatrix object class cannot tolerate duplicate columns, even when they have distinct names. These duplicates cannot be removed by the removeDuplicateFeatures function, because that function only accepts the BinaryMatrix object.
+```{r}
+dupcols <- function(mat, mat2){
+  r <- mat[ , 3]
+  mat2 <- cbind(mat[ , 1:50], r, mat[ , 51:250], r, mat[, 251:500])
+  s <- mat[ , 8]
+  mat2 <- cbind(mat2[ , 1:61], s, mat2[ , 62:300], s, mat2[ , 300:502])
+}
+
+dc.mat <- dupcols(base.mat, dc.mat)
+dim(dc.mat)
+class(dc.mat)
+
+f.c <- data.frame(1:505)
+dim(f.c)
+
+nrow(f.c) == ncol(dc.mat)
+
+try(dc.bm <- BinaryMatrix(dc.mat , f.c))
+try(dc.whynot <- BinaryMatrix(dc.mat, data.frame(1:505)))
+
+try(dim(dc.bm))
+try(summary(dc.bm))
+```
+
+Not even one duplicate column is tolerated.
+```{r}
+base.mat2 <- matrix(rbinom(500*500, 1, 0.5), nrow = 500)
+duponecol <- rbind(base.mat2[ , 1:250], base.mat2[ , 1], base.mat2[ , 251:500])
+dupone.f <- data.frame(1:501)
+one.bm <- BinaryMatrix(duponecol, dupone.f)
+```
+
+## removeDuplicateFeatures
+We try to run the removeDuplicateFeatures function on our matrix with duplicate rows. Although the BinaryMatrix object created successfully with a feature set consisting of a data frame of integers, this feature set is not compatible with the removeDuplicateFeatures function because removeDuplicateFeatures recognizes the class of .
+```{r}
+summary(dr.bm)
+class(f.r)
+class(dr.bm@features)
+try(no.dup.row <- removeDuplicateFeatures(dr.bm))
+```
+
+We create a feature set of factor class, and fail.
+```{r}
+dim(dr.mat)
+f.fac <- data.frame(as.character(1:500))
+class(f.fac[1,1])
+dr.bm.fac <- BinaryMatrix(dr.mat, f.fac)
+class(dr.bm.fac@features)
+summary(dr.bm.fac)
+no.dup.row.fac <- removeDuplicateFeatures(dr.bm.fac)
+```
+
+We create a feature set of character class, and removeDuplicateFeatures still fails.
+```{r}
+#500 random character strings as headers, since trying to turn integers into characters keeps getting forced to Factor class.
+randomString <- function(){
+  v <- c(sample(LETTERS, 12, replace = TRUE))
+  return(paste0(v, collapse = ""))
+}
+
+char.names <- rep(0, 500)
+for(i in 1:500){
+  char.names[i] <- randomString()
+}
+
+
+char.df <- data.frame(char.names, stringsAsFactors = FALSE)
+class(char.df)
+class(char.df[1, ])
+
+char.bm <- BinaryMatrix(dr.mat, char.df)
+
+no.dup.row.char <- removeDuplicateFeatures(char.bm)
+```
+
+We create a data.frame of more than one column. We find that removeDuplicateFeatures ran without error with the multi-column data frame. 
+```{r}
+two.df <- cbind(char.names, f.fac, 1:500)
+summary(two.df)
+
+moredf.bm <- BinaryMatrix(dr.mat, two.df)
+
+new.bm <- removeDuplicateFeatures(moredf.bm)
+dim(dr.mat)
+dim(new.bm)
+summary(new.bm)
+new.bm@info
+
+removeDuplicateFeatures(moredf.bm)
+```
+
+# Conclusions: Issues with removeDuplicateFeatures
+1. removeDuplicateFeatures cannot remove duplicate columns, because rDF only takes the BinaryMatrix object class, which cannot be constructed in the presence of duplicate columns.
+2. On testing, rDF was unable to remove duplicate rows from a test BinaryMatrix.
+3. Intuitively, it seems like rDF should be able to be run without assigning it to a new variable, but this results in printing a huge amount of data. However, it is not clear it is possible to recover the @info results on duplicates removed without printing everything.
