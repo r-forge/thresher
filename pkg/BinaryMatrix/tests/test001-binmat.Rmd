@@ -146,10 +146,3 @@ bm_char <- BinaryMatrix(t_char, f10)
 summary(bm_char)
 bm_char
 ```
-
-### Takeaways: We need to define the input of the BinaryMatrix as consisting of only 0s and 1s in integer or numeric form.
-
-```{r}
-
-```
-```
