@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+### This document tests all metrics provided in the 01-metrics.R file.
+
 ## Our Test Function
 We begin by creating a function that allows us to easily run a pre-made test matrix against a variety of metrics to return runtime and error. Because we know hierarchical clustering to be the fastest plot to compute, we will use it as the confirmatory plot of our output.
 ```{r prep}
