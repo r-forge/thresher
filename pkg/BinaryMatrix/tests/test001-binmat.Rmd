@@ -5,6 +5,9 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+####This document tests the following functions:
+#### 02.binaryMatrix.R - BinaryMatrix and subsidiaries (validBinaryMatrix, [], dim, summary)
+
 We assume that the input for all tests in the BinaryMatrix package should be in the form of the BinaryMatrix class.  
 The BinaryMatrix class builds a list containing at least 2 basic components:  
 1. A binary matrix of 0s and 1s.  
@@ -145,4 +148,24 @@ dim(t_char)
 bm_char <- BinaryMatrix(t_char, f10)
 summary(bm_char)
 bm_char
+```
+
+## Subsetting a Matrix
+We confirm that we can subset an appropriate matrix in a variety of predictable ways.
+```{r}
+whole.mat <- matrix(rbinom(500*500, 1, 0.5), nrow=500)
+whole.df <- data.frame(1:500)
+whole.bm <- BinaryMatrix(whole.mat, whole.df)
+
+part.bm <- whole.bm[100,100]
+dim(part.bm)
+summary(part.bm)
+
+part2.bm <- whole.bm[1:100,1:100]
+dim(part2.bm)
+summary(part2.bm)
+
+part3.bm <- whole.bm[100:199,300:349]
+dim(part3.bm)
+summary(part3.bm)
 ```
