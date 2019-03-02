@@ -1,0 +1,249 @@
+---
+title: 'Test 004: Visualization Hijinks'
+author: "Cat Coombes"
+date: "`r Sys.Date()"
+output: html_document
+---
+
+## Tests Missing form this document as it currently stands:
+- Multiple plots with addVisualization
+- Adjusting parameters from dependent packages (such as polychrome, Rtsne, etc.) when creating DistanceVis or plotting. (I've scratched the surface a little.)
+- More comprehensive tests of all DistanceVis parameters.
+- Adjusting parameters of the plot function (ex. axis titles, aspect ratio, plot title) when plotting.
+- More in-depth tests of components of the DistanceVis function.
+
+## Goals
+The goal of these tests is to explore functioning and bugs in visualization in the BinaryMatrix package.
+
+## Test Set
+We begin by creating a binary matrix that we know to work: a matrix object containing numerical data of 0s and 1s with dimensions 500x500.
+
+We can assume that any distance matrix that has built without error can be used to test any visualization. Thus, all tests will be performed with one distance matrix. We choose Euclidean distance because former tests showed it to be error-free and well-behaved in all cases, classes, and numerical ranges provided.
+
+```{r prep}
+library(BinaryMatrix)
+
+set.seed(1987)
+```
+```{r}
+goodMat <- matrix(as.numeric(rbinom(500*500, 1, 0.5)), nrow = 500)
+goodDis <- binaryDistance(goodMat, "euclid")
+goodF <- data.frame(1:500)
+goodBM <- BinaryMatrix(goodMat, goodF)
+```
+
+## Basic Visualizations
+First, we create simple visualizations of our test matrix with hierarchical clustering, multi-dimensional scaling, and t-SNE.
+```{r}
+goodClust <- DistanceVis(goodBM, "euclid", "hclust", K = 15)
+plot(goodClust@view[[1]], col=goodClust@colv, pch=goodClust@symv)
+
+goodMDS <- DistanceVis(goodBM, "euclid", "mds", K = 15)
+plot(goodMDS@view[[1]], col=goodMDS@colv, pch=goodMDS@symv)
+
+goodTS <- DistanceVis(goodBM, "euclid", "tsne", K = 15)
+plot(goodTS@view[[1]]$Y, col=goodTS@colv, pch=goodTS@symv)
+```
+
+## Testing DistanceVis
+
+#### Object Class
+DistanceVis only accepts the BinaryMatrix object, even though binaryDistance only accepts a matrix.
+```{r}
+try(matClust <- DistanceVis(goodMat, "euclid", "hclust", K = 15))
+```
+
+#### Syntax errors in creating DistanceVis
+1. Failure to include quotes when specifying distance metric or plot type results in error. (Two different errors, in fact.)
+2. Function requires Uppercase "K"
+```{r}
+try(bad1Clust <- DistanceVis(goodBM, euclid, "hclust", K = 15))
+try(bad2Clust <- DistanceVis(goodBM, "euclid", hclust, K = 15))
+try(bad3Clust <- DistanceVis(goodBM, "euclid", "hclust", k = 15))
+```
+
+# Tests by Plot Type
+We test each plot for general syntax, color settings, and function with unusual binary matrices.
+
+We create a function to test data at extreme distributions of 0s and 1s.
+```{r}
+extremes <- c(0.01, 0.05, 0.1, 0.5, 0.9, 0.95, 0.99)
+
+plot.exs <- function(vistype){
+  for(i in 1:length(extremes)){
+    temp.mat <- matrix(rbinom(500*500, 1, extremes[i]), nrow = 500)
+    temp.f <- data.frame(1:500)
+    temp.bm <- BinaryMatrix(temp.mat, temp.f)
+    
+    temp.vis <- DistanceVis(temp.bm, "euclid", vistype, K = 15)
+
+    if(vistype == "tsne"){
+      plot(temp.vis@view[[1]]$Y, col=temp.vis@colv, pch=temp.vis@symv)
+    }else{
+      plot(temp.vis@view[[1]], col=temp.vis@colv, pch=temp.vis@symv)
+    }
+    
+  }
+}
+```
+
+We create a function to test visualization of data of very small and/or unusually proportioned matrices.
+```{r}
+dim1 <- c(250, 250)
+dim2 <- c(250, 25)
+dim3 <- c(25, 250)
+dim4 <- c(100, 100)
+dim5 <- c(10, 100)
+dim6 <- c(100, 10)
+dim7 <- c(250, 10)
+dim8 <- c(10, 250)
+
+my.dims <- list(dim1, dim2, dim3, dim4, dim5, dim6, dim7, dim8)
+
+small.vis <- function(vistype, dims){
+  for(i in 1:length(dims)){
+    cat("Plot Attempt ", i, " - ", dims[[c(i, 1)]], " rows x ", dims[[c(i, 2)]], " columns \n")
+    
+    temp.mat <- matrix(rbinom(dims[[c(i, 1)]]*dims[[c(i, 2)]], 1, 0.5), nrow = dims[[c(i, 1)]])
+    temp.f <- data.frame(1:dims[[c(i,2)]])
+    temp.bm <- BinaryMatrix(temp.mat, temp.f)
+    
+    temp.vis <- try(DistanceVis(temp.bm, "euclid", vistype, K = as.integer(dims[[c(i,2)]]^1/3)))
+    
+    if(vistype == "tsne"){
+      try(plot(temp.vis@view[[1]]$Y, col=temp.vis@colv, pch=temp.vis@symv))
+    }else{
+      try(plot(temp.vis@view[[1]], col=temp.vis@colv, pch=temp.vis@symv))
+    }
+  }
+}
+```
+
+## hclust: Hierarchical Clustering
+
+#### General Syntax
+We create a DistanceVis, and create the simplest means to plot a hierarchical cluster.
+```{r}
+bmClust <- DistanceVis(goodBM, "euclid", "hclust", K = 15)
+
+plot(bmClust@view[[1]])
+```
+
+We explore ways to break the plotting syntax.
+```{r}
+try(plot(bmClust))
+try(plot(bmClust@view))
+try(plot(bmClust@view[[0]]))
+try(plot(bmClust@view[[2]]))
+```
+
+#### Colors in Hierarchical Clustering
+The variety of color settings provided by Polychrome cannot be tested on a dendrogram of randomly generated binary data, but the global color can be changed.
+```{r}
+plot(bmClust@view[[1]], col=7)
+plot(bmClust@view[[1]], col=bmClust@colv)
+plot(bmClust@view[[1]], col=bmClust@colv, pch=bmClust@symv)
+```
+
+#### Data Extremes
+We test the visualization on a series of binary matrices with very high proportions of 0s or 1s. There is no evidence of error, even at 99% probability of 0s or 1s.
+```{r}
+plot.exs("hclust")
+```
+
+We assume that the maximum size of a matrix that can be visualized is contingent only on computational time and power. We test the visualizations on a very small matrix.
+```{r}
+small.vis("hclust", my.dims)
+```
+
+## mds: Multi-Dimensional Scaling
+
+#### Basic Syntax
+We create a simple MDS plot.
+```{r}
+bmMDS <- DistanceVis(goodBM, "euclid", "mds", K = 15)
+
+plot(bmMDS@view[[1]])
+```
+
+#### MDS Colors
+Color and symbol features are provided as part of the [Polychrome package](https://cran.r-project.org/web/packages/Polychrome/Polychrome.pdf). Any parameter tested that was part of polychrome could be adjusted when plotting.
+
+.**Note: I do not totally understand col=bmMDS@colv and pch=bmMDS@symv.**
+```{r}
+plot(bmMDS@view[[1]], col=bmMDS@colv)
+plot(bmMDS@view[[1]], col=bmMDS@colv, pch=bmMDS@symv)
+plot(bmMDS@view[[1]], col=bmMDS@colv, pch=2)
+try(plot(bmMDS@view[[1]], col=bmMDS@colv, pch=6, data =Light24))
+```
+
+#### Data Extremes
+We test the visualization on a series of binary matrices with very high proportions of 0s or 1s. There is no evidence of error, even at 99% probability of 0s or 1s.
+```{r}
+plot.exs("mds")
+```
+
+We assume that the maximum size of a matrix that can be visualized is contingent only on computational time and power. We test the visualizations on a very small matrix.
+```{r}
+small.vis("mds", my.dims)
+```
+
+## tsne: t-SNE
+
+#### Basic Syntax
+We create a simple t-SNE plot. Notice that t-SNE won't plot without the addition of "$Y" after view - a feature not shared by other plots.
+```{r}
+bmTSNE <- DistanceVis(goodBM, "euclid", "tsne", K = 15)
+
+try(plot(bmTSNE@view[[1]]))
+plot(bmTSNE@view[[1]]$Y)
+```
+
+#### Colors
+```{r}
+plot(bmTSNE@view[[1]]$Y, col = bmTSNE@colv)
+plot(bmTSNE@view[[1]]$Y, col = bmTSNE@colv, pch = bmTSNE@symv)
+```
+
+#### Data Extremes
+We test the visualization on a series of binary matrices with very high proportions of 0s or 1s. There is no evidence of error, even at 99% probability of 0s or 1s.
+```{r}
+plot.exs("tsne")
+```
+
+#### Perplexity and Small Plots
+We assume that the maximum size of a matrix that can be visualized is contingent only on computational time and power. We test the visualizations on a very small matrix.
+
+DistanceVis for t-SNE fails when the number of columns is too small due to errors with perplexity.
+```{r}
+small.vis("tsne", my.dims)
+```
+
+Perplexity is a tuneable parameter of t-SNE that expresses a balance between local and global structures in data as an estimate about the number of close neighbors a point has. Typically it holds a value between 5 and 50, and must be lower than the number of items. At low perplexity, local variations dominate; at high perplexity, global variations dominate. Although a variety of tuneable parameters can be used to refine t-SNE outcome (including perplexity, number of iterations)
+
+[An excellent resource on t-SNE can be found here.](https://distill.pub/2016/misread-tsne/)
+
+As [documented in the CRAN package](https://cran.r-project.org/web/packages/Rtsne/Rtsne.pdf), the default Rtsne perplexity = 30.
+
+Perplexity, or any other Rtsne parameter, can be adjusted within the DistanceVis function.
+```{r}
+slim.mat <- matrix(rbinom(50*250, 1, 0.5), ncol = 50)
+slim.f <- data.frame(1:50)
+slim.bm <- BinaryMatrix(slim.mat, slim.f)
+
+
+slim.30 <- DistanceVis(slim.bm, "euclid", "tsne", K = 15)
+slim.10 <- DistanceVis(slim.bm, "euclid", "tsne", K = 15, perplexity = 10)
+
+plot(slim.10@view[[1]]$Y,  col=slim.10@colv)
+
+slim.3D <- DistanceVis(slim.bm, "euclid", "tsne", K = 15, perplexity = 10, dims = 3)
+
+plot(slim.3D@view[[1]]$Y, col=slim.3D@colv)
+```
+
+## multiple plots
+
+
+
+
