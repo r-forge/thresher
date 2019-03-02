@@ -5,6 +5,11 @@ date: "r Sys.Date()"
 output: html_document
 ---
 
+#### This document tests the following functions:
+#### 02-binaryMatrix.R
+#### Building a BinaryMatrix with duplicate rows and columns, and
+#### removeDuplicateFeatures
+
 ## Building a BinaryMatrix with Duplicates
 We create a binary matrix and introduce duplicate columns an duplicate rows.
 
@@ -72,7 +77,7 @@ Not even one duplicate column is tolerated.
 base.mat2 <- matrix(rbinom(500*500, 1, 0.5), nrow = 500)
 duponecol <- rbind(base.mat2[ , 1:250], base.mat2[ , 1], base.mat2[ , 251:500])
 dupone.f <- data.frame(1:501)
-one.bm <- BinaryMatrix(duponecol, dupone.f)
+try(one.bm <- BinaryMatrix(duponecol, dupone.f))
 ```
 
 ## removeDuplicateFeatures
@@ -92,7 +97,7 @@ class(f.fac[1,1])
 dr.bm.fac <- BinaryMatrix(dr.mat, f.fac)
 class(dr.bm.fac@features)
 summary(dr.bm.fac)
-no.dup.row.fac <- removeDuplicateFeatures(dr.bm.fac)
+try(no.dup.row.fac <- removeDuplicateFeatures(dr.bm.fac))
 ```
 
 We create a feature set of character class, and removeDuplicateFeatures still fails.
@@ -115,7 +120,7 @@ class(char.df[1, ])
 
 char.bm <- BinaryMatrix(dr.mat, char.df)
 
-no.dup.row.char <- removeDuplicateFeatures(char.bm)
+try(no.dup.row.char <- removeDuplicateFeatures(char.bm))
 ```
 
 We create a data.frame of more than one column. We find that removeDuplicateFeatures ran without error with the multi-column data frame. 
