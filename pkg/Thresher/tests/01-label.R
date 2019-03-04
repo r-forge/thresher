@@ -22,18 +22,3 @@ countAgreement(tab)
 labelAccuracy(dset, labels)
 
 bestMetric(dset, labels)
-
-
-fug <- function(one, two) {
-  lem <- labelMatcher(table(one, two))
-  oj <- order(lem$jj)
-  lem$ii[oj][one]
-}
-
-one <- as.numeric(labels)
-two <- as.numeric(factor(newLabels))
-R <- fug(one, two)
-
-one <- labels
-two <- newLabels
-R <- fug(one, two)
