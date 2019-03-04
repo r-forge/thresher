@@ -28,12 +28,12 @@ matchLabels(tab)
 # What we really want to is change the arbitrary labels
 # in the "vary" assignments
 # First, test the numeric version
-S <- fug(X, Y)
+S <- remap(X, Y)
 table(Y, S) # map from Y to S is 1->3, 2->1, 3->2, as it shoul be
 table(X, S)
 
 # Next the character/factor version
-R <- fug(fix, vary)
+R <- remap(fix, vary)
 table(vary, R) # maps D->F, E->D, F->E
 table(fix, R) # better diagnal than the original, shown next
 table(fix, vary)
