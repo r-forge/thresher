@@ -69,5 +69,7 @@ remap <- function(fix, vary) {
   oj <- order(lem$jj)
   tricky <- lem$ii[oj]
   names(tricky) <- levels(V)
-  levels(V)[tricky[vary]] # should swap the labels in "vary" to best match "fix"
+  res <- levels(V)[tricky[vary]] # should swap the labels in "vary" to best match "fix"
+  if (is.numeric(vary)) res <- as.numeric(res)
+  res
 }
