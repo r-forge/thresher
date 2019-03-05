@@ -1,5 +1,5 @@
 Package: BinaryMatrix
-Version: 0.0.4
+Version: 0.0.5
 Date: 2019-03-01
 Title: Clustering and Visualizing Binary Matrices
 Author: Kevin R. Coombes
@@ -7,7 +7,7 @@ Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: Defines the classes used to identify explore, cluster and
   visualize binary matrices.
 Depends: R (>= 3.1)
-Imports: methods, stats, graphics, cluster, Thresher, Rtsne, igraph
+Imports: methods, stats, graphics, utils, cluster, Thresher (>= 1.1), Rtsne, igraph
 Suggests: Polychrome
 License: Apache License (== 2.0)
 biocViews: Clustering

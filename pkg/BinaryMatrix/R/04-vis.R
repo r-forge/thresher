@@ -24,18 +24,21 @@ setMethod("summary", signature(object="DistanceVis"),
 
 setMethod("hist", signature(x = "DistanceVis"), function(x, breaks=123, ...) {
   M <- as.matrix(x@distance)
-  U <- X[upper.tri(M)]
+  U <- M[upper.tri(M)]
   hist(U, breaks=breaks, ...)
 })
 
-DistanceVis <- function(binaryMat, metric, method, K, ...) {
+makeDisplay <- function(clusters, master =  NULL) {
   data(Dark24, package="Polychrome")
-  DistMat <- binaryDistance(binaryMat@binmat, metric)
-  M <- attr(DistMat, "comment")
-  if (!is.null(M)) metric <- M
-  view <- list()
-  view[[method]] <- computeVisualization(DistMat, method, ...)
-  poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+  K <- max(clusters)
+  if (!is.null(master)) {
+    L <- max(master)
+    if (K != L) {
+      warning("Mismatch in number of clusters; ignoring.")
+    } else {
+      clusters <- remap(master, clusters)
+    }
+  }
   R <- ifelse(K %% 24 == 0, K/24, 1 + trunc(K/24))
   baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
   if (R > length(baseSyms)) {
@@ -43,8 +46,42 @@ DistanceVis <- function(binaryMat, metric, method, K, ...) {
   }
   mycol <- rep(Dark24, R)
   mysym <- rep(baseSyms[1:R], each=24)
-  colv <- mycol[poof]
-  symv <- mysym[poof]
+  colv <- mycol[clusters]
+  symv <- mysym[clusters]
+  list(colv = colv, symv = symv)
+}
+
+recoverCluster <- function(colv, symv) {
+  baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
+  lead <- sapply(symv, function(X) which(baseSyms == X)) - 1
+  units <- sapply(colv, function(X) which(Dark24 == X))
+  24*lead + units
+}
+
+recolor <- function(fix, vary) {
+  fixCluster <- recoverCluster(fix@colv, fix@symv)
+  varyCluster <- recoverCluster(vary@colv, vary@symv)
+  newCluster <- remap(fixCluster, varyCluster)
+  newDisplay <- makeDisplay(newCluster)
+  new("DistanceVis",
+      metric = vary@metric,
+      distance = vary@distance,
+      view = vary@view,
+      colv = newDisplay$colv,
+      symv = newDisplay$symv
+      )
+}
+
+DistanceVis <- function(binaryMat, metric, method, K, ...) {
+  DistMat <- binaryDistance(binaryMat@binmat, metric)
+  M <- attr(DistMat, "comment")
+  if (!is.null(M)) metric <- M
+  view <- list()
+  view[[method]] <- computeVisualization(DistMat, method, ...)
+  poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+  dispSet <- makeDisplay(poof)
+  colv <- dispSet$colv
+  symv <- dispSet$symv
   names(colv) <- names(symv) <- colnames(DistMat)
   new("DistanceVis",
       metric = metric,
@@ -67,7 +104,7 @@ computeVisualization <- function(distMat, method, ...) {
   METHODS = c(mds = function(X, ...) cmdscale(X, ...),
               hclust = function(X, ...) hclust(X, method="ward.D2"),
               tsne = function(X, ...) Rtsne(X, is_distance = TRUE, ...),
-              heat = function(X, ...) x)
+              heat = function(X, ...) X)
   method  <- match.arg(method, names(METHODS))
   FUN <- METHODS[[method]]
   argList <- c(list(distMat), list(...))

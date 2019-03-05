@@ -17,11 +17,6 @@ thrash <- threshLGF(egg, cutoff = 0.5)
 # convert back to base class
 oval <- as(thrash, "BinaryMatrix")
 
-library(Polychrome)
-data(Dark24)
-mycol <- rep(Dark24, 2)
-mysym <- rep(c(15, 16), each=24)
-
 # jacc, pear, manh, euc
 vis1 <- DistanceVis(oval, "jacc", "mds", K=8)
 plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
