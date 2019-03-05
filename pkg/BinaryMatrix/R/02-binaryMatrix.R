@@ -50,8 +50,8 @@ removeDuplicateFeatures <- function(object) {
   dupstring <- duplicated(binstring)
   I$redundant <- object@features[dupstring,]
   retainBand <- !(dupstring | neverHit)
-  binmat <- object@binmat[, retainBand]
-  features <- object@features[retainBand,]
+  binmat <- object@binmat[, retainBand, drop = FALSE]
+  features <- object@features[retainBand,, drop = FALSE]
   history <- c(object@history, "Duplicate features removed.")
   new("BinaryMatrix",
       binmat = binmat,

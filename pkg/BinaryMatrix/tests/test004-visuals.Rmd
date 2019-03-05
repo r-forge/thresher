@@ -50,6 +50,7 @@ plot(goodTS@view[[1]]$Y, col=goodTS@colv, pch=goodTS@symv)
 #### Object Class
 DistanceVis only accepts the BinaryMatrix object, even though binaryDistance only accepts a matrix.
 ```{r}
+options(try.outFile = stdout())
 try(matClust <- DistanceVis(goodMat, "euclid", "hclust", K = 15))
 ```
 
@@ -232,7 +233,7 @@ slim.f <- data.frame(1:50)
 slim.bm <- BinaryMatrix(slim.mat, slim.f)
 
 
-slim.30 <- DistanceVis(slim.bm, "euclid", "tsne", K = 15)
+slim.30 <- try(DistanceVis(slim.bm, "euclid", "tsne", K = 15))
 slim.10 <- DistanceVis(slim.bm, "euclid", "tsne", K = 15, perplexity = 10)
 
 plot(slim.10@view[[1]]$Y,  col=slim.10@colv)

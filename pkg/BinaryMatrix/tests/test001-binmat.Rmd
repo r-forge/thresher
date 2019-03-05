@@ -55,6 +55,7 @@ The BinaryMatrix object will build with matrix input of 0s and 1s in integer, nu
 Clearly, the BinaryMatrix object accepts input in the form of a matrix. Does it accept other object structures?
 
 ```{r}
+options(try.outFile = stdout())
 t_df <- data.frame(matrix(as.numeric(rbinom(400, 1, 0.5)), nrow = 20, ncol = 20))
 try(bm_df <- BinaryMatrix(t_df, f20))
 try(summary(bm_df))

@@ -14,7 +14,7 @@ library(BinaryMatrix)
 
 set.seed(1987)
 ```
-```{r}
+```{r definFunctions}
 mettest <- function(matrix, metric){
   
   t1 <- Sys.time()
@@ -28,6 +28,7 @@ mettest <- function(matrix, metric){
 
 my.mets <- c("jaccard", "sokalMichener", "hamming", "russellRao", "pearson", "goodmanKruskal", "manhattan", "canberra", "binary", "euclid")
 
+options(try.outFile = stdout())
 runmytests <- function(my.matrix){
     
   for(i in 1:length(my.mets)){
@@ -41,25 +42,25 @@ runmytests <- function(my.matrix){
   
 ## A Simple Test
 Next, we explore acceptable input for the binaryDistance function. We begin by creating a well-behaved test matrix and BinaryMatrix of 500x500 dimensions with randomly generated 0s and 1s, with p = 0.5.
-```{r}
+```{r goodMat}
 goodmat <- matrix(rbinom(500*500, 1, 0.5), nrow = 500)
 
 goodf <- data.frame(1:500)
 goodbm <- BinaryMatrix(goodmat, goodf)
 ```
 
-We use our function to confirm that we can run every metric (“jaccard”, “sokalMichener”, “hamming”, “russellRao”, “pearson”, “goodmanKruskal”, “manhattan”, “canberra”, “binary”, “euclid”) on our basic test matrix.
-```{r}
+We use our function to confirm that we can run every metric ("jaccard", "sokalMichener", "hamming", "russellRao", "pearson", "goodmanKruskal", "manhattan", "canberra", "binary", "euclid") on our basic test matrix.
+```{r testGoodmat}
 runmytests(goodmat)
 ```
 
 We find that none of the binaryDistance metrics take the simple BinaryMatrix object type as valid input.
-```{r}
+```{r testGoodbm}
 runmytests(goodbm)
 ```
 
 However, we find that all of the binaryDistance metrics will take BinaryMatrix@binmat (the matrix component).
-```{r}
+```{r testBinmat}
 runmytests(goodbm@binmat)
 ```
 
@@ -74,7 +75,7 @@ We begin by varying the proportion of 0s and 1s in the set: p = 0.01, 0.1, 0.3, 
 The binaryDistance measures return error-free results at all levels. The hierarchical clustering visualization returns errors at p = 0.01 (pearson, canberra) and p = 0.99 (pearson and Goodman Kruskal).
 
 There is evidence that some of the visualizations may behave strangely at the poles. We will need to test visualizations at the extremes: 0.01, 0.1, 0.5, 0.9, and 0.99.
-```{r}
+```{r testProbabiliites}
 ps <- c(0.01, 0.10, 0.30, 0.50, 0.70, 0.90, 0.99)
 
 for(i  in 1:length(ps)){
@@ -90,7 +91,7 @@ for(i  in 1:length(ps)){
 Next, we vary the proportions of the matrix itself, continuing with a matrix the same size as we have been testing with. We create a long matrix (with very many columns) and a tall matrix (with very many rows).
 
 A very tall matrix is successful, but a very long matrix fails. It appears that a 0.002:1 ratio of rows to columns succeeds with a variety of matrix sizes.
-```{r}
+```{r testMatrixProportions}
 #For reference:
 runmytests(goodmat)
 
@@ -115,7 +116,7 @@ runmytests(twoagainlong)
 
 #### Identical Rows and Identical Columns
 All the distance metrics tolerate a small number of duplicate rows or columns.
-```{r}
+```{r testIdenticalRC}
 duprows <- rbind(goodmat[1:300, ], goodmat[200, ], goodmat[301:499, ])
 runmytests(duprows)
 
@@ -131,7 +132,7 @@ runmytests(dupmanycols)
 
 #### Rows or Columns of all 0s or 1s
 All metrics could handle rows of all 0s or 1s. All metrics other than Pearson can tolerate columns of all 0s or 1s.
-```{r}
+```{r testAll01}
 all0 <- rep(0, 500)
 all1 <- rep(1, 500)
 
@@ -154,7 +155,7 @@ A matrix (including the BinaryMatrix object) accepts multiple classes of data. T
 All distance metrics work for binary numeric and logical matrices.
 
 Manhattan, Canberra, Binary, and Euclidean distance return ostensibly meaningful output to a binary matrix of character class.
-```{r}
+```{r testDataClasses}
 num.mat <- matrix(as.numeric(rbinom(500*500, 1, 0.5)), nrow = 500)
 runmytests(num.mat)
 
@@ -172,7 +173,7 @@ How do the various distance metrics fare in the face of non-binary data?
 We begin with the common case of "binary" data store as 1s and 2s. 
 
 All distance metrics return output without error, but some hierarchical clustering patterns are unusual.
-```{r}
+```{r test12}
 two.mat <- goodmat + 1
 runmytests(two.mat)
 ```
@@ -181,7 +182,7 @@ runmytests(two.mat)
 We take the case of a randomly generated set of probabilities between 0 and 1.
 
 All distance metrics return output without error, but some hierarchical clustering patterns are unusual.
-```{r}
+```{r testUniform}
 prob.mat <- matrix(runif(500*500, min = 0, max = 1), nrow = 500)
 runmytests(prob.mat)
 ```
@@ -190,7 +191,7 @@ runmytests(prob.mat)
 We take the final case of a randomly generated set of numbers with a wide range.
 
 All distance metrics return output without error, but some hierarchical clustering patterns are highly unusual.
-```{r}
+```{r testRea;Spread}
 wide.mat <- matrix(rnorm(500*500, sd = 1000), nrow = 500)
 runmytests(wide.mat)
 ```

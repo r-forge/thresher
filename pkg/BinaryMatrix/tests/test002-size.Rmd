@@ -28,7 +28,7 @@ vistests <- function(n){
   mybinmat <- BinaryMatrix(nmat, fmat)
   
   # set K
-  k <- n ^ 1/3
+  k <- n^(1/3)
   
   # Test A
   tA1 <- Sys.time()
