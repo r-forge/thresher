@@ -7,6 +7,7 @@ importFrom("stats", "dist", "hclust", "cmdscale", "as.dist")
 importFrom("utils", "data")
 importFrom("cluster", "pam")
 importFrom("Rtsne", "Rtsne")
+importFrom("Polychrome", "dark.colors")
 importFrom("Thresher", "Thresher", "Reaper", "remap")
 # redefined S3 methods
 #importMethodsFrom(oompaBase, "summary", "plot", "image")

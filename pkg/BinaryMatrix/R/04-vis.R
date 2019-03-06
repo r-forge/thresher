@@ -29,7 +29,7 @@ setMethod("hist", signature(x = "DistanceVis"), function(x, breaks=123, ...) {
 })
 
 makeDisplay <- function(clusters, master =  NULL) {
-  data(Dark24, package="Polychrome")
+  Dark24 <- dark.colors(24)
   K <- max(clusters)
   if (!is.null(master)) {
     L <- max(master)
@@ -52,6 +52,7 @@ makeDisplay <- function(clusters, master =  NULL) {
 }
 
 recoverCluster <- function(colv, symv) {
+  Dark24 <- dark.colors(24)
   baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
   lead <- sapply(symv, function(X) which(baseSyms == X)) - 1
   units <- sapply(colv, function(X) which(Dark24 == X))
