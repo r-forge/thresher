@@ -1,0 +1,26 @@
+library("BinaryMatrix")
+data("CML")
+bm <- BinaryMatrix(CMLData, lgfFeatures)
+bm <- removeDuplicateFeatures(bm)
+flipped <- BinaryMatrix(t(bm@binmat), CMLInfo)
+vis <- DistanceVis(flipped, "jacc", "mds", K=48)
+vis <- addVisualization(vis, "tsne")
+vis <- addVisualization(vis, "hclust")
+plot(vis@view[[1]], col=vis@colv, pch=vis@symv)
+plot(vis@view[[2]]$Y, col=vis@colv, pch=vis@symv, cex=1.5)
+mn <- apply(DM <- as.matrix(vis@distance), 1, function(x) min(x[x>0]))
+summary(mn)
+R <- quantile(mn, c(0.10, 0.15, 0.20)
+# prep
+set.seed(58667)
+pick500 <- downsample(500, DM, R[1])
+smaller <- flipped[, pick500]
+viss <- DistanceVis(smaller, "jacc", "mds", K=12)
+plot(viss@view[[1]], col=vis@colv, pch=vis@symv)
+viss <- addVisualization(viss, "tsne")
+plot(viss@view[[2]]$Y, col=viss@colv, pch=viss@symv, cex=2)
+plot(viss@view[[2]]$Y, col=vis@colv[pick500], pch=vis@symv[pick500], cex=2)
+
+wow <- vis[pick500] # like rally, really slow ....
+plot(wow@view[[1]], col=wow@colv, pch=wow@symv, cex=1.5)
+plot(wow@view[[2]]$Y, col=wow@colv, pch=wow@symv, cex=1.5)

@@ -11,6 +11,53 @@ setClass("DistanceVis",
            symv = "numeric")
          )
 
+shrinkView <- function(name, object, i) {
+  shrinkTSNE <- function(tis, i) {
+    tis$Y <- tis$Y[i,]
+    tis
+  }
+  snipTree <- function(hc, i) {
+    dend <- as.dendrogram(hc)
+    L <- labels(dend)
+    if (is.character(i)) {
+      i <- L %in% i
+    } else if (is.numeric(i)) {
+      temp <- i
+      i <- rep(FALSE, length(i))
+      i[temp] <- TRUE
+    }
+    L <- L[!i]
+    P <- prune(dend, L) # this step does not scale well
+                        # since it removes one leaf at a time
+    as.hclust(P)
+  }
+  switch(name,
+         mds = object[i,],
+         tsne = shrinkTSNE(object, i),
+         hclust = snipTree(object, i),
+         heat = object
+         )
+}
+
+setMethod("[", signature = "DistanceVis", function(x, i, j, ..., drop=FALSE) {
+  # ignore j and drop, since we are thinking of this as really one-dimenaional
+  if(missing(i)) i <- j
+  M <- as.matrix(x@distance)[i,i]
+  V <- list()
+  for (I in 1:length(x@view)) {
+    N <- names(x@view)[I]
+    cat(N, "\n", file=stderr())
+    V[[N]] <- shrinkView(N, x@view[[I]], i)
+  }
+  new("DistanceVis",
+      metric = x@metric,
+      distance = as.dist(M),
+      view = V,
+      colv = x@colv[i],
+      symv = x@symv[i]
+      )
+})
+
 setMethod("dim", signature = "DistanceVis", function(x) {
   dim(as.matrix((x@distance)))
 })
@@ -27,6 +74,7 @@ setMethod("hist", signature(x = "DistanceVis"), function(x, breaks=123, ...) {
   U <- M[upper.tri(M)]
   hist(U, breaks=breaks, ...)
 })
+
 
 makeDisplay <- function(clusters, master =  NULL) {
   Dark24 <- dark.colors(24)

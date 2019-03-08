@@ -80,7 +80,7 @@ goodmanKruskalSimilarity <- function(X) {
   d <- (1 - X) %*% t(1 - X)
   n <- a + b + c + d
   sig <- pmax(a, b) + pmax(c, d) + pmax(a, c) + pmax(b, d)
-  sigprime <- pmax(a + c) + pmax(a + b, c + d)
+  sigprime <- pmax(a + c, b + d) + pmax(a + b, c + d)
   (sig - sigprime) / (2*n - sigprime)
 }
 goodmanKruskalDistance <- function(X) {

@@ -3,12 +3,14 @@
 ###
 import(methods)
 
-importFrom("stats", "dist", "hclust", "cmdscale", "as.dist")
+importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
+           "rbinom", "as.dendrogram", "as.hclust")
 importFrom("utils", "data")
 importFrom("cluster", "pam")
 importFrom("Rtsne", "Rtsne")
 importFrom("Polychrome", "dark.colors")
 importFrom("Thresher", "Thresher", "Reaper", "remap")
+importFrom("dendextend", "prune")
 # redefined S3 methods
 #importMethodsFrom(oompaBase, "summary", "plot", "image")
 
@@ -30,8 +32,12 @@ export("threshLGF")
 exportClasses("DistanceVis")
 export("DistanceVis", "addVisualization")
 
+exportMethods("hist")
+
 export(recolor)
 
+# 05-graph
+export(downsample)
 
 
 # new methods for new classes

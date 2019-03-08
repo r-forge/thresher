@@ -1,4 +1,3 @@
-Extend 'screeplot' method to take an argument restricting the number
-of component bars to display.  (Useful when the matrix dimension >>
-100.)
+1. Decide if we want to add any more binary distance measures formt he
+Choi paper.
 
