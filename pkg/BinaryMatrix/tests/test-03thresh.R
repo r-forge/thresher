@@ -4,6 +4,8 @@ data(lgfFeatures)
 
 bm <- BinaryMatrix(t(CML1000@binmat),
                    lgfFeatures[rownames(CML1000@binmat),])
+bm <- removeDuplicateFeatures(bm)
+summary(bm)
 
 # run the thresher algorithm to remove "useless" vectors
 thrash <- threshLGF(bm, cutoff = 0.5)
