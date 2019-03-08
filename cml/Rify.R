@@ -1,4 +1,4 @@
-source("parseBands.R")# to get L:GF annotations
+source("parseBands.R")# to get LGF annotations
 
 library(rjson)
 
@@ -46,4 +46,4 @@ rownames(CMLData) <- rownames(CMLInfo)
 CMLData[1:10, 1:4]
 
 
-save(CMLData, CMLInfo, lgfFeatures, file = "../../data/CML.rda")
+save(CMLData, CMLInfo, lgfFeatures, file = "CML.rda")

@@ -1,3 +1,6 @@
-1. Decide if we want to add any more binary distance measures formt he
+1. Decide if we want to add any more binary distance measures from the
 Choi paper.
+2. Decide if the BinaryMatrix class should carry along data frames
+for both the columns and the rows. If so, then we might also want to
+define a transpose ("t") method.
 

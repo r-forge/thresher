@@ -22,4 +22,4 @@ lgfFeatures <- data.frame(Label = label,
                           Index = 1:(3*916))
 rownames(lgfFeatures) <- as.character(lgfFeatures$Label)
 rm(arm, bands, chr, label, nc, partial, type)
-save(lgfFeatures, file = file.path("..", "..", "data", "lgfFeatures.rda"))
+save(lgfFeatures, file = "lgfFeatures.rda")
