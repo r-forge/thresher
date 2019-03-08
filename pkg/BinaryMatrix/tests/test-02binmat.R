@@ -1,18 +1,18 @@
 library("BinaryMatrix")
-data("CML")
+data("CML500")
+data(lgfFeatures)
 
-# load("../data/CML.Rda")
-
-# prep
-set.seed(29574)
-F <- sample(ncol(CMLData), 276)
-working <- CMLData[sample(nrow(CMLData), 1100), F]
+### need a plain old binary matrix
+working <- t(CML500@binmat)
+### and a data.fame describing the feature-columns.
+feat <- lgfFeatures[colnames(working),]
 
 # construction
-egg <- BinaryMatrix(working, lgfFeatures[F,])
+egg <- BinaryMatrix(working, feat)
 summary(egg)
 
 # remove extra identical feature vectors
 egg <- removeDuplicateFeatures(egg)
 summary(egg)
-all( dim(egg) == c(1100, 159) )
+all( dim(egg) == c(511, 446) )
+

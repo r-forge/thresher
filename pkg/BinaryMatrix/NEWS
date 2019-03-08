@@ -6,6 +6,16 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.2.0
+
+NEW FEATURES
+
+    o	Removed the (temporary) "CML.rda" file and replaced it with two
+        smaller subsets, "CML1000.rda" and "CML500.rda". Restructured
+        the appropriate test scripts to use the smaller data sets so
+        they run faster.  Note that both subsets were created using
+        the "downsample" function.
+
 		CHANGES IN R VERSION 0.1.1
 
 NEW FEATURES

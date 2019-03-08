@@ -1,7 +1,7 @@
 library("BinaryMatrix")
 
 ### get the CML data set, and remove duplicate LGF features
-data("CML")
+load("CML.rda")
 bm <- BinaryMatrix(CMLData, lgfFeatures)
 bm <- removeDuplicateFeatures(bm)
 
