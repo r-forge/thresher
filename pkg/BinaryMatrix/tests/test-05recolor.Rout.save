@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 > # jacc, pear, manh, euc
 > vis1 <- DistanceVis(CML500, "jacc", "mds", K=8)
 > vis2 <- DistanceVis(CML500, "sokal", "mds", K=8)
-> vis3 <- recolor(vis1, vis2)
+> vis3 <- remapColors(vis1, vis2)
 > 
 > # par(mfrow=c(1,3),  cex=1.5)
 > plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
@@ -67,6 +67,11 @@ B     1   2   3   4   5   6   7   8
   7   0   0   0   0   0   1   0   0
   8   0   0   0   0   0   1   0   0
 > 
+> library(cluster)
+> clus <- pam(vis1@distance, k = 12, diss=TRUE, cluster.only=TRUE)
+> vis4 <- recolor(vis1, clus)
+> plot(vis4@view[[1]], col=vis4@colv, pch=vis4@symv)
+> 
 > proc.time()
    user  system elapsed 
-   3.74    0.17    3.93 
+   4.16    0.29    4.49 

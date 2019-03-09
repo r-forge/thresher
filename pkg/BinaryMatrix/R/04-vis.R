@@ -107,7 +107,7 @@ recoverCluster <- function(colv, symv) {
   24*lead + units
 }
 
-recolor <- function(fix, vary) {
+remapColors <- function(fix, vary) {
   fixCluster <- recoverCluster(fix@colv, fix@symv)
   varyCluster <- recoverCluster(vary@colv, vary@symv)
   newCluster <- remap(fixCluster, varyCluster)
@@ -118,6 +118,20 @@ recolor <- function(fix, vary) {
       view = vary@view,
       colv = newDisplay$colv,
       symv = newDisplay$symv
+      )
+}
+
+recolor <- function(DV, clusters) {
+  dispSet <- makeDisplay(clusters)
+  colv <- dispSet$colv
+  symv <- dispSet$symv
+  names(colv) <- names(symv) <- colnames(DV@distance)
+  new("DistanceVis",
+      metric = DV@metric,
+      distance = DV@distance,
+      view = DV@view,
+      colv = colv,
+      symv = symv
       )
 }
 

@@ -6,6 +6,20 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.4.0
+
+INCOMPATIBLE CHANGES
+
+    o	Decided that the "recolor" function should be called
+        "remapColors", since the point is to make color assiognments
+        for two different distance metrics compatible
+
+NEW FEATURES
+
+    o	Added a **new** function called "recolor", which allows you
+        to change the stored color assignments based on a new
+        clustering using the same distance metric.
+
 		CHANGES IN R VERSION 0.3.0
 
 INCOMPATIBLE CHANGES

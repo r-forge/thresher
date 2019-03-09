@@ -6,7 +6,7 @@ CML500 <- removeDuplicateFeatures(CML500)
 # jacc, pear, manh, euc
 vis1 <- DistanceVis(CML500, "jacc", "mds", K=8)
 vis2 <- DistanceVis(CML500, "sokal", "mds", K=8)
-vis3 <- recolor(vis1, vis2)
+vis3 <- remapColors(vis1, vis2)
 
 # par(mfrow=c(1,3),  cex=1.5)
 plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
@@ -19,3 +19,8 @@ table(A, B)
 X <- BinaryMatrix:::recoverCluster(vis1@colv, vis1@symv)
 table(A, X)
 table(B, X)
+
+library(cluster)
+clus <- pam(vis1@distance, k = 12, diss=TRUE, cluster.only=TRUE)
+vis4 <- recolor(vis1, clus)
+plot(vis4@view[[1]], col=vis4@colv, pch=vis4@symv)

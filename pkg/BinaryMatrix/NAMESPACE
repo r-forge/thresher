@@ -34,7 +34,7 @@ export("DistanceVis", "addVisualization")
 
 exportMethods("hist")
 
-export(recolor)
+export(recolor, remapColors)
 
 # 05-graph
 export(downsample)
