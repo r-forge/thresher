@@ -1,0 +1,43 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("BinaryMatrix")
+> data("CML1000")
+> 
+> # manual transposition
+> bm <- t(CML1000)
+> bm <- removeDuplicateFeatures(bm)
+> summary(bm)
+An object of the 'BinaryMatrix' class, of size
+[1] 1057  597
+History:
+[1] "Newly created."              "Subsetted."                 
+[3] "transposed"                  "Duplicate features removed."
+> 
+> # jacc, pear, manh, euc
+> vis1 <- DistanceVis(bm, "jacc", "mds", K=20)
+> plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
+> 
+> vis1 <- addVisualization(vis1, "tsne", perplexity=20)
+> plot(vis1@view[[2]]$Y, col=vis1@colv, pch=vis1@symv)
+> 
+> vis1 <- addVisualization(vis1, "hclust")
+> plot(vis1@view[[3]])
+> 
+> proc.time()
+   user  system elapsed 
+   9.73    0.29   10.09 

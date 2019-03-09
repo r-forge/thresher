@@ -6,6 +6,19 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.3.0
+
+INCOMPATIBLE CHANGES
+
+    o	Decided that the BinaryMatrix class needs to carry along
+        information about both rows and columns, and not just
+        columns. As a results, changed the name of te "featresa" slot
+        to "columnInfo, and added a parallel "rowInfo" slot.
+
+NEW FEATURES
+
+    o	Added a transpose ("t") operator for a BinaryMatrix. 
+
 		CHANGES IN R VERSION 0.2.0
 
 NEW FEATURES

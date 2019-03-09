@@ -22,7 +22,7 @@ export("binaryDistance")
 exportClasses("BinaryMatrix")
 export("BinaryMatrix", "removeDuplicateFeatures")
 
-exportMethods("[", "dim", "summary")
+exportMethods("[", "dim", "summary", "t")
 
 # 03-thresh
 exportClasses("ThreshedBinaryMatrix")

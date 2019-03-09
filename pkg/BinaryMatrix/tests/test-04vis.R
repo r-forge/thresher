@@ -1,9 +1,8 @@
 library("BinaryMatrix")
 data("CML1000")
-data(lgfFeatures)
 
-bm <- BinaryMatrix(t(CML1000@binmat),
-                   lgfFeatures[rownames(CML1000@binmat),])
+# manual transposition
+bm <- t(CML1000)
 bm <- removeDuplicateFeatures(bm)
 summary(bm)
 

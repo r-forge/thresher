@@ -1,0 +1,64 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("BinaryMatrix")
+> data("CML500")
+> 
+> ### need a plain old binary matrix
+> working <- t(CML500@binmat)
+> feat <- CML500@columnInfo
+> sams <- CML500@rowInfo
+> dim(working)
+[1] 511 770
+> dim(feat)
+[1] 511   3
+> dim(sams)
+[1] 770   6
+> 
+> plain <- BinaryMatrix(working) # default row and column info
+> colonly <- BinaryMatrix(working, sams)
+> 
+> # construction, using both info parts
+> egg <- BinaryMatrix(working, sams, feat)
+> summary(egg)
+An object of the 'BinaryMatrix' class, of size
+[1] 511 770
+History:
+[1] "Newly created."
+> 
+> # remove extra identical feature vectors
+> egg <- removeDuplicateFeatures(egg)
+> summary(egg)
+An object of the 'BinaryMatrix' class, of size
+[1] 511 446
+History:
+[1] "Newly created."              "Duplicate features removed."
+> all( dim(egg) == c(511, 446) )
+[1] TRUE
+> 
+> # transposing back using the t-operator.
+> gge <- t(egg)
+> summary(gge)
+An object of the 'BinaryMatrix' class, of size
+[1] 446 511
+History:
+[1] "Newly created."              "Duplicate features removed."
+[3] "transposed"                 
+> 
+> proc.time()
+   user  system elapsed 
+   2.27    0.26    2.54 

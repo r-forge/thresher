@@ -1,13 +1,22 @@
 library("BinaryMatrix")
+sessionInfo()
 
 ### get the CML data set, and remove duplicate LGF features
 load("CML.rda")
-bm <- BinaryMatrix(CMLData, lgfFeatures)
+dumb <- data.frame(Name = rownames(CMLData))
+rownames(dumb) <- rownames(CMLData)
+bam <- new("BinaryMatrix",
+           binmat = CMLData,
+           columnInfo = lgfFeatures,
+           rowInfo = CMLInfo,
+           info = list(),
+           history =  "Manual")
+
+bm <- BinaryMatrix(CMLData, lgfFeatures, CMLInfo)
 bm <- removeDuplicateFeatures(bm)
 
-### create the transposed biary matr4ix (columns = samples)
-flipped <- BinaryMatrix(t(bm@binmat), CMLInfo)
-LGF <- bm@features
+### create the transposed biary matrix (columns = samples)
+flipped <- BinaryMatrix(t(bm@binmat), CMLInfo, bm@columnInfo)
 rm(CMLData, CMLInfo, lgfFeatures, bm)
 
 ### Compute two visualizations based on Jaccard distance
@@ -66,5 +75,5 @@ pick500 <- downsample(500, DM, R[2])
 CML500 <- flipped[, pick500]
 
 
-save(CML1000, LGF, file = "CML1000.rda")
-save(CML500, LGF, file = "CML500.rda")
+save(CML1000, file = "CML1000.rda")
+save(CML500, file = "CML500.rda")

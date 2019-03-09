@@ -1,0 +1,75 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("BinaryMatrix")
+> data("CML500")
+> temp <- removeDuplicateFeatures(CML500)
+> ### need a plain old binary matrix
+> working <- temp@binmat
+> dim(working)
+[1] 770 470
+> N <- dim(working)[2]
+> 
+> jacc <- binaryDistance(working, "jaccard")
+> all(dim(as.matrix(jacc)) == c(N, N))
+[1] TRUE
+> plot(hclust(jacc, "ward.D2"))
+> 
+> canb <- binaryDistance(working, "canberra")
+> all(dim(as.matrix(canb)) == c(N, N))
+[1] TRUE
+> plot(hclust(canb, "ward.D2"))
+> 
+> X <- binaryDistance(working, "sokal")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "hamming")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "russell")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "goodman")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "manhattan")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "binary")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> X <- binaryDistance(working, "euclid")
+> all(dim(as.matrix(X)) == c(N, N))
+[1] TRUE
+> plot(hclust(X, "ward.D2"))
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   8.36    0.17    8.58 

@@ -1,0 +1,56 @@
+
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("BinaryMatrix")
+> data("CML1000")
+> 
+> # transposition
+> bm <-t(CML1000)
+> bm <- removeDuplicateFeatures(bm)
+> summary(bm)
+An object of the 'BinaryMatrix' class, of size
+[1] 1057  597
+History:
+[1] "Newly created."              "Subsetted."                 
+[3] "transposed"                  "Duplicate features removed."
+> 
+> # run the thresher algorithm to remove "useless" vectors
+> thrash <- threshLGF(bm, cutoff = 0.5)
+> summary(thrash)
+An object of the 'BinaryMatrix' class, of size
+[1] 1057  238
+History:
+[1] "Newly created."              "Subsetted."                 
+[3] "transposed"                  "Duplicate features removed."
+[5] "Threshed."                  
+> 
+> # convert back to base class
+> oval <- as(thrash, "BinaryMatrix")
+> slotNames(oval)
+[1] "binmat"     "columnInfo" "rowInfo"    "info"       "history"   
+> summary(oval)
+An object of the 'BinaryMatrix' class, of size
+[1] 1057  238
+History:
+[1] "Newly created."              "Subsetted."                 
+[3] "transposed"                  "Duplicate features removed."
+[5] "Threshed."                  
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  22.44    0.26   22.76 

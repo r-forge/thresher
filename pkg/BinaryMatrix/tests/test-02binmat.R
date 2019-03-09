@@ -1,14 +1,19 @@
 library("BinaryMatrix")
 data("CML500")
-data(lgfFeatures)
 
 ### need a plain old binary matrix
 working <- t(CML500@binmat)
-### and a data.fame describing the feature-columns.
-feat <- lgfFeatures[colnames(working),]
+feat <- CML500@columnInfo
+sams <- CML500@rowInfo
+dim(working)
+dim(feat)
+dim(sams)
 
-# construction
-egg <- BinaryMatrix(working, feat)
+plain <- BinaryMatrix(working) # default row and column info
+colonly <- BinaryMatrix(working, sams)
+
+# construction, using both info parts
+egg <- BinaryMatrix(working, sams, feat)
 summary(egg)
 
 # remove extra identical feature vectors
@@ -16,3 +21,6 @@ egg <- removeDuplicateFeatures(egg)
 summary(egg)
 all( dim(egg) == c(511, 446) )
 
+# transposing back using the t-operator.
+gge <- t(egg)
+summary(gge)
