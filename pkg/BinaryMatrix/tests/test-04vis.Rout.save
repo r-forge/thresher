@@ -38,8 +38,9 @@ Type 'q()' to quit R.
 > vis1 <- addVisualization(vis1, "graph")
 > G <- vis1@view[["graph"]]
 > plot(G$graph, layout=G$layouts[["nicely"]])
-> 
+> plot(G$graph, layout=G$layouts[["mds"]])
+> plot(G$graph, layout=G$layouts[["tsne"]])
 > 
 > proc.time()
    user  system elapsed 
-   8.42    0.29    8.76 
+   9.84    0.21   10.09 

@@ -15,17 +15,17 @@ bam <- new("BinaryMatrix",
 bm <- BinaryMatrix(CMLData, lgfFeatures, CMLInfo)
 bm <- removeDuplicateFeatures(bm)
 
-### create the transposed biary matrix (columns = samples)
-flipped <- BinaryMatrix(t(bm@binmat), CMLInfo, bm@columnInfo)
+### create the transposed binary matrix (columns = samples)
+flipped <- t(bm)
 rm(CMLData, CMLInfo, lgfFeatures, bm)
 
 ### Compute two visualizations based on Jaccard distance
-### This takes a fair amount oif time, since thereare more
+### This takes a fair amount oif time, since there are more
 ### than 5000 samples to cluster.
 vis <- DistanceVis(flipped, "jacc", "mds", K=48)
-vis <- addVisualization(vis, "tsne")
-
 plot(vis@view[[1]], col=vis@colv, pch=vis@symv)
+### Add a t-SNE plot, which is also slow
+vis <- addVisualization(vis, "tsne")
 plot(vis@view[[2]]$Y, col=vis@colv, pch=vis@symv, cex=1.5)
 
 ### Test the "downsample" routine. This requires a distance matrix

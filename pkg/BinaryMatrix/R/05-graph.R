@@ -37,5 +37,15 @@ createGraph <- function(DV, Q) {
   myg <- set_vertex_attr(myg, "color", value=DV@colv[V$name])
   myg <- set_vertex_attr(myg, "shape", value=syms[V$name])
   layouts <- list(nicely = layout_nicely(myg))
+  if (!is.null(MV <- DV@view[["mds"]])) {
+    V <- igraph::vertex_attr(myg)
+    layouts[["mds"]] <- MV[V$name,]
+  }
+  if (!is.null(TV <- DV@view[["tsne"]])) {
+    Y <- TV$Y
+    rownames(Y) <- labels(DV@distance)
+    V <- igraph::vertex_attr(myg)
+    layouts[["tsne"]] <- Y[V$name,]
+  }
   list(graph = myg, layouts = layouts)
 }
