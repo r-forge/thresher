@@ -6,6 +6,12 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.5.0
+
+NEW FEATURES
+
+    o	Added a new visualization, based on igraph.
+
 		CHANGES IN R VERSION 0.4.0
 
 INCOMPATIBLE CHANGES

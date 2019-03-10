@@ -16,28 +16,30 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("BinaryMatrix")
-> data("CML1000")
+> data("CML500")
 > 
-> # manual transposition
-> bm <- t(CML1000)
-> bm <- removeDuplicateFeatures(bm)
-> summary(bm)
-An object of the 'BinaryMatrix' class, of size
-[1] 1057  597
-History:
-[1] "Newly created."              "Subsetted."                 
-[3] "transposed"                  "Duplicate features removed."
-> 
-> # jacc, pear, manh, euc
-> vis1 <- DistanceVis(bm, "jacc", "mds", K=20)
+> # Jaccard
+> vis1 <- DistanceVis(CML500, "jacc", "mds", K=20)
+> head(vis1@symv) # make sure names propagate correctly
+ S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
+     16      16      16      16      16      16 
+> head(vis1@colv)
+   S3.2.0    S4.1.0   S35.1.0   S49.1.0   S57.1.0   S59.1.0 
+"#2E91E5" "#E15F99" "#E15F99" "#1CA71C" "#E15F99" "#E15F99" 
 > plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
 > 
-> vis1 <- addVisualization(vis1, "tsne", perplexity=20)
+> vis1 <- addVisualization(vis1, "tsne", perplexity=30)
 > plot(vis1@view[[2]]$Y, col=vis1@colv, pch=vis1@symv)
 > 
 > vis1 <- addVisualization(vis1, "hclust")
 > plot(vis1@view[[3]])
 > 
+> # now test the igraph part
+> vis1 <- addVisualization(vis1, "graph")
+> G <- vis1@view[["graph"]]
+> plot(G$graph, layout=G$layouts[["nicely"]])
+> 
+> 
 > proc.time()
    user  system elapsed 
-   9.73    0.29   10.09 
+   8.42    0.29    8.76 

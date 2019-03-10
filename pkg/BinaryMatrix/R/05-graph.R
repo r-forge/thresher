@@ -9,3 +9,33 @@ downsample <- function(target, distanceMat, cutoff) {
   P <- rbinom(length(ldens), 1, (1/ldens)/length(ldens) * target/scalefactor)
   P == 1
 }
+
+createGraph <- function(DV, Q) {
+  M <- as.matrix(DV@distance) # spread out distance matrix
+  U <- M[upper.tri(M)] # then reselect the upper triangular portion
+  if (missing(Q)) Q <- quantile(M, 0.1)
+  selU <- U < Q        # select edges based on a distance cutoff
+  ## Compute column indices for selected edges
+  M <- 0*M
+  M <- sweep(M, 2, 1:ncol(M), "+")
+  cols <- M[upper.tri(M)][selU]
+  ## doi the same for row indices
+  M <- 0*M
+  M <- sweep(M, 1, 1:ncol(M), "+")
+  rows <- M[upper.tri(M)][selU]
+  ## then build an edge-list data frame
+  daft <- data.frame(A = colnames(M)[cols], 
+                     B = colnames(M)[rows], 
+                     weight = 1-U[selU])
+  ## make an igraph from the edges
+  myg <- graph_from_data_frame(daft, directed=FALSE)
+  myg <- set_vertex_attr(myg, "size", value=3)   # shrink the nodes
+  myg <- set_vertex_attr(myg, "label", value="") # hide the labels
+  V <- vertex_attr(myg)
+  syms <- c("square", "circle")[DV@symv - 14]
+  names(syms) <- names(DV@symv)
+  myg <- set_vertex_attr(myg, "color", value=DV@colv[V$name])
+  myg <- set_vertex_attr(myg, "shape", value=syms[V$name])
+  layouts <- list(nicely = layout_nicely(myg))
+  list(graph = myg, layouts = layouts)
+}

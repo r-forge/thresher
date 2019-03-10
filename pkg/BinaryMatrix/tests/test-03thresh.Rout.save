@@ -25,8 +25,9 @@ Type 'q()' to quit R.
 An object of the 'BinaryMatrix' class, of size
 [1] 1057  597
 History:
-[1] "Newly created."              "Subsetted."                 
-[3] "transposed"                  "Duplicate features removed."
+[1] "Newly created."              "Duplicate features removed."
+[3] "transposed"                  "Subsetted."                 
+[5] "transposed"                  "Duplicate features removed."
 > 
 > # run the thresher algorithm to remove "useless" vectors
 > thrash <- threshLGF(bm, cutoff = 0.5)
@@ -34,9 +35,10 @@ History:
 An object of the 'BinaryMatrix' class, of size
 [1] 1057  238
 History:
-[1] "Newly created."              "Subsetted."                 
-[3] "transposed"                  "Duplicate features removed."
-[5] "Threshed."                  
+[1] "Newly created."              "Duplicate features removed."
+[3] "transposed"                  "Subsetted."                 
+[5] "transposed"                  "Duplicate features removed."
+[7] "Threshed."                  
 > 
 > # convert back to base class
 > oval <- as(thrash, "BinaryMatrix")
@@ -46,11 +48,12 @@ History:
 An object of the 'BinaryMatrix' class, of size
 [1] 1057  238
 History:
-[1] "Newly created."              "Subsetted."                 
-[3] "transposed"                  "Duplicate features removed."
-[5] "Threshed."                  
+[1] "Newly created."              "Duplicate features removed."
+[3] "transposed"                  "Subsetted."                 
+[5] "transposed"                  "Duplicate features removed."
+[7] "Threshed."                  
 > 
 > 
 > proc.time()
    user  system elapsed 
-  22.44    0.26   22.76 
+  20.90    0.17   21.12 

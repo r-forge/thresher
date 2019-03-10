@@ -1,17 +1,20 @@
 library("BinaryMatrix")
-data("CML1000")
+data("CML500")
 
-# manual transposition
-bm <- t(CML1000)
-bm <- removeDuplicateFeatures(bm)
-summary(bm)
-
-# jacc, pear, manh, euc
-vis1 <- DistanceVis(bm, "jacc", "mds", K=20)
+# Jaccard
+vis1 <- DistanceVis(CML500, "jacc", "mds", K=20)
+head(vis1@symv) # make sure names propagate correctly
+head(vis1@colv)
 plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
 
-vis1 <- addVisualization(vis1, "tsne", perplexity=20)
+vis1 <- addVisualization(vis1, "tsne", perplexity=30)
 plot(vis1@view[[2]]$Y, col=vis1@colv, pch=vis1@symv)
 
 vis1 <- addVisualization(vis1, "hclust")
 plot(vis1@view[[3]])
+
+# now test the igraph part
+vis1 <- addVisualization(vis1, "graph")
+G <- vis1@view[["graph"]]
+plot(G$graph, layout=G$layouts[["nicely"]])
+

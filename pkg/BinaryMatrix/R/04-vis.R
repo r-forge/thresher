@@ -139,37 +139,35 @@ DistanceVis <- function(binaryMat, metric, method, K, ...) {
   DistMat <- binaryDistance(binaryMat@binmat, metric)
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
-  view <- list()
-  view[[method]] <- computeVisualization(DistMat, method, ...)
   poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
   dispSet <- makeDisplay(poof)
   colv <- dispSet$colv
   symv <- dispSet$symv
-  names(colv) <- names(symv) <- colnames(DistMat)
-  new("DistanceVis",
-      metric = metric,
-      distance = DistMat,
-      view = view,
-      colv = colv,
-      symv = symv
-      )
+  names(colv) <- names(symv) <- labels(DistMat)
+  view <- list()
+  ob <- new("DistanceVis",
+            metric = metric,
+            distance = DistMat,
+            view = view,
+            colv = colv,
+            symv = symv
+            )
+  addVisualization(ob, method, ...)
 }
 
-addVisualization <- function(BV, method, ...) {
-  if (!is.null(BV@view[[method]])) {
-    warning("Overwriting an exisintg visualization:", method)
-  }
-  BV@view[[method]] <- computeVisualization(BV@distance, method, ...)
-  BV
-}
-
-computeVisualization <- function(distMat, method, ...) {
-  METHODS = c(mds = function(X, ...) cmdscale(X, ...),
-              hclust = function(X, ...) hclust(X, method="ward.D2"),
-              tsne = function(X, ...) Rtsne(X, is_distance = TRUE, ...),
-              heat = function(X, ...) X)
+addVisualization <- function(DV, method, ...) {
+  METHODS = c(mds = function(X, ...) cmdscale(X@distance, ...),
+              hclust = function(X, ...) hclust(X@distance, method="ward.D2"),
+              tsne = function(X, ...) Rtsne(X@distance, is_distance = TRUE, ...),
+              graph = function(X, ...) createGraph(X, ...),
+              heat = function(X, ...) X@distance)
   method  <- match.arg(method, names(METHODS))
+  if (!is.null(DV@view[[method]])) {
+    warning("Overwriting an existing visualization:", method)
+  }
   FUN <- METHODS[[method]]
-  argList <- c(list(distMat), list(...))
-  do.call(FUN, argList)
+  argList <- c(list(DV), list(...))
+  DV@view[[method]] <- do.call(FUN, argList)
+  DV
 }
+
