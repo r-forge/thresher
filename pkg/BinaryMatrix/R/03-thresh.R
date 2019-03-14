@@ -15,7 +15,7 @@ threshLGF <- function(object, cutoff = 0) {
   keep <- thresh@delta  > cutoff
   new("ThreshedBinaryMatrix",
       binmat = object@binmat[, keep],
-      columnInfo = object@columnInfo[keep,],
+      columnInfo = object@columnInfo[keep,,drop=FALSE],
       rowInfo = object@rowInfo,
       info = I,
       history = c(object@history, "Threshed."),
