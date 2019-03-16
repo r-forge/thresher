@@ -32,7 +32,7 @@ export("threshLGF")
 
 # 04-vis
 exportClasses("DistanceVis")
-export("DistanceVis", "addVisualization")
+export("DistanceVis", "addVisualization", "recoverCluster")
 
 exportMethods("hist")
 

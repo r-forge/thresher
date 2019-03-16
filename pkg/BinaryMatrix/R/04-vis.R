@@ -99,7 +99,7 @@ makeDisplay <- function(clusters, master =  NULL) {
   list(colv = colv, symv = symv)
 }
 
-recoverCluster <- function(colv, symv) {
+RC <- function(colv, symv) {
   Dark24 <- dark.colors(24)
   baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
   lead <- sapply(symv, function(X) which(baseSyms == X)) - 1
@@ -107,9 +107,13 @@ recoverCluster <- function(colv, symv) {
   24*lead + units
 }
 
+recoverCluster <- function(DV) {
+  RC(DV@colv, DV@symv)
+}
+
 remapColors <- function(fix, vary) {
-  fixCluster <- recoverCluster(fix@colv, fix@symv)
-  varyCluster <- recoverCluster(vary@colv, vary@symv)
+  fixCluster <- RC(fix@colv, fix@symv)
+  varyCluster <- RC(vary@colv, vary@symv)
   newCluster <- remap(fixCluster, varyCluster)
   newDisplay <- makeDisplay(newCluster)
   new("DistanceVis",
