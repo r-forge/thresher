@@ -1,0 +1,16 @@
+###
+### NAMESPACE
+###
+import(methods)
+importFrom("graphics", "par", "plot")
+importFrom("cluster", "silhouette")
+importFrom("Thresher", "remap")
+importFrom("oompaBase", "cyanyellow")
+importFrom("Polychrome", "palette36.colors", "sortByHue",
+           "dark.colors", "light.colors", "colorNames")
+
+exportClasses("SillyPutty")
+export("SillyPutty")
+
+exportClasses("RandomSillyPutty")
+export("RandomSillyPutty", "summarizeRepeats", "showme")

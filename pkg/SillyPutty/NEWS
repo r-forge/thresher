@@ -1,0 +1,25 @@
+			Dear Emacs, please make this -*-Text-*- mode!
+	**************************************************
+	*						 *
+	*	       0.0 SERIES NEWS			 *
+	*						 *
+	**************************************************
+
+
+		CHANGES IN R VERSION 0.1.1
+
+NEW FEATURES
+
+    o	Exported the 'showme' routine.
+
+BUG FIXES
+
+    o	Removed hard-coded color scheme from "showme".
+
+    o	Added some "importFrom" directives.
+
+		CHANGES IN R VERSION 0.1.0
+
+NEW FEATURES
+
+    o	Initial version.
