@@ -1,4 +1,4 @@
-library("BinaryMatrix")
+library("Mercator")
 data("CML1000")
 
 # transposition

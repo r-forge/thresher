@@ -1,4 +1,4 @@
-library("BinaryMatrix")
+library("Mercator")
 data("CML500")
 temp <- removeDuplicateFeatures(CML500)
 ### need a plain old binary matrix

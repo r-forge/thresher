@@ -1,8 +1,4 @@
-library(Rtsne)
-library(igraph)
-library(Polychrome)
-
-setClass("DistanceVis",
+setClass("Mercator",
          slots = c(
            metric ="character",
            distance = "dist",
@@ -39,7 +35,7 @@ shrinkView <- function(name, object, i) {
          )
 }
 
-setMethod("[", signature = "DistanceVis", function(x, i, j, ..., drop=FALSE) {
+setMethod("[", signature = "Mercator", function(x, i, j, ..., drop=FALSE) {
   # ignore j and drop, since we are thinking of this as really one-dimenaional
   if(missing(i)) i <- j
   M <- as.matrix(x@distance)[i,i]
@@ -49,7 +45,7 @@ setMethod("[", signature = "DistanceVis", function(x, i, j, ..., drop=FALSE) {
     cat(N, "\n", file=stderr())
     V[[N]] <- shrinkView(N, x@view[[I]], i)
   }
-  new("DistanceVis",
+  new("Mercator",
       metric = x@metric,
       distance = as.dist(M),
       view = V,
@@ -58,18 +54,18 @@ setMethod("[", signature = "DistanceVis", function(x, i, j, ..., drop=FALSE) {
       )
 })
 
-setMethod("dim", signature = "DistanceVis", function(x) {
+setMethod("dim", signature = "Mercator", function(x) {
   dim(as.matrix((x@distance)))
 })
 
-setMethod("summary", signature(object="DistanceVis"),
+setMethod("summary", signature(object="Mercator"),
           function(object, ...) {
-  cat("An object of the 'DistanceVis' class, using the '", object@metric, "' metric, of size\n")
+  cat("An object of the 'Mercator' class, using the '", object@metric, "' metric, of size\n")
   print(dim(object))
   cat("Contains these visualizations: ", names(object@view), "\n")
 })
 
-setMethod("hist", signature(x = "DistanceVis"), function(x, breaks=123, ...) {
+setMethod("hist", signature(x = "Mercator"), function(x, breaks=123, ...) {
   M <- as.matrix(x@distance)
   U <- M[upper.tri(M)]
   hist(U, breaks=breaks, ...)
@@ -116,7 +112,7 @@ remapColors <- function(fix, vary) {
   varyCluster <- RC(vary@colv, vary@symv)
   newCluster <- remap(fixCluster, varyCluster)
   newDisplay <- makeDisplay(newCluster)
-  new("DistanceVis",
+  new("Mercator",
       metric = vary@metric,
       distance = vary@distance,
       view = vary@view,
@@ -130,7 +126,7 @@ recolor <- function(DV, clusters) {
   colv <- dispSet$colv
   symv <- dispSet$symv
   names(colv) <- names(symv) <- colnames(DV@distance)
-  new("DistanceVis",
+  new("Mercator",
       metric = DV@metric,
       distance = DV@distance,
       view = DV@view,
@@ -139,7 +135,7 @@ recolor <- function(DV, clusters) {
       )
 }
 
-DistanceVis <- function(binaryMat, metric, method, K, ...) {
+Mercator <- function(binaryMat, metric, method, K, ...) {
   DistMat <- binaryDistance(binaryMat@binmat, metric)
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
@@ -149,7 +145,7 @@ DistanceVis <- function(binaryMat, metric, method, K, ...) {
   symv <- dispSet$symv
   names(colv) <- names(symv) <- labels(DistMat)
   view <- list()
-  ob <- new("DistanceVis",
+  ob <- new("Mercator",
             metric = metric,
             distance = DistMat,
             view = view,

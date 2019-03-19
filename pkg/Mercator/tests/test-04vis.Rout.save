@@ -1,6 +1,6 @@
 
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 3.5.3 (2019-03-11) -- "Great Truth"
+Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -15,11 +15,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library("BinaryMatrix")
+> library("Mercator")
 > data("CML500")
 > 
 > # Jaccard
-> vis1 <- DistanceVis(CML500, "jacc", "mds", K=20)
+> vis1 <- Mercator(CML500, "jacc", "mds", K=20)
 > head(vis1@symv) # make sure names propagate correctly
  S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
      16      16      16      16      16      16 
@@ -43,4 +43,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-   9.84    0.21   10.09 
+  10.32    1.45   12.25 

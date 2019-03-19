@@ -1,11 +1,11 @@
-Package: BinaryMatrix
-Version: 0.6.2
-Date: 2019-03-14
-Title: Clustering and Visualizing Binary Matrices
+Package: Mercator
+Version: 0.7.0
+Date: 2019-03-19
+Title: Clustering and Visualizing Distance Matrices
 Author: Kevin R. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: Defines the classes used to explore, cluster and
-  visualize binary matrices.
+  visualize distance matrices, espcially those arising from binary data.
 Depends: R (>= 3.1)
 Imports: methods, stats, graphics, utils, cluster, Thresher (>= 1.1),
   Rtsne, igraph, Polychrome, dendextend

@@ -31,8 +31,8 @@ exportClasses("ThreshedBinaryMatrix")
 export("threshLGF")
 
 # 04-vis
-exportClasses("DistanceVis")
-export("DistanceVis", "addVisualization", "recoverCluster")
+exportClasses("Mercator")
+export("Mercator", "addVisualization", "recoverCluster")
 
 exportMethods("hist")
 

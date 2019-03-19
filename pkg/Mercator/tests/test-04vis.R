@@ -1,8 +1,8 @@
-library("BinaryMatrix")
+library("Mercator")
 data("CML500")
 
 # Jaccard
-vis1 <- DistanceVis(CML500, "jacc", "mds", K=20)
+vis1 <- Mercator(CML500, "jacc", "mds", K=20)
 head(vis1@symv) # make sure names propagate correctly
 head(vis1@colv)
 plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)

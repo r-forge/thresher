@@ -1,11 +1,11 @@
-library("BinaryMatrix")
+library("Mercator")
 data("CML500")
 
 # remove extra identical feature vectors
 CML500 <- removeDuplicateFeatures(CML500)
 # jacc, pear, manh, euc
-vis1 <- DistanceVis(CML500, "jacc", "mds", K=8)
-vis2 <- DistanceVis(CML500, "sokal", "mds", K=8)
+vis1 <- Mercator(CML500, "jacc", "mds", K=8)
+vis2 <- Mercator(CML500, "sokal", "mds", K=8)
 vis3 <- remapColors(vis1, vis2)
 
 # par(mfrow=c(1,3),  cex=1.5)

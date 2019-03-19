@@ -6,6 +6,19 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.7.0
+
+BREAKING CHANGES
+
+    o	Renamed the "DistanceVis" class to "Mercator".
+
+    o	Renamed the hwole package fromk "BinaryMatrix" to "Mercator"
+
+BUG FIXES
+
+    o	Fixed a "drop=FALSE" bug with subsetting "info" components
+        when they are single-column data frames.
+
 		CHANGES IN R VERSION 0.6.2
 
 NEW FEATURES
