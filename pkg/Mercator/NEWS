@@ -6,6 +6,15 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 0.7.1
+
+BUG FIXES
+
+    o	Fixed a labeling bug in "recolor".
+
+    o	Updated data objects to use "Mercator" rather than
+        "BinaryMatrix". 
+
 		CHANGES IN R VERSION 0.7.0
 
 BREAKING CHANGES

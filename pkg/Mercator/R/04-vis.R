@@ -125,7 +125,7 @@ recolor <- function(DV, clusters) {
   dispSet <- makeDisplay(clusters)
   colv <- dispSet$colv
   symv <- dispSet$symv
-  names(colv) <- names(symv) <- colnames(DV@distance)
+  names(colv) <- names(symv) <- attr(DV@distance, "Labels")
   new("Mercator",
       metric = DV@metric,
       distance = DV@distance,
