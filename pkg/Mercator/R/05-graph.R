@@ -6,7 +6,9 @@ downsample <- function(target, distanceMat, cutoff) {
   }
   ldens <- localDensity(distanceMat, cutoff)
   scalefactor <- sum(1/ldens)/length(ldens)
-  P <- rbinom(length(ldens), 1, (1/ldens)/length(ldens) * target/scalefactor)
+  prob <- (1/ldens)/length(ldens) * target/scalefactor
+  prob[prob > 0.99999] <- 0.99999
+  P <- rbinom(length(ldens), 1, prob)
   P == 1
 }
 
