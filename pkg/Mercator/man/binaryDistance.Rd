@@ -65,11 +65,8 @@ Systemics, Cybernetics, and Informatics. 2010; 8(1):43-48.
   to supply a list of distance metrics instead of relying on the
   hard-coded list internally.}
 \seealso{
-  Hierarchical clustering is implemented in the \code{\link{hclust}}
-  function.  We use the extended set of distance metrics provided by the
-  \code{\link{distanceMatrix}} function from the ClassDiscovery package.
   This set includes all of the  metrics from the \code{\link{dist}}
-  funciton. 
+  function. 
 }
 \examples{
 factor1 <- sample(c("A", "B", "C"), 30, replace=TRUE)
