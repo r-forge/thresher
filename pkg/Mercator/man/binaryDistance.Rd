@@ -17,7 +17,7 @@ Binary Distance Definitions Across Methods
 \description{
 The \code{binaryDistance} function defines a various similarity or distance
 measures between binary vectors, which represent the first step in the 
-algorithm underlying the /code{Mercator} visualizations.
+algorithm underlying the \code{Mercator} visualizations.
 }
 \usage{
 binaryDistance(mat, metric)
@@ -31,7 +31,8 @@ binaryDistance(mat, metric)
   }
 }
 \value{
-
+Returns an object of class \code{\link{dist}} corresponding to the distance
+\code{metric} provided.
 }
 \details{
 Similarity or difference between binary vectors can be calculated using a
@@ -61,23 +62,14 @@ Choi SS, Cha SH, Tappert CC, A Survey of Binary Similarity and Distance Measures
 Systemics, Cybernetics, and Informatics. 2010; 8(1):43-48.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
-\note{The \code{labelAccuracy} function should probably allow the user
-  to supply a list of distance metrics instead of relying on the
-  hard-coded list internally.}
+\note{Although the distance metrics provided in the \code{binaryDistance} function
+are explicitly offered for use on matrices of binary vectors, some metrics may 
+return useful distances when applied to non-binary matrices.
+}
 \seealso{
-  This set includes all of the  metrics from the \code{\link{dist}}
-  function. 
+  This set includes all of the  metrics from the \code{\link{dist}} function. 
 }
 \examples{
-factor1 <- sample(c("A", "B", "C"), 30, replace=TRUE)
-factor2 <- rep(c("X", "Y", "Z"), each=10)
-tab <- table(factor1, factor2)
-matchLabels(tab)
-labelMatcher(tab)
-R <- remap(factor1, factor2)
-table(R, factor2) # remapping
-table(R, factor1) # cross-comparison
+my.dist <- binaryDistance(my.matrix, "jaccard")
 }
 \keyword{ cluster }
-\keyword{ classif }
-\keyword{ multivariate }
