@@ -15,15 +15,15 @@
 Binary Distance Definitions Across Methods
 }
 \description{
-The \code{binaryDistance} function defines a various similarity or distance
+The \code{binaryDistance} function defines various similarity or distance
 measures between binary vectors, which represent the first step in the 
 algorithm underlying the \code{Mercator} visualizations.
 }
 \usage{
-binaryDistance(mat, metric)
+binaryDistance(X, metric)
 }
 \arguments{
-  \item{mat}{An object of class \code{matrix}.}
+  \item{X}{An object of class \code{matrix}.}
   \item{metric}{An object of class \code{character} limited to the names of 
   10 selected distance metrics: \code{jaccard}, \code{sokalMichener}, \code{hamming},
   \code{russellRao}, \code{pearson}, \code{goodmanKruskal}, \code{manhattan},
@@ -70,6 +70,7 @@ return useful distances when applied to non-binary matrices.
   This set includes all of the  metrics from the \code{\link{dist}} function. 
 }
 \examples{
+my.matrix <- matrix(rbinom(50*100, 1, 0.15), ncol=50)
 my.dist <- binaryDistance(my.matrix, "jaccard")
 }
 \keyword{ cluster }
