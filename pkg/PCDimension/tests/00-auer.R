@@ -1,6 +1,7 @@
 #######################################################
 library(PCDimension)
 # simulate one unstructured dataset
+RNGversion("3.5.3")
 set.seed(992500)
 NC <- 15
 NS <- 200

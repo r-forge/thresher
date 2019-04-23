@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,6 +21,7 @@ Loading required package: ClassDiscovery
 Loading required package: cluster
 Loading required package: oompaBase
 > # simulate one unstructured dataset
+> RNGversion("3.5.3")
 > set.seed(992500)
 > NC <- 15
 > NS <- 200
@@ -98,4 +99,4 @@ twice    km   km3    tt   tt2   cpt   cpm
 > 
 > proc.time()
    user  system elapsed 
-   5.70    0.29    6.14 
+   2.99    0.09    3.19 
