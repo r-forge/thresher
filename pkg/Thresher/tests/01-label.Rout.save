@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -69,4 +69,4 @@ uncentered correlation       absolute pearson           sqrt pearson
 > 
 > proc.time()
    user  system elapsed 
-   1.80    0.26    2.07 
+   1.01    0.17    1.27 

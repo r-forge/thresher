@@ -1,6 +1,7 @@
 library(Thresher)
 
-# unstructured nmatrix
+# unstructured matrix
+RNGversion("3.5.3")
 set.seed(9948489)
 dumb <- matrix(rnorm(100*12), ncol=12)
 colnames(dumb) <- paste("G", 1:12, sep='')

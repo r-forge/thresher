@@ -1,6 +1,6 @@
 
-R version 3.4.0 (2017-04-21) -- "You Stupid Darkness"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 3.5.1 (2018-07-02) -- "Feather Spray"
+Copyright (C) 2018 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,8 @@ Loading required package: cluster
 Loading required package: oompaBase
 Loading required package: PCDimension
 > 
-> # unstructured nmatrix
+> # unstructured matrix
+> RNGversion("3.5.3")
 > set.seed(9948489)
 > dumb <- matrix(rnorm(100*12), ncol=12)
 > colnames(dumb) <- paste("G", 1:12, sep='')
@@ -57,4 +58,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-   2.66    0.29    2.94 
+   1.35    0.10    1.49 

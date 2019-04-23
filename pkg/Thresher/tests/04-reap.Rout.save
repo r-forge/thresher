@@ -22,6 +22,7 @@ Loading required package: oompaBase
 Loading required package: PCDimension
 > 
 > # unstructured matrix
+> RNGversion("3.5.3")
 > set.seed(9948489)
 > dumb <- matrix(rnorm(100*12), ncol=12)
 > colnames(dumb) <- paste("G", 1:12, sep='')
@@ -89,4 +90,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-   2.96    0.26    3.26 
+   1.85    0.14    2.02 
