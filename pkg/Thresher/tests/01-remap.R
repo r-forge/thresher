@@ -1,7 +1,7 @@
 library(Thresher)
 
 # randomly generate data (reproducibly) with labels
-RNGversion("3.5.3")
+suppressWarnings( RNGversion("3.5.0") )
 set.seed(782345)
 N <- 25
 fix <- sample(LETTERS[1:3], N, replace=TRUE)
