@@ -7,8 +7,8 @@ The \code{Mercator} Distance Visualization Object
 }
 \description{
 The \code{Mercator} object applies one of 10 metrics of 
-\link{\code{binaryDistance}} to an object of class 
-\link{\code{BinaryMatrix}} and implements 5 visualizations for
+\code{\link{binaryDistance}} to an object of class 
+\code{\link{BinaryMatrix}} and implements 5 visualizations for
 clusters of large-scale, multi-dimensional data: 
 hierarchical clustering, heat map, multi-dimensional scaling,
 t-Stochastic Neighbor Embedding (t-SNE), and iGraph.
@@ -18,8 +18,8 @@ Mercator(binaryMat, metric, method, K, ...)
 addVisualization(DV, method, ...)
 }
 \arguments{
-  \item{binaryMat}{A \link{\code{BinaryMatrix}}.}
-  \item{metric}{A \link{\code{binaryDistance}} limited to the names of 
+  \item{binaryMat}{A \code{\link{BinaryMatrix}}.}
+  \item{metric}{A \code{\link{binaryDistance}} limited to the names of 
     10 selected distance metrics: \code{jaccard}, \code{sokalMichener}, \code{hamming},
     \code{russellRao}, \code{pearson}, \code{goodmanKruskal}, \code{manhattan},
     \code{canberra}, \code{binary}, or \code{euclid}.}
@@ -30,7 +30,7 @@ addVisualization(DV, method, ...)
 \section{Slots}{
   \describe{
     \item{\code{metric}:}{Object of class \code{"character"}; the name 
-      of the \link{\code{binaryDistance}} applied to create this object. }
+      of the \code{\link{binaryDistance}} applied to create this object. }
     \item{\code{distance}:}{Object of class \code{"dist"}; the distance 
       matrix calculated by this object.}
     \item{\code{view}:}{Object of class \code{"list"}; contains the 

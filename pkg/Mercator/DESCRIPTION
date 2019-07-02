@@ -1,6 +1,6 @@
 Package: Mercator
-Version: 0.7.3
-Date: 2019-04-04
+Version: 0.7.4
+Date: 2019-07-02
 Title: Clustering and Visualizing Distance Matrices
 Author: Kevin R. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>

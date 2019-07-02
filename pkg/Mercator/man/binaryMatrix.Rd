@@ -14,8 +14,8 @@ returns a new object of \code{BinaryMatrix} class.
 \section{Objects from the Class}{
   Objects should be defined using the \code{BinaryMatrix} constructor. In
   the simplest case, you simply pass in the binary data matrix that you
-  want to visualize, and the \code{BinaryMatrix is constructed using the matrix's
-  existing column and row names.}
+  want to visualize, and the \code{BinaryMatrix} is constructed using the matrix's
+  existing column and row names.
 }
 \usage{
 BinaryMatrix(binmat, columnInfo, rowInfo)
