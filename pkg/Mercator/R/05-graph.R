@@ -34,7 +34,8 @@ createGraph <- function(DV, Q) {
   myg <- set_vertex_attr(myg, "size", value=3)   # shrink the nodes
   myg <- set_vertex_attr(myg, "label", value="") # hide the labels
   V <- vertex_attr(myg)
-  syms <- c("square", "circle")[DV@symv - 14]
+#  syms <- c("square", "circle")[DV@symv - 14] # BUG!
+  syms <- c("square", "circle")[1 + (DV@symv %% 2)]
   names(syms) <- names(DV@symv)
   myg <- set_vertex_attr(myg, "color", value=DV@colv[V$name])
   myg <- set_vertex_attr(myg, "shape", value=syms[V$name])
