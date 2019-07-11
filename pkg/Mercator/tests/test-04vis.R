@@ -17,5 +17,5 @@ plot(vis1@view[[3]])
 vis1 <- addVisualization(vis1, "graph")
 G <- vis1@view[["graph"]]
 plot(G$graph, layout=G$layouts[["nicely"]])
-plot(G$graph, layout=G$layouts[["mds"]])
-plot(G$graph, layout=G$layouts[["tsne"]])
+#plot(G$graph, layout=G$layouts[["mds"]]) # bug in igraph
+#plot(G$graph, layout=G$layouts[["tsne"]]) # bug in igraph
