@@ -16,6 +16,8 @@ plot(vis1@view[[3]])
 # now test the igraph part
 vis1 <- addVisualization(vis1, "graph")
 G <- vis1@view[["graph"]]
-plot(G$graph, layout=G$layouts[["nicely"]])
-#plot(G$graph, layout=G$layouts[["mds"]]) # bug in igraph
-#plot(G$graph, layout=G$layouts[["tsne"]]) # bug in igraph
+plot(G$graph, layout = G$layouts[["nicely"]])
+M <- jitter( G$layouts[["mds"]] ) # work around a bug in igraph
+plot(G$graph, layout = M)
+M <- jitter( G$layouts[["tsne"]] ) # work around a bug in igraph
+plot(G$graph, layout = M)

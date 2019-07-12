@@ -1,5 +1,5 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -37,10 +37,12 @@ Type 'q()' to quit R.
 > # now test the igraph part
 > vis1 <- addVisualization(vis1, "graph")
 > G <- vis1@view[["graph"]]
-> plot(G$graph, layout=G$layouts[["nicely"]])
-> plot(G$graph, layout=G$layouts[["mds"]])
-> plot(G$graph, layout=G$layouts[["tsne"]])
+> plot(G$graph, layout = G$layouts[["nicely"]])
+> M <- jitter( G$layouts[["mds"]] ) # work around a bug in igraph
+> plot(G$graph, layout = M)
+> M <- jitter( G$layouts[["tsne"]] ) # work around a bug in igraph
+> plot(G$graph, layout = M)
 > 
 > proc.time()
    user  system elapsed 
-  10.32    1.45   12.25 
+  14.49    4.24   18.78 
