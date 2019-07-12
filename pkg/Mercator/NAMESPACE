@@ -2,6 +2,8 @@
 ### NAMESPACE
 ###
 import(methods)
+import(Thresher)
+#importFrom("Thresher", "Thresher", "Reaper", "remap")
 
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
@@ -9,7 +11,6 @@ importFrom("utils", "data")
 importFrom("cluster", "pam")
 importFrom("Rtsne", "Rtsne")
 importFrom("Polychrome", "dark.colors")
-importFrom("Thresher", "Thresher", "Reaper", "remap")
 importFrom("dendextend", "prune")
 importFrom("igraph", "vertex_attr", "set_vertex_attr",
            "layout_nicely", "graph_from_data_frame")

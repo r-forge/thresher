@@ -90,10 +90,10 @@ summary(my.binmat)
 #Principal Component Analysis
 my.binmat@reaper@pcdim
 my.binmat@reaper@nGroups
-#namespace issue: plot(my.binmat@reaper@ag)
-#abline(h=1, col="red")
-#screeplot(my.binmat@reaper)
-#abline(v=6, col="green")
+plot(my.binmat@reaper@ag)
+abline(h=1, col="red")
+screeplot(my.binmat@reaper)
+abline(v=6, col="forestgreen", lwd=2)
   }
 }
 \keyword{ cluster }
