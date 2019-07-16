@@ -6,8 +6,8 @@
 Threshing and Reaping the \code{BinaryMatrix}
 }
 \description{
-The \code{\link{threshLGF}} function produces an object of class 
-\code{\link{ThreshedBinaryMatrix}} from threshing on an object of class 
+The \code{threshLGF} function produces an object of class 
+\code{ThreshedBinaryMatrix} from threshing on an object of class 
 \code{\link{BinaryMatrix}}. 
 
 The function \code{\link{threshLGF}} and the \code{\link{ThreshedBinaryMatrix}} 

@@ -157,15 +157,15 @@ my.binmat@reaper@nGroups
 ```
 
 ... or they can be visualized with an *Auer-Gervini plot*... 
-```{r pcVis-1, fig.cap="Auer-Gervini plot.}
-plot(my.binmat@thresher@ag)
+```{r pcVis-1, fig.cap="Auer-Gervini plot."}
+plot(my.binmat@reaper@ag)
 abline(h=my.binmat@reaper@pcdim, col="blue")
 abline(h=my.binmat@reaper@nGroups, col="green")
 abline(h=8, col="orange")
 ```
 
-```{r pcVis-2, fig.cap="Scree plot.}
-screeplot(my.binmat@thresher)
+```{r pcVis-2, fig.cap="Scree plot."}
+screeplot(my.binmat@reaper)
 abline(h=my.binmat@reaper@pcdim, col="blue")
 abline(h=my.binmat@reaper@nGroups, col="green")
 abline(h=8, col="orange")
@@ -283,14 +283,17 @@ set.seed(87530)
 P <- downsample(40, N, 0.1)
 J <- jacc.Vis[P]
 J <- addVisualization(J, "tsne", perplexity=5)
+par(pty="s")
 plot(J@view[[3]]$Y, col=J@colv, pch=J@symv, main="Down-sampled t-SNE Plot",
      xlab="T1", ylab="T2")
+par(pty="m")
 ```
+
 The densest "eyes" are heavily under-sampled.
 
 Now we can look at the resulting graph, using three different "layouts".
 BECAUSE OF A BUG IN IGRAPH, I DON'T WORK!
-```{r igraph}
+```{r igraph, eval=FALSE}
 set.seed(10967)
 J <- addVisualization(J, "mds")
 J <- addVisualization(J, "graph")
@@ -309,30 +312,15 @@ plot(G$graph, layout=G$layouts[["tsne"]], main="T-SNE Layout")
 ```
 
 #Cluster Identities and Color Tuning
-getClusters(my.vis) #gives color and cluster number
-recolor
-remapColors
 
-```{r}
+We can use the *getClusters* function to obtain the components of each cluster.
+```{r, eval=FALSE}
 my.clust <- getClusters(jacc.Vis)
-
+my.1 <- my.binmat[ , ]
+[my.clust == 1]
 ```
-Color of cluster 1
+
 Identities in cluster 3
 
-||||||| .r125
-
-```{r}
-my.vis <- addVisualization(my.vis, "mds")
-plot(my.vis@view[[3]], col=my.vis@colv, pch=my.vis@symv)
-my.clust <- recoverCluster(my.vis)
-remapColors()
-=======
-
-```{r}
-my.vis <- addVisualization(my.vis, "mds")
-plot(my.vis@view[[3]], col=my.vis@colv, pch=my.vis@symv)
-my.clust <- getClusters(my.vis)
-remapColors()
->>>>>>> .r132
-```
+recolor
+remapColors
