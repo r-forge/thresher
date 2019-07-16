@@ -1,5 +1,5 @@
 Package: Mercator
-Version: 0.8.0
+Version: 0.8.2
 Date: 2019-07-16
 Title: Clustering and Visualizing Distance Matrices
 Author: Kevin R. Coombes
@@ -9,6 +9,8 @@ Description: Defines the classes used to explore, cluster and
 Depends: R (>= 3.1), Thresher (>= 1.1)
 Imports: methods, stats, graphics, utils, cluster,
   Rtsne, igraph, Polychrome, dendextend
+VignetteBuilder: knitr
+Suggests: knitr, rmarkdown
 License: Apache License (== 2.0)
 biocViews: Clustering
 URL: http://oompa.r-forge.r-project.org/

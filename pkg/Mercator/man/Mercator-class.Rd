@@ -1,7 +1,13 @@
 \name{Mercator-class}
 \docType{class}
+\alias{Mercator-class}
 \alias{Mercator}
+\alias{[,Mercator-method}
+\alias{dim,Mercator-method}
+\alias{hist,Mercator-method}
+\alias{summary,Mercator-method}
 \alias{addVisualization}
+\alias{getClusters}
 \title{
 The \code{Mercator} Distance Visualization Object
 }
@@ -29,8 +35,17 @@ getClusters(DV)
   \item{K}{An \code{integer} specifying the number of desired clusters.}
   \item{DV}{A distance visualization produced as the output of the 
     \code{Mercator} function.}
-  \item{Q}{A quantile cutoff for the creation of the IGraph visualization. 
-    By default, the value is set at the 10th percentile.}
+  \item{\dots}{Additional arguments passed on to the functions that
+    implement different methods for \code{addVisualization} (possibly
+    passed here through the \code{Mercator} function). These include
+    \describe{
+      \item{\dots}{Any arguments to the \code{\link{cmdscale}} function for an
+	\code{mds} visualization.}
+      \item{\dots}{Any arguments to the \code{\link{Rtsne}} function for a
+	\code{tsne} visualization.}
+      \item{Q}{A quantile cutoff for the creation of the IGraph visualization.
+	By default, the value is set at the 10th percentile.}
+    }
   }
 }
 \section{Slots}{
@@ -91,8 +106,9 @@ my.binmat <- BinaryMatrix(my.data, , my.rows)
 my.binmat <- t(my.binmat)
 summary(my.binmat)
 
-#Form a Mercator object
-my.vis <- Mercator(my.binmat, "euclid", "hclust", K=3) #set K to the known number of species in the dataset
+# Form a Mercator object
+# Set K to the known number of species in the dataset
+my.vis <- Mercator(my.binmat, "euclid", "hclust", K=3) 
 summary(my.vis)
 hist(my.vis)
 my.vis <- addVisualization(my.vis, "mds")

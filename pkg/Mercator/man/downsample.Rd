@@ -50,8 +50,9 @@ my.binmat <- BinaryMatrix(my.data, , my.rows)
 my.binmat <- t(my.binmat)
 summary(my.binmat)
 
-#Form and plot Mercator object
-my.vis <- Mercator(my.binmat, "euclid", "tsne", K=3) #set K to the known number of species in the dataset
+# Form and plot Mercator object
+# Set K to the known number of species in the dataset
+my.vis <- Mercator(my.binmat, "euclid", "tsne", K=3)
 summary(my.vis)
 plot(my.vis@view[[1]]$Y, col=my.vis@colv, pch=my.vis@symv,
      main="t-SNE plot of all data points",

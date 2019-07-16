@@ -1,9 +1,13 @@
 \name{BinaryMatrix-class}
-\doctype{class}
+\docType{class}
 \alias{BinaryMatrix}
 \alias{BinaryMatrix-class}
+\alias{[,BinaryMatrix-method}
+\alias{t,BinaryMatrix-method}
+\alias{dim,BinaryMatrix-method}
+\alias{hist,BinaryMatrix-method}
+\alias{summary,BinaryMatrix-method}
 \alias{validBinaryMatrix}
-\alias{removeDuplicateFeatures}
 
 \title{Class \code{"BinaryMatrix"}}
 \description{
@@ -32,15 +36,15 @@ BinaryMatrix(binmat, columnInfo, rowInfo)
 }
 \section{Slots}{
   \describe{
-      \item{\code{@binmat}:}{Object of class \code{matrix}; the binary data 
+      \item{\code{binmat}:}{Object of class \code{matrix}; the binary data 
           used for visualization.}
-      \item{\code{@columnInfo}:}{Object of class \code{data.frame}; names and
+      \item{\code{columnInfo}:}{Object of class \code{data.frame}; names and
           definitions of columns.}
-      \item{\code{@rowInfo}:}{Object of class \code{data.frame}; names and
+      \item{\code{rowInfo}:}{Object of class \code{data.frame}; names and
           definitions of rows.}
-      \item{\code{@info}:}{Object of class \code{list}; identifies \code{$notUsed}
+      \item{\code{info}:}{Object of class \code{list}; identifies \code{$notUsed}
           and \code{$redundant} features.}
-      \item{\code{@history}:}{Object of class \code{"character"}; returns a 
+      \item{\code{history}:}{Object of class \code{"character"}; returns a 
           history of manipulations by \code{Mercator} functions to the \code{BinaryMatrix} 
           object, including "Newly created," "Subsetted," "Transposed," "Duplicate 
           features removed," and "Threshed."}

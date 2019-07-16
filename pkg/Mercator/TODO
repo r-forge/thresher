@@ -1,4 +1,14 @@
 1. Decide if we want to add any more binary distance measures from the
 Choi paper.
 
+2. DONE (KRC; 2019-07-16. 4PM) Document "dots" in the Mercator-class.Rd file.
 
+3. Fix bug in igraph (with names).
+
+4. Fix bug in igraph with assuming mds view exists.
+
+5. Document functions "recolor" and "remapColors"
+
+6. Document data objects "CML1000", "CML500", and "lgfFeatures".
+
+7. Finish vignette.
