@@ -1,6 +1,6 @@
 ---
-title: "Mercator Vignette"
-author: "Cat Coombes"
+title: "Using the Mercator Package"
+author: "Kevin R. Coombes, Zachary B. Abrams, C.E. Coombes, Suli Li"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -11,89 +11,72 @@ editor_options:
   chunk_output_type: console
 ---
 
-%\VignetteIndexEntry{Mercator}
-%\VignetteKeywords{clustering,visualization,distance metric,dissimilarity matrix,distance,dissimilarity,multidimensional scaling,tSNE,hierarchical clustering,iGraph,heat map}
-%\VignetteDepends{Mercator}
-%\VignettePackage{Mercator}
-\documentclass[11pt]{article}
-\usepackage{authblk}
-\usepackage{url}
-
-%\usepackage{stats}
-%\usepackage{utils}
-%\usepackage{cluster}
-%\usepackage{Rtsne}
-%\usepackage{Polychrome}
-%\usepackage{Thresher}
-%\usepackage{dendextend}
-%\usepackage{igraph}
-%\usepackage[oompaBase}
-%\pagestyle{myheadings}
-
-\setlength\parindent{0pt}
-\setlength{\topmargin}{0in}
-\setlength{\textheight}{8in}
-\setlength{\textwidth}{6.5in}
-\setlength{\oddsidemargin}{0in}
-\setlength{\evensidemargin}{0in}
-\setlength{\parskip}{0.37em}%
-
-\newcommand{\quotes}[1]{``#1''}
-\def\rcode#1{\texttt{#1}}
-\def\fref#1{\textbf{Figure~\ref{#1}}}
-\def\tref#1{\textbf{Table~\ref{#1}}}
-\def\sref#1{\textbf{Section~\ref{#1}}}
-
-\title{Using the Mercator Package}
-\date{\today}
-\author[1]{Zachary B. Abrams}
-\author[2]{Caitlin E. Coombes}
-\author[3]{Suli Li}
-\author[4]{Kevin R. Coombes}
-\affil[1]{Dept. of Biomedical Informatics\\ The Ohio State University}
-\affil[2]{Dept. of Biomedical Informatics\\ The Ohio State University}
-\affil[3]{Dept. of Leukemia\\ The University of Texas MD Anderson Cancer Center}
-\affil[4]{Dept. of Biomedical Informatics\\ The Ohio State University}
-
-\begin{document}
-\maketitle
-\tableofcontents
-
-\section{Implementation in of an Example Dataset Mercator}
-\label{Implementation}
-
-\subsubsection{The BinaryMatrix Object Class}
-\label{BinaryMatrix}
-
-First we load the R library package \texttt{Mercator}.
-```{r library}
-library(Mercator)
+```{r setup, include=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-We proceed with a model dataset of karyotypes from patients with [CANCER] 
-with $XXX$ karyotypic features recorded over $XXX$ patients from the public
-Mitelman database. Cytogenetic abnormalities, recorded in Mitelman as text 
-strings have been pre-processed with the \texttt{CytoGPS} package into 
-binary vectors.
+# Introduction
+Modern biological experiments are increasingly producing interesting
+binary matrices. These may represent the presence or absence of
+specific gene mutations, copy number variants, microRNAs, or other
+molecular or clinical phenomena. We have recently developed a tool, *CytoGPS*,
+that converts conventional karyotypes from the standard text-based
+notation (the International Standard for Human Cytogenetic Nomenclature;
+ISCN) into a binary vector with three bits (loss, gain, or fusion) per
+cytoband, which we call the "LGF model".
 
-For the sake of clarity and efficiency, we have chosen a subset of patients 
-and features for this example.
+The *Mercator* package is intended to facilitate the
+exploration of binary data sets. It implements a subset of the 76
+binary distance metrics described by [Choi and colleagues], ensuring that
+at least one representative of each of their major clusters is
+included. Each resulting distance matrix can be combined with multiple
+visualiization techniques, providing a consistent interface to
+thoroughly explore the data set.
+
+# The BinaryMatrix Object Class
+
+First we load the R library package *Mercator*.
+```{r library}
+library(Mercator)
+suppressWarnings( suppressMessages( library(Thresher) ))
+```
+
+```{r path}
+#We need to decide where to store the test data set and set the path.
+```
+
+### A Limited, Sample Dataset
+We proceed with a model dataset of karyotypes from patients with Chronic Myelogenous Leukemia (CML) with 400 chromosomal features recorded over 
+740 patients, from the public
+Mitelman database. Cytogenetic abnormalities, recorded in Mitelman as text 
+strings have been pre-processed with the *CytoGPS* package into 
+binary vectors. For the sake of clarity and efficiency, we have chosen a subset of patients and features for this example.
 ```{r data}
-setwd("C:/Users/catco/Dropbox/CatCLLStudy/Mercator paper") #yes, I know this is a problem and needs to be fixed. I'd love an explanantion as to how.
+setwd("C:/Cat/01KRCLab/SVN/thresher/pkg/Mercator/vignettes") #for the time being
 my.data <- read.csv("Mercator_Test_Data.csv", header=TRUE)
 dim(my.data)
 ```
 
-The functions of the Mercator package operate on the BinaryMatrix S4 object. 
+### Generating the BinaryMatrix
+The functions of the Mercator package operate on the BinaryMatrix S4 object, 
+which forms the input of the subsequent functions and visualizations. 
+
 The BinaryMatrix object is formed from a matrix of integer or numeric 
-class, and row and column headings can be assigned as data.frames. If no 
-row or column headings are assigned, the BinaryMatrix takes the row and 
+class. Although this package is designed for the processing and visualizations of
+binary data, the BinaryMatrix object and subsequent functions accept a variety 
+of integer and numeric values. 
+
+Row and column names can be assigned as data frames.
+If no row or column headings are assigned, the BinaryMatrix takes the row and 
 column names of the inital matrix as default. Here, we wish to keep the 
 column names associated with the parent matrix, but must create row names 
-to build the BinaryMatrix.
+to build the BinaryMatrix. 
+
+Notice also that the object always includes a "history" element that tracks how it has been processed.
 ```{r}
 my.data <- as.matrix(my.data)
 my.rows <- c(1:length(my.data[,1]))
+my.rows <- paste("C", my.rows, sep = "")
 my.rows <- data.frame(my.rows)
 my.binmat <- BinaryMatrix(my.data, , my.rows)
 summary(my.binmat)
@@ -108,48 +91,80 @@ my.binmat <- t(my.binmat)
 summary(my.binmat)
 ```
 
-Next, we remove duplicate features from the BinaryMatrix. Removal of duplicates 
-is recorded in the BinaryMatrix's history.
+### Remove Duplicate Features
+The binary feature-vectors (viewed across a population of patient
+samples) are rarely unique. 
+Having identical feature vectors can complicate some of the
+clustering and visualization routines that we want to use (often by
+introducing a division by zero). But they can also alter the
+biological implications, by automatically giving more "weight" to a
+single genomic event (like a trisomy or monosomy). To deal with this
+issue, the *Mercator* package includes a function to remove
+duplicate or redundant features.
 ```{r duplicateFeatures}
 my.binmat <- removeDuplicateFeatures(my.binmat)
 summary(my.binmat)
 ```
 
-\subsubsection{Filtering with the Thresher Method}
-\label{Thresher}
+In the case of our data, only 136 of the 740 karyotypes are unique. 
+Some of the karyotypes are "not used", in the sense that they contain 
+none of the abnormalities selected for this limited subset.
+```{r}
+length(my.binmat@info$notUsed)
+```
 
-\quotes{Mercator} implements the functions of the \quotes{Thresher} package, including 
+By contrast, many features are *used* but are simply redundant.
+```{r}
+length(my.binmat@info$redundant)
+```
+
+# Data Filtering with the Thresher Method
+*
+*Mercator* implements the functions of the *Thresher* R package, including 
 outlier detection, principal component analysis, the von Mises Fisher
 mixture method, and the Auer-Gervini statistic to identify and reduce to 
-only informative features for clustering.
+only informative features for clustering. [Wang et al]
+The underlying idea is that the features can be viewed as
+"weight vectors" in a principal component space trying to display the samples.
+The lengths of the vectors are a measure of their importance in the data set;
+short vectors can (and probably should) be removed since they do not carry
+much useful information. We have incorporated that feature into the
+*Mercator*  package.
 
-We create a \quotes{ThreshedBinaryMatrix} to implement the algorithm. 
-In general, a delta cutoff above 0.3 can be chosen as standard to 
+We create a *ThreshedBinaryMatrix* to implement the algorithm. 
+In general, a delta cutoff above approximately 0.3 can be chosen as standard to 
 indicate informative feature. Then, we subset our ThreshedBinaryMatrix 
 to only include features above our given cutoff.
 ```{r thresher}
-my.binmat <- threshLGF(my.binmat) #create a ThreshedBinaryMatrix
-Delta <- my.binmat@thresher@delta
-hist(Delta, breaks=15, main="", xlab="Weight")
-abline(v=0.3, col='red')
-my.binmat <- threshLGF(my.binmat, cutoff = 0.3)
+set.seed(21348)
+my.binmat <- threshLGF(my.binmat, cutoff=0.3)
 summary(my.binmat)
 ```
 
-We implement the \quotes{Reaper} functionality of \quotes{Thresher} for principal 
+The red vertical line in the figure indicates the cutoff we have chosen 
+to separate uninformative features (<0.3) from informative ones (>0.3).
+```{r delta, fig.cap="Histogram of weight vectors."}
+Delta <- my.binmat@thresher@delta
+hist(Delta, breaks=20, main="", xlab="Weight")
+abline(v=0.3, col='red')
+```
+
+We implement the *Reaper* functionality of *Thresher* for principal 
 component analysis. Principal components returned numerically...
 ```{r pcdim}
 my.binmat@reaper@pcdim
 my.binmat@reaper@nGroups
 ```
 
-... or they can be visualized with an \quotes{Auer-Gervini plot} or 
-\quotes{screeplot}.
-```{r pcVis}
+... or they can be visualized with an *Auer-Gervini plot*... 
+```{r pcVis-1, fig.cap="Auer-Gervini plot.}
 plot(my.binmat@thresher@ag)
 abline(h=my.binmat@reaper@pcdim, col="blue")
 abline(h=my.binmat@reaper@nGroups, col="green")
 abline(h=8, col="orange")
+```
+
+```{r pcVis-2, fig.cap="Scree plot.}
 screeplot(my.binmat@thresher)
 abline(h=my.binmat@reaper@pcdim, col="blue")
 abline(h=my.binmat@reaper@nGroups, col="green")
@@ -157,17 +172,19 @@ abline(h=8, col="orange")
 ```
 
 All three of these methods provide different, but imperfect, means of 
-estimating K. From inspection of the plots, we determine an appropriate 
-K with which to proceed as $8$.
-```{r}
-k <- 8
+estimating K. The blue line represents the result of the *pcdim* 
+calculation of principal components. The green line represents the result 
+of the nGroups calculation. The orange line represents an estimate of 
+principal components from visual inspection.
+
+From inspection of the plots, we determine an appropriate 
+K with which to proceed as 8.
+```{r kk}
+kk <- 8
 ```
 
-\subsubsection{Selecting a Distance Metric}
-\label{Distance}
-
-The Mercator package implements 10 distance metrics: Jaccard, Sokal-Michener, Hamming, 
-Russell-Rao, Pearson, Goodman-Kruskal, Manhattan, Canberra, Binary 
+# Selecting a Distance Metric
+The Mercator package implements 10 distance metrics: Jaccard, Sokal-Michener, Hamming, Russell-Rao, Pearson, Goodman-Kruskal, Manhattan, Canberra, Binary 
 and Euclidean. Although some of these metrics 
 can be used for continuous or categorical data, all are appropriate for 
 some or all binary matrices. Mercator allows the user to easily select 
@@ -179,9 +196,7 @@ interpretability, commoness of use, and its appropriatness of application
 to asymmetric binary data, such as the binary vector output of CytoGPS 
 in this dataset.
 
-\subsubsection{Visualizing with 5 Methods}
-\label{Visualization}
-
+# Visualizing with 5 Methods
 The Mercator Package allows visualization of data with 5 methods, including both 
 standard techniques (hierarchical clustering, heat maps) and large-scale 
 multi-dimensional visualizations (multidimensional scaling (MDS), 
@@ -190,479 +205,134 @@ T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.)
 The initial Mercator function can be implemented with any visualization, 
 and visualizations can be added in an arbitrary order.
 ```{r distance, echo=TRUE}
-my.vis <- Mercator(my.binmat, "jaccard", "hclust", K=k)
+jacc.Vis <- Mercator(my.binmat, "jaccard", "hclust", K=kk)
 ```
 
 We can represent all the distances between features within the 
 dissimilarity matrix we have calculated on our data as a 
 histogram, as a visual representation of relatedness. 
-```{r}
-hist(my.vis, 
+```{r jacc-hist}
+hist(jacc.Vis, 
      xlab="Jaccard Distance", main="Histogram of Distances")
 ```
 
 Mercator allows us to implement common, standard visualizations 
 such as hierarchical clustering...
-```{r}
-plot(my.vis@view[[1]], col=my.vis@colv, pch=my.vis@symv)
+```{r jacc-hclust}
+plot(jacc.Vis@view[[1]], col="black", pch=jacc.Vis@symv)
 ```
 
 ... and heat map.
-```{r}
-my.vis <- addVisualization(my.vis, "heat")
-plot(my.vis@view[[2]], col=my.vis@colv, pch=my.vis@symv)
+```{r jacc-heat}
+jacc.Vis <- addVisualization(jacc.Vis, "heat")
+plot(jacc.Vis@view[[2]], col=jacc.Vis@colv, pch=jacc.Vis@symv)
 ```
 
 Mercator can be used to plot t-Stochastic Neighbor Embedding 
 (t-SNE) plots for visualizing large-scale, high-dimensional data in 
 2-dimensional space. 
-```{r}
-my.vis <- addVisualization(my.vis, "tsne", 
-                          perplexity=5)
-plot(my.vis@view[[3]]$Y, col=my.vis@colv, pch=my.vis@symv,
-     main="t-SNE; perplexity=5")
+```{r jacc-tsne5}
+par(pty="s")
+jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
+            perplexity=5, 
+            xlab="T1", ylab="T2")
+plot(jacc.Vis@view[[3]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
+     main="t-SNE; Jaccard Distance; perplexity=5")
 ```
 
 t-SNE parameters, such as perplexity, can be used to fine-tune 
 the plot as the visualization is created. Using addVisualization 
 to create a new, tuned plot of an existing type overwrites the 
 existing plot of that type.
-```{r}
-my.vis <- addVisualization(my.vis, "tsne", 
-                           perplexity=10)
-plot(my.vis@view[[3]]$Y, col=my.vis@colv, pch=my.vis@symv,
-     main="t-SNE; perplexity=10")
+```{r jacc-tsne10}
+jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
+            perplexity=10,
+            xlab="T1", ylab="T2")
+plot(jacc.Vis@view[[3]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
+     main="t-SNE; Jaccard Distance; perplexity=10")
+par(pty="m")
 ```
 
+Mercator allows visualization of multi-dimensional scaling (MDS) plots, as well.
+```{r jacc-mds1}
+jacc.Vis <- addVisualization(jacc.Vis, "mds")
+plot(jacc.Vis@view[[4]], col=jacc.Vis@colv, pch=jacc.Vis@symv,
+      main="MDS; Jaccard Distance", xlab="PC1", ylab="PC2")
+```
+
+### IGraph
+Mercator can be used to visualize complex networks using 
+IGraph. To improve clarity of the visualization and computational 
+time, we implement the downsample function to reduce the 
+number of data points to be linked and visualized. 
+The idea goes back to Peng Qiu's implementation of the
+SPADE clustering algorithm for mass cytyometry data. The main point is to *under* sample
+the densest regions of the data space to make it more likely that rarer clusters
+will still be adequately sampled.
+
+**Note:** The *Mercator* class includes a "subset" operator that tries to preserve
+earlier visualizations. This operator is fast for MDS or t-SNE models, but
+is very slow for large hierarchical clustering. (It uses the implementation in the *dendextend*
+package, which works by removing a single leaf at a time from the tree.) In the
+next code chunk, we first throw away the dendrogram, then subset using the downsampled
+data, and then compute a new dendrogram.
+```{r downsample}
+X <- jacc.Vis
+N <- as.matrix(X@distance)
+set.seed(87530)
+P <- downsample(40, N, 0.1)
+J <- jacc.Vis[P]
+J <- addVisualization(J, "tsne", perplexity=5)
+plot(J@view[[3]]$Y, col=J@colv, pch=J@symv, main="Down-sampled t-SNE Plot",
+     xlab="T1", ylab="T2")
+```
+The densest "eyes" are heavily under-sampled.
+
+Now we can look at the resulting graph, using three different "layouts".
+BECAUSE OF A BUG IN IGRAPH, I DON'T WORK!
+```{r igraph}
+set.seed(10967)
+J <- addVisualization(J, "mds")
+J <- addVisualization(J, "graph")
+G <- J@view[["graph"]]
+
+V <- igraph::vertex_attr(G$graph)
+
+plot(G$graph, layout=G$layouts[["mds"]])
+
+plot(G$graph, layout=G$layouts[["nicely"]], 
+     main="Graphical View of Down-sampled Jaccard Distance Matrix",
+     xlim=c(-1,1))
+
+
+plot(G$graph, layout=G$layouts[["tsne"]], main="T-SNE Layout")
+```
+
+#Cluster Identities and Color Tuning
+getClusters(my.vis) #gives color and cluster number
+recolor
+remapColors
+
+```{r}
+my.clust <- getClusters(jacc.Vis)
+
+```
+Color of cluster 1
+Identities in cluster 3
+
+||||||| .r125
+
+```{r}
+my.vis <- addVisualization(my.vis, "mds")
+plot(my.vis@view[[3]], col=my.vis@colv, pch=my.vis@symv)
+my.clust <- recoverCluster(my.vis)
+remapColors()
+=======
 
 ```{r}
 my.vis <- addVisualization(my.vis, "mds")
 plot(my.vis@view[[3]], col=my.vis@colv, pch=my.vis@symv)
 my.clust <- getClusters(my.vis)
 remapColors()
+>>>>>>> .r132
 ```
-
-Mercator can be used to visualized complex networks using 
-iGraph. To improve clarity of the visualization and computational 
-time, we implement the downsample function to reduce the 
-number of data points to be linked and visualized. 
-```{r}
-my.sample <- downsample(my.vis, "jaccard", 1)
-downsample(my.sample, my.vis, .5)
-
-
-my.vis <- addVisualization(downsample(my.vis, "jaccard"), "graph")
-plot(my.vis@view[[5]], col=my.vis@colv, pch=my.vis@symv)
-```
-
-
-COLOR TUNING
-By default, the color of the cluster dendrogram is implemented 
-as the default color of the first cluster.
-
-
-
-getClusters(my.vis) #gives color and cluster number
-recolor
-remapColors
-
-
-
-
-
-
-
-```{r}
-jacF <- Mercator(ft, "jaccard", "mds", K=Kf)
-jacF <- addVisualization(jacF, "hclust")
-jacF <- addVisualization(jacF, "tsne")
-plot(jacF@view[[1]], col=jacF@colv, pch=jacF@symv)
-plot(jacF@view[[2]], col=jacF@colv, pch=jacF@symv)
-plot(jacF@view[[3]]$Y, col=jacF@colv, pch=jacF@symv)
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Get some datata
-```{r load.matrix}
-setwd("C:/Users/catco/Dropbox/KRC Lab Box/Mercator AML/datata/")
-#readLines("AML Cat.csv", n=1) #I legit do not know what this fixed it. But there you have it.
-aml.df <- read.csv("AML Cat.csv", header=TRUE)
-dim(aml.df)
-
-head(aml.df[c(1:20), c(2747:2751)])
-aml.df$X <- NULL
-aml.df$X.1 <- NULL
-aml.df$X.2 <- NULL
-dim(aml.df)
-head(aml.df[c(1:20), c(2744:2748)])
-```
-
-Make it a matrix
-```{r}
-aml.mt <- as.matrix(aml.df)
-dim(aml.mt)
-class(aml.mt)
-class(aml.mt[1,1])
-```
-
-## Test Subset
-In order to more efficiently test the code, create a small data subset.
-```{r tiny, eval=FALSE}
-aml.mt <- aml.mt[c(1:1000),c(1:1000)]
-dim(aml.mt)
-```
-
-## Make a Binary Matrix
-
-Load the Mercator package and its dependents, if you haven't already.
-```{r}
-#install.packages("Mercator", repos="http://R-Forge.R-project.org")
-library(Mercator)
-suppressWarnings( suppressMessages( library(Thresher) ))
-```
-
-# By Feature
-I didn't know if you wanted this clustered by patient or by feature, so I did both.
-
-Identify any columns that are all 0s and remove them, since they break Thresher.
-```{r no0sft}
-ft <- aml.mt
-dim(ft)
-
-zeros <- apply(ft, 2, sum)
-length(zeros[zeros == 0])
-
-ft <- ft[,apply(ft, 2, sum)!=0]
-
-dim(ft)
-```
-
-Make it a BinaryMatrix.
-```{r ftbm}
-#rownames(aml.mt)
-#It needs row names.
-aml.row <- c(1:length(ft[,1]))
-rownames(ft) <- aml.row
-#rownames(aml.mt)
-
-ft <- BinaryMatrix(ft)
-summary(ft)
-```
-
-Remove duplicate features.
-```{r nodupsft}
-dim(ft)
-ft <- removeDuplicateFeatures(ft)
-summary(ft)
-```
-
-Next we Thresh, and identify uninformative features (defined by delta < 0.3). I can't figure out how to remove them, so I'm just going to keep going.
-```{r threshft}
-set.seed(1987)
-ft <- threshLGF(ft)
-summary(ft)
-
-Delta <- ft@thresher@delta
-#sort(Delta)
-hist(Delta, breaks=15, main="", xlab="Weight")
-abline(v=0.3, col='red')
-
-abandon <- ft@thresher@delta < 0.3
-names(abandon)[abandon]
-
-summary(ft)
-```
-
-We identify our dimensions/principal components numerically and visually, and arbitrarily set k to keep things easy.
-```{r}
-th <- ft@thresher
-re <- ft@reaper
-
-re@pcdim
-re@nGroups
-
-#makeFigures(th)
-#par(ask = FALSE) # resets makeFigures
-
-plot(th@ag)
-abline(h=re@pcdim, col="green", lty="longdash")
-abline(h=re@nGroups, col="blue", lty ="longdash")
-
-screeplot(th)
-abline(v=re@pcdim, col="green")
-abline(v=re@nGroups, col="blue")
-
-Kf <- re@nGroups
-```
-
-There are a variety of distance metrics at our disposal, but we're going to go easy and just use Jaccard.
-```{r}
-all.metrics <- c("jaccard", "sokalMichener", "hamming", "russellRao", "pearson", "goodmanKruskal", "manhattan", "canberra", "binary", "euclid")
-```
-
-If I were trying, this is where I would cluster distance metrics to determine the best one and calculate silhouette width, but I'm not.
-
-###Using the Jaccard distance, we cluster by patient and characterize.
-
-To determine the defining features of each cluster, we begin by computing the frequency of each sign, symptom, or clinical test result in each of the 10 sample clusters.
-```{r}
-jacF <- Mercator(ft, "jaccard", "mds", K=Kf)
-jC <- getClusters(jacF)
-
-relFrequency <- sapply(1:Kf, function(i) { #reset K here
-  M <- ft@binmat[, jC == i]
-  apply(M, 1, mean)
-})
-relFrequency <- 100*relFrequency
-
-dim(relFrequency)
-summary(relFrequency)
-```
-
-Next, we look at the maximum frequency for each clinical features, where a large value suggests that the abnormality may aid in "characterizing" at least one of the sample clusters.
-```{r}
-M1 <- apply(relFrequency, 1, max) #find the max value in each row, where each row is a feature
-opar <- par(mfrow = c(1,2))
-plot(M1, xlab="Feature", ylab="Percentage")
-abline(h=c(15,50,75), col="green")
-plot(sort(M1), ylab="Percentage")
-abline(h=c(15,50,75), col="green")
-par(opar)
-```
-
-We view the characteristics of each cluster in table form.
-```{r}
-if (!require("DT")) {
-  install.packages("DT")
-  library("DT")
-}
-
-if (!require("reshape2")) {
-  install.packages("reshape2")
-  library("reshape2")
-}
-
-if (!require("Polychrome")) {
-  install.packages("Polychrome")
-  library("Polychrome")
-}
-
-stack <- melt(relFrequency)
-colnames(stack) <- c("Feature", "Cluster", "Percent")
-stack <- stack[, c(2, 1, 3)]
-summary(stack)
-
-w <- which(tapply(stack$Percent, list(stack$Cluster), max) < 75)
-if (length(w) == 0) w <- 0
-
-pickME <- stack$Percent > 75 | ((stack$Cluster %in% w) & stack$Percent > 50 )
-partStack <- stack[pickME,]
-partStack$Percent <- round(partStack$Percent, 1)
-
-dk <- Polychrome::dark.colors(Kf)
-
-datatable(partStack, rownames=FALSE) %>% 
-  formatStyle('Cluster', backgroundColor = styleEqual(seq(1:Kf), dk), color="white",
-              fontWeight="bold")
-```
-
-Make some pictures.
-```{r}
-jacF <- Mercator(ft, "jaccard", "mds", K=Kf)
-jacF <- addVisualization(jacF, "hclust")
-jacF <- addVisualization(jacF, "tsne")
-plot(jacF@view[[1]], col=jacF@colv, pch=jacF@symv)
-plot(jacF@view[[2]], col=jacF@colv, pch=jacF@symv)
-plot(jacF@view[[3]]$Y, col=jacF@colv, pch=jacF@symv)
-```
-
-
-
-
-# By Patient
-
-First, transpose.
-```{r t}
-pt <- t(aml.mt)
-dim(pt)
-```
-
-Identify any columns that are all 0s and remove them, since they break Thresher.
-```{r no0spt}
-zeros <- apply(pt, 2, sum)
-length(zeros[zeros == 0])
-
-pt <- pt[,apply(pt, 2, sum)!=0]
-
-dim(pt)
-```
-
-Make it a BinaryMatrix.
-```{r ptbm}
-rownames(pt)[c(1:15)]
-colnames(pt)[c(1:15)]
-#It needs column names.
-pt.col <- c(1:length(pt[1,]))
-colnames(pt) <- pt.col
-colnames(pt)[c(1:15)]
-
-pt <- BinaryMatrix(pt)
-summary(pt)
-```
-
-Remove duplicate features.
-```{r nodupspt}
-dim(pt)
-pt <- removeDuplicateFeatures(pt)
-summary(pt)
-```
-
-Next we Thresh, and identify uninformative features (defined by delta < 0.3). I can't figure out how to remove them, so I'm just going to keep going.
-```{r threshpt}
-set.seed(1987)
-pt <- threshLGF(pt)
-summary(pt)
-
-Delta <- pt@thresher@delta
-#sort(Delta)
-hist(Delta, breaks=15, main="", xlab="Weight")
-abline(v=0.3, col='red')
-
-abandon <- pt@thresher@delta < 0.3
-names(abandon)[abandon]
-
-summary(pt)
-```
-
-We identify our dimensions/principal components numerically and visually, and arbitrarily set k to keep things easy.
-```{r}
-th <- pt@thresher
-re <- pt@reaper
-
-re@pcdim
-re@nGroups
-
-#makeFigures(th)
-#par(ask = FALSE) # resets makeFigures
-
-plot(th@ag)
-abline(h=re@pcdim, col="green", lty="longdash")
-abline(h=re@nGroups, col="blue", lty ="longdash")
-
-screeplot(th)
-abline(v=re@pcdim, col="green")
-abline(v=re@nGroups, col="blue")
-
-Kp <- re@nGroups
-```
-
-If I were trying, this is where I would cluster distance metrics to determine the best one and calculate silhouette width, but I'm not.
-
-###Using the Jaccard distance, we cluster by patient and characterize.
-
-To determine the defining features of each cluster, we begin by computing the frequency of each sign, symptom, or clinical test result in each of the 10 sample clusters.
-```{r}
-jacP <- Mercator(pt, "jaccard", "mds", K=Kp)
-jC <- getClusters(jacP)
-
-relFrequency <- sapply(1:Kp, function(i) { #reset K here
-  M <- pt@binmat[, jC == i]
-  apply(M, 1, mean)
-})
-relFrequency <- 100*relFrequency
-
-dim(relFrequency)
-summary(relFrequency)
-```
-
-Next, we look at the maximum frequency for each clinical features, where a large value suggests that the abnormality may aid in "characterizing" at least one of the sample clusters.
-```{r}
-M1 <- apply(relFrequency, 1, max) #find the max value in each row, where each row is a feature
-opar <- par(mfrow = c(1,2))
-plot(M1, xlab="Feature", ylab="Percentage")
-abline(h=c(15,50,75), col="green")
-plot(sort(M1), ylab="Percentage")
-abline(h=c(15,50,75), col="green")
-par(opar)
-```
-
-We view the characteristics of each cluster in table form.
-```{r}
-if (!require("DT")) {
-  install.packages("DT")
-  library("DT")
-}
-
-if (!require("reshape2")) {
-  install.packages("reshape2")
-  library("reshape2")
-}
-
-if (!require("Polychrome")) {
-  install.packages("Polychrome")
-  library("Polychrome")
-}
-
-stack <- melt(relFrequency)
-colnames(stack) <- c("Feature", "Cluster", "Percent")
-stack <- stack[, c(2, 1, 3)]
-summary(stack)
-
-w <- which(tapply(stack$Percent, list(stack$Cluster), max) < 75)
-if (length(w) == 0) w <- 0
-
-pickME <- stack$Percent > 75 | ((stack$Cluster %in% w) & stack$Percent > 50 )
-partStack <- stack[pickME,]
-partStack$Percent <- round(partStack$Percent, 1)
-
-dk <- Polychrome::dark.colors(Kp)
-
-datatable(partStack, rownames=FALSE) %>% 
-  formatStyle('Cluster', backgroundColor = styleEqual(seq(1:Kp), dk), color="white",
-              fontWeight="bold")
-```
-
-Make some pictures.
-```{r}
-jacP <- Mercator(pt, "jaccard", "mds", K=Kp)
-jacP <- addVisualization(jacP, "hclust")
-jacP <- addVisualization(jacP, "tsne")
-plot(jacP@view[[1]], col=jacP@colv, pch=jacP@symv)
-plot(jacP@view[[2]], col=jacP@colv, pch=jacP@symv)
-plot(jacP@view[[3]]$Y, col=jacP@colv, pch=jacP@symv)
-```
-
-
-
-
-
-
-
