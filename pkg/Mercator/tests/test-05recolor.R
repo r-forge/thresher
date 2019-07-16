@@ -13,10 +13,10 @@ plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
 plot(vis2@view[[1]], col=vis2@colv, pch=vis2@symv)
 plot(vis3@view[[1]], col=vis3@colv, pch=vis3@symv)
 
-A <- recoverCluster(vis2)
-B <- recoverCluster(vis3)
+A <- getClusters(vis2)
+B <- getClusters(vis3)
 table(A, B)
-X <- recoverCluster(vis1)
+X <- getClusters(vis1)
 table(A, X)
 table(B, X)
 

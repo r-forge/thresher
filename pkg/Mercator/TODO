@@ -1,5 +1,4 @@
 1. Decide if we want to add any more binary distance measures from the
 Choi paper.
 
-2. Decide whether to change "recoverCluster" to the clearer "getCluster".
 

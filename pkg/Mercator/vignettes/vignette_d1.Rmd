@@ -238,7 +238,7 @@ plot(my.vis@view[[3]]$Y, col=my.vis@colv, pch=my.vis@symv,
 ```{r}
 my.vis <- addVisualization(my.vis, "mds")
 plot(my.vis@view[[3]], col=my.vis@colv, pch=my.vis@symv)
-my.clust <- recoverCluster(my.vis)
+my.clust <- getClusters(my.vis)
 remapColors()
 ```
 
@@ -262,7 +262,7 @@ as the default color of the first cluster.
 
 
 
-recoverCluster(my.vis) #gives color and cluster number
+getClusters(my.vis) #gives color and cluster number
 recolor
 remapColors
 
@@ -435,7 +435,7 @@ If I were trying, this is where I would cluster distance metrics to determine th
 To determine the defining features of each cluster, we begin by computing the frequency of each sign, symptom, or clinical test result in each of the 10 sample clusters.
 ```{r}
 jacF <- Mercator(ft, "jaccard", "mds", K=Kf)
-jC <- recoverCluster(jacF)
+jC <- getClusters(jacF)
 
 relFrequency <- sapply(1:Kf, function(i) { #reset K here
   M <- ft@binmat[, jC == i]
@@ -591,7 +591,7 @@ If I were trying, this is where I would cluster distance metrics to determine th
 To determine the defining features of each cluster, we begin by computing the frequency of each sign, symptom, or clinical test result in each of the 10 sample clusters.
 ```{r}
 jacP <- Mercator(pt, "jaccard", "mds", K=Kp)
-jC <- recoverCluster(jacP)
+jC <- getClusters(jacP)
 
 relFrequency <- sapply(1:Kp, function(i) { #reset K here
   M <- pt@binmat[, jC == i]

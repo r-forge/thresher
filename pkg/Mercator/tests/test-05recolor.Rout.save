@@ -30,8 +30,8 @@ Type 'q()' to quit R.
 > plot(vis2@view[[1]], col=vis2@colv, pch=vis2@symv)
 > plot(vis3@view[[1]], col=vis3@colv, pch=vis3@symv)
 > 
-> A <- recoverCluster(vis2)
-> B <- recoverCluster(vis3)
+> A <- getClusters(vis2)
+> B <- getClusters(vis3)
 > table(A, B)
    B
 A     1   2   3   4   5   6   7   8
@@ -43,7 +43,7 @@ A     1   2   3   4   5   6   7   8
   6   0   0   0   0   0  14   0   0
   7   0   0   0   0   0   0   0   1
   8   0   0   1   0   0   0   0   0
-> X <- recoverCluster(vis1)
+> X <- getClusters(vis1)
 > table(A, X)
    X
 A     1   2   3   4   5   6   7   8

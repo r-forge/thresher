@@ -8,6 +8,7 @@ import(Thresher)
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
 importFrom("utils", "data")
+importFrom("graphics", "hist")
 importFrom("cluster", "pam")
 importFrom("Rtsne", "Rtsne")
 importFrom("Polychrome", "dark.colors")
@@ -33,7 +34,7 @@ export("threshLGF")
 
 # 04-vis
 exportClasses("Mercator")
-export("Mercator", "addVisualization", "recoverCluster")
+export("Mercator", "addVisualization", "getClusters")
 
 exportMethods("hist")
 

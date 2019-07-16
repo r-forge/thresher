@@ -103,7 +103,7 @@ RC <- function(colv, symv) {
   24*lead + units
 }
 
-recoverCluster <- function(DV) {
+getClusters <- function(DV) {
   RC(DV@colv, DV@symv)
 }
 
