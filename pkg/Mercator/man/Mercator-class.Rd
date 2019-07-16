@@ -16,6 +16,7 @@ t-Stochastic Neighbor Embedding (t-SNE), and iGraph.
 \usage{
 Mercator(binaryMat, metric, method, K, ...)
 addVisualization(DV, method, ...)
+getClusters(DV)
 }
 \arguments{
   \item{binaryMat}{A \code{\link{BinaryMatrix}}.}
@@ -26,6 +27,11 @@ addVisualization(DV, method, ...)
   \item{method}{A visualization method, limited to \code{hclust}, \code{heat}, 
     \code{mds}, \code{tsne}, and \code{graph}.}
   \item{K}{An \code{integer} specifying the number of desired clusters.}
+  \item{DV}{A distance visualization produced as the output of the 
+    \code{Mercator} function.}
+  \item{Q}{A quantile cutoff for the creation of the IGraph visualization. 
+    By default, the value is set at the 10th percentile.}
+  }
 }
 \section{Slots}{
   \describe{
@@ -65,14 +71,39 @@ addVisualization(DV, method, ...)
   }
 }
 \value{
-  The \code{Mercator} function constructs and returns an object of 
+  The \code{Mercator} function constructs and returns a distance
+  visualization object of 
   \code{Mercator} class, including a distance matrix calculated on a 
-  given metric and a given visualiations. The \code{addVisualizations} 
-  function can be used to add additional visualizations to a given 
-  \code{Mercator} object.
+  given metric and given visualiations.
+  
+  The \code{addVisualizations} function can be used to add additional 
+  visualizations to a given \code{Mercator} object.
+  
+  The \code{getClusters} function returns the cluster number and color 
+  assigned to each observation in the \code{Mercator} distance 
+  visualization.
 }
 \author{Kevin R. Coombes <krc@silicovore.com}
 \examples{
+#Form a BinaryMatrix
+data("iris")
+my.data <- as.matrix(iris[,c(1:4)])
+my.rows <- as.data.frame(c(1:length(my.data[,1])))
+my.binmat <- BinaryMatrix(my.data, , my.rows)
+my.binmat <- t(my.binmat)
+summary(my.binmat)
+
+#Form a Mercator object
+my.vis <- Mercator(my.binmat, "euclid", "hclust", K=3) #set K to the known number of species in the dataset
+summary(my.vis)
+hist(my.vis)
+my.vis <- addVisualization(my.vis, "mds")
+plot(my.vis@view[[1]], col=my.vis@colv, pch=my.vis@symv)
+plot(my.vis@view[[2]], col=my.vis@colv, pch=my.vis@symv)
+
+#Recover cluster identities and colors
+my.clust <- getClusters(my.vis)
+my.clust
 
 
 
