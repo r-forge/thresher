@@ -79,9 +79,7 @@ getClusters(DV)
   The \code{addVisualizations} function can be used to add additional 
   visualizations to a given \code{Mercator} object.
   
-  The \code{getClusters} function returns the cluster number and color 
-  assigned to each observation in the \code{Mercator} distance 
-  visualization.
+  The \code{getClusters} function returns a vector of cluster assignments.
 }
 \author{Kevin R. Coombes <krc@silicovore.com}
 \examples{
@@ -101,14 +99,10 @@ my.vis <- addVisualization(my.vis, "mds")
 plot(my.vis@view[[1]], col=my.vis@colv, pch=my.vis@symv)
 plot(my.vis@view[[2]], col=my.vis@colv, pch=my.vis@symv)
 
-#Recover cluster identities and colors
+#Recover cluster identities
+#What species comprise cluster 1?
 my.clust <- getClusters(my.vis)
-my.clust
-
-
-
-
-
-
+my.species <- iris$Species[my.clust == 1]
+my.species
 }
 \keyword{ cluster }
