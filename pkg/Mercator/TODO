@@ -9,6 +9,10 @@ Choi paper.
 
 5. Document functions "recolor" and "remapColors"
 
-6. Document data objects "CML1000", "CML500", and "lgfFeatures".
+6. DONE (CEC; 2019-07-17. 10AM) Document data objects "CML1000", "CML500", and "lgfFeatures".
 
-7. Finish vignette.
+7. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
+
+8. Decide if we want to permit MDS visualizations past the first two dimensions.
+
+9. Fix bug in heatmap where heat does not produce a heatmap.

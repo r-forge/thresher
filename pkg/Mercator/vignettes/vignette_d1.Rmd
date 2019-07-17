@@ -311,14 +311,24 @@ plot(G$graph, layout=G$layouts[["tsne"]], main="T-SNE Layout")
 
 #Cluster Identities and Color Tuning
 
-We can use the *getClusters* function to obtain the components of each cluster.
-```{r, eval=FALSE}
+We can use the *getClusters* function to characterize each cluster and 
+use these for further manipulation.
+
+We can easily determine cluster size...
+```{r cluster1Identity}
 my.clust <- getClusters(jacc.Vis)
-my.1 <- my.binmat[ , ]
-[my.clust == 1]
+tab <- table(my.clust)
+tab
 ```
 
-Identities in cluster 3
+... or the patients that comprise each cluster.
+```{r}
+C <- my.binmat@columnInfo
+Cl4 <- C[my.clust == 4 ,]
+Cl4
+```
+
+
 
 recolor
 remapColors
