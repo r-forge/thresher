@@ -13,13 +13,13 @@ The \code{Mercator} Distance Visualization Object
 }
 \description{
   The \code{Mercator} object represents a distance matrix togeher with
-  clustering assignments and a set of visualizatrions. The default
+  clustering assignments and a set of visualizations. It implements four
+  visualizations for clusters of large-scale, multi-dimensional data:
+  hierarchical clustering, multi-dimensional scaling, t-Stochastic
+  Neighbor Embedding (t-SNE), and iGraph. The default
   \code{Mercator} constructor applies one of ten metrics of
   \code{\link{binaryDistance}} to an object of the
-  \code{\link{BinaryMatrix}} class and implements four visualizations
-  for clusters of large-scale, multi-dimensional data: hierarchical
-  clustering, multi-dimensional scaling, t-Stochastic Neighbor Embedding
-  (t-SNE), and iGraph.
+  \code{\link{BinaryMatrix}} class.
 }
 \usage{
 Mercator(binaryMat, metric, method, K, ...)
@@ -31,9 +31,10 @@ getClusters(DV)
   \item{metric}{A \code{\link{binaryDistance}} currently limited to the
     names of 10 selected distance metrics: \code{jaccard},
     \code{sokalMichener}, \code{hamming},
-    \code{russellRao}, \code{pearson}, \code{goodmanKruskal}, \code{manhattan},
+    \code{russellRao}, \code{pearson}, \code{goodmanKruskal},
+    \code{manhattan},
     \code{canberra}, \code{binary}, or \code{euclid}.}
-  \item{method}{A visualization method, limited to \code{hclust}, \code{heat}, 
+  \item{method}{A visualization method, limited to \code{hclust}, 
     \code{mds}, \code{tsne}, and \code{graph}.}
   \item{K}{An \code{integer} specifying the number of desired clusters.}
   \item{DV}{A distance visualization produced as the output of the 
@@ -43,10 +44,11 @@ getClusters(DV)
     passed here through the \code{Mercator} function). These include
     \describe{
       \item{\dots}{Any arguments to the \code{\link{cmdscale}} function for an
-	\code{mds} visualization. Mosdt commonly, this is likelt to
-	include \code{k}, the number of dimensions tro compute.}
+	\code{mds} visualization. Most commonly, this is likely to
+	include \code{k}, the number of dimensions to compute.}
       \item{\dots}{Any arguments to the \code{\link{Rtsne}} function for a
-	\code{tsne} visualization.}
+	\code{tsne} visualization. Common examples include \code{dims}
+	and \code{perplexity}.}
       \item{Q}{A quantile cutoff for the creation of the IGraph visualization.
 	By default, the value is set at the 10th percentile.}
     }

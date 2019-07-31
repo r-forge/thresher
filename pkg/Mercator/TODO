@@ -5,11 +5,9 @@ Choi paper.
 
 3. Fix bug in igraph with assuming mds view exists.
 
-4. DONE (CEC; 2019-07-17. 10AM) Document data objects "CML1000", "CML500", and "lgfFeatures".
+4. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
 
-5. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
+5. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
+Removed this formt he documentaiotn. Mainly because I'm no longer sure
+what the deafulty behgavior of a heatm,ap shoudl be for a distance matrix
 
-6. Decide if we want to permit MDS visualizations past the first two
-dimensions. DOCUMENT!!!
-
-7. Fix bug in heatmap where heat does not produce a heatmap.
