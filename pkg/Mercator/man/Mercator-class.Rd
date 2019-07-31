@@ -12,12 +12,14 @@
 The \code{Mercator} Distance Visualization Object
 }
 \description{
-The \code{Mercator} object applies one of 10 metrics of 
-\code{\link{binaryDistance}} to an object of class 
-\code{\link{BinaryMatrix}} and implements 5 visualizations for
-clusters of large-scale, multi-dimensional data: 
-hierarchical clustering, heat map, multi-dimensional scaling,
-t-Stochastic Neighbor Embedding (t-SNE), and iGraph.
+  The \code{Mercator} object represents a distance matrix togeher with
+  clustering assignments and a set of visualizatrions. The default
+  \code{Mercator} constructor applies one of ten metrics of
+  \code{\link{binaryDistance}} to an object of the
+  \code{\link{BinaryMatrix}} class and implements four visualizations
+  for clusters of large-scale, multi-dimensional data: hierarchical
+  clustering, multi-dimensional scaling, t-Stochastic Neighbor Embedding
+  (t-SNE), and iGraph.
 }
 \usage{
 Mercator(binaryMat, metric, method, K, ...)
@@ -26,8 +28,9 @@ getClusters(DV)
 }
 \arguments{
   \item{binaryMat}{A \code{\link{BinaryMatrix}}.}
-  \item{metric}{A \code{\link{binaryDistance}} limited to the names of 
-    10 selected distance metrics: \code{jaccard}, \code{sokalMichener}, \code{hamming},
+  \item{metric}{A \code{\link{binaryDistance}} currently limited to the
+    names of 10 selected distance metrics: \code{jaccard},
+    \code{sokalMichener}, \code{hamming},
     \code{russellRao}, \code{pearson}, \code{goodmanKruskal}, \code{manhattan},
     \code{canberra}, \code{binary}, or \code{euclid}.}
   \item{method}{A visualization method, limited to \code{hclust}, \code{heat}, 
@@ -40,7 +43,8 @@ getClusters(DV)
     passed here through the \code{Mercator} function). These include
     \describe{
       \item{\dots}{Any arguments to the \code{\link{cmdscale}} function for an
-	\code{mds} visualization.}
+	\code{mds} visualization. Mosdt commonly, this is likelt to
+	include \code{k}, the number of dimensions tro compute.}
       \item{\dots}{Any arguments to the \code{\link{Rtsne}} function for a
 	\code{tsne} visualization.}
       \item{Q}{A quantile cutoff for the creation of the IGraph visualization.

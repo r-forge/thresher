@@ -1,18 +1,15 @@
 1. Decide if we want to add any more binary distance measures from the
 Choi paper.
 
-2. DONE (KRC; 2019-07-16. 4PM) Document "dots" in the Mercator-class.Rd file.
+2. Fix bug in igraph (with names).
 
-3. Fix bug in igraph (with names).
+3. Fix bug in igraph with assuming mds view exists.
 
-4. Fix bug in igraph with assuming mds view exists.
+4. DONE (CEC; 2019-07-17. 10AM) Document data objects "CML1000", "CML500", and "lgfFeatures".
 
-5. Document functions "recolor" and "remapColors"
+5. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
 
-6. DONE (CEC; 2019-07-17. 10AM) Document data objects "CML1000", "CML500", and "lgfFeatures".
+6. Decide if we want to permit MDS visualizations past the first two
+dimensions. DOCUMENT!!!
 
-7. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
-
-8. Decide if we want to permit MDS visualizations past the first two dimensions.
-
-9. Fix bug in heatmap where heat does not produce a heatmap.
+7. Fix bug in heatmap where heat does not produce a heatmap.

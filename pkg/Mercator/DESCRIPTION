@@ -1,8 +1,8 @@
 Package: Mercator
-Version: 0.8.2
-Date: 2019-07-16
+Version: 0.8.3
+Date: 2019-07-31
 Title: Clustering and Visualizing Distance Matrices
-Author: Kevin R. Coombes
+Author: Kevin R. Coombes, Caitlin E. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: Defines the classes used to explore, cluster and
   visualize distance matrices, espcially those arising from binary data.
