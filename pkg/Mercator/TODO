@@ -1,7 +1,8 @@
 1. Decide if we want to add any more binary distance measures from the
 Choi paper.
 
-3. Fix bug in igraph with assuming mds view exists.
+2. Fix bug in igraph with assuming mds view exists.
+(NOT SURE WHAT THIS MEANS)
 
 4. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
 

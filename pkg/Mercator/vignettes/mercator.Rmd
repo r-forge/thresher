@@ -304,7 +304,7 @@ plot(G$graph, layout=G$layouts[["nicely"]],
 plot(G$graph, layout=G$layouts[["tsne"]], main="T-SNE Layout")
 ```
 
-# Cluster Identities and Color Tuning
+# Cluster Identities
 
 We can use the *getClusters* function to characterize each cluster and 
 use these for further manipulation.
@@ -323,10 +323,28 @@ Cl4 <- C[my.clust == 4 ,]
 Cl4
 ```
 
+# Tuning
+Finally, we are going to look at what happens if we use a different distance metric.
+```{r sokal}
+set.seed(8642)
+sokal.Vis <- Mercator(my.binmat, "sokal", "tsne", K=kk, peplexity = 10)
+table(getClusters(sokal.Vis), getClusters(jacc.Vis))
+plot(sokal.Vis@view[["tsne"]]$Y, col=sokal.Vis@colv, pch=sokal.Vis@symv,
+     main="t-SNE; Sokal-Michener Distance; perplexity=10")
+```
+The two larges groups get assigned the same colors (by chanmce) in the Jacard and the
+Sokal-Michener clusterings. However, it is not at all clear how to align the smaller
+groups. For that purpose, we can use the <tt>remapColors</tt> function.
+```{r recolored}
+SV <- remapColors(jacc.Vis, sokal.Vis)
+table(getClusters(SV), getClusters(jacc.Vis))
+plot(SV@view[["tsne"]]$Y, col=SV@colv, pch=SV@symv,
+     main="t-SNE; Sokal-Michener Distance; perplexity=10")
+```
+
+Now colors have been matched (as well as possible) between the two sets of visualizations.
 
 
-recolor
-remapColors
 
 # References
 
