@@ -76,8 +76,7 @@ Notice also that the object always includes a "history" element that tracks how
 it has been processed.
 ```{r}
 my.data <- as.matrix(my.data)
-my.rows <- data.frame(Labels = paste("C", 1:nrow(my.data), sep = ""))
-my.binmat <- BinaryMatrix(my.data, , my.rows)
+my.binmat <- BinaryMatrix(my.data)
 summary(my.binmat)
 ```
 
@@ -289,13 +288,11 @@ par(pty="m")
 The densest "eyes" are heavily under-sampled.
 
 Now we can look at the resulting graph, using three different "layouts".
-```{r igraph, eval=FALSE}
+```{r igraph}
 set.seed(10967)
 J <- addVisualization(J, "mds")
 J <- addVisualization(J, "graph")
 G <- J@view[["graph"]]
-
-V <- igraph::vertex_attr(G$graph)
 
 plot(G$graph, layout=G$layouts[["mds"]])
 
@@ -307,7 +304,7 @@ plot(G$graph, layout=G$layouts[["nicely"]],
 plot(G$graph, layout=G$layouts[["tsne"]], main="T-SNE Layout")
 ```
 
-#Cluster Identities and Color Tuning
+# Cluster Identities and Color Tuning
 
 We can use the *getClusters* function to characterize each cluster and 
 use these for further manipulation.

@@ -1,8 +1,6 @@
 1. Decide if we want to add any more binary distance measures from the
 Choi paper.
 
-2. Fix bug in igraph (with names).
-
 3. Fix bug in igraph with assuming mds view exists.
 
 4. Finish vignette. - COMPLETE EXCEPT recolor and remapColors (CEC; 2019-07-17. 1PM)
@@ -10,4 +8,17 @@ Choi paper.
 5. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
 Removed this formt he documentaiotn. Mainly because I'm no longer sure
 what the deafulty behgavior of a heatm,ap shoudl be for a distance matrix
+
+6. CHeck the example RMD scripts in inst/Examples for correctness.
+
+7. Possibly change name of "recolor" to "setClusters".
+
+8. Add a "plot" method for Mercator objects that would look like
+   plot(myObject, which = c("tsne", "mds"))
+
+9. Impemenmt the option to add new visualization instead oif
+overwriting.
+
+10 Figure out why accessing the list of views by name makes accessing
+by integer not work propoerly.
 

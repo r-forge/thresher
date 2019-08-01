@@ -11,10 +11,16 @@ setClass("BinaryMatrix",
 
 BinaryMatrix <- function(binmat, columnInfo, rowInfo) {
   if (missing(rowInfo)) {
+    if (is.null(rownames(binmat))) {
+      rownames(binmat) <- paste("R", 1:nrow(binmat), sep = "")
+    }
     rowInfo <- data.frame(Names = rownames(binmat))
     rownames(rowInfo) <- rownames(binmat)
   }
   if (missing(columnInfo)) {
+    if (is.null(colnames(binmat))) {
+      colnames(binmat) <- paste("X", 1:ncol(binmat), sep = "")
+    }
     columnInfo <- data.frame(Names = colnames(binmat))
     rownames(columnInfo) <- colnames(binmat)
   }
