@@ -1,6 +1,6 @@
 ---
 title: "Using the Mercator Package"
-author: "Kevin R. Coombes, Zachary B. Abrams, C.E. Coombes, Suli Li"
+author: "C.E. Coombes, Zachary B. Abrams, Suli Li, Kevin R. Coombes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -21,75 +21,76 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=7,fig.height=5,echo=TRUE)
 Modern biological experiments are increasingly producing interesting
 binary matrices. These may represent the presence or absence of
 specific gene mutations, copy number variants, microRNAs, or other
-molecular or clinical phenomena. We have recently developed a tool, *CytoGPS*,
+molecular or clinical phenomena. We have recently developed a tool, 
+*CytoGPS* [^Abrams and colleagues],
 that converts conventional karyotypes from the standard text-based
 notation (the International Standard for Human Cytogenetic Nomenclature;
 ISCN) into a binary vector with three bits (loss, gain, or fusion) per
 cytoband, which we call the "LGF model".
 
-The *Mercator* package is intended to facilitate the
+The <tt>Mercator</tt> package is intended to facilitate the
 exploration of binary data sets. It implements a subset of the 76
-binary distance metrics described by [Choi and colleagues], ensuring that
+binary distance metrics described by [^Choi and colleagues], ensuring that
 at least one representative of each of their major clusters is
 included. Each resulting distance matrix can be combined with multiple
 visualiization techniques, providing a consistent interface to
 thoroughly explore the data set.
 
-# The BinaryMatrix Object Class
+# The BinaryMatrix Class
 
-First we load the R library package *Mercator*.
+First we load the package.
 ```{r library}
-library(Mercator)
-#suppressWarnings( suppressMessages( library(Thresher) ))
+suppressMessages( suppressWarnings( library(Mercator) ) )
 ```
 
-### A Limited, Sample Dataset
-We proceed with a model dataset of karyotypes from patients with Chronic Myelogenous Leukemia (CML) with 400 chromosomal features recorded over 
+## A Limited, Sample Dataset
+We proceed with a model dataset of karyotypes from patients with 
+Chronic Myelogenous Leukemia (CML) with 400 chromosomal features recorded over 
 740 patients, from the public
 Mitelman database. Cytogenetic abnormalities, recorded in Mitelman as text 
-strings have been pre-processed with the *CytoGPS* package into 
-binary vectors. For the sake of clarity and efficiency, we have chosen a subset of patients and features for this example.
+strings have been pre-processed with CytoGPS into 
+binary vectors. For the sake of clarity and efficiency, we have chosen a subset
+of patients and features for this example.
 ```{r data}
 filename <- system.file("Examples/Mercator_Test_Data.csv", package="Mercator")
 my.data <- read.csv(filename, header=TRUE)
 dim(my.data)
 ```
 
-### Generating the BinaryMatrix
-The functions of the Mercator package operate on the BinaryMatrix S4 object, 
+## Generating the BinaryMatrix
+The functions of the <tt>Mercator</tt> package operate on a <tt>BinaryMatrix</tt> S4 object, 
 which forms the input of the subsequent functions and visualizations. 
 
-The BinaryMatrix object is formed from a matrix of integer or numeric 
-class. Although this package is designed for the processing and visualizations of
-binary data, the BinaryMatrix object and subsequent functions accept a variety 
+A <tt>BinaryMatrix</tt> object is formed from a matrix containing integer or numeric 
+values. Although <tt>Mercator</tt> was designed primarily for the processing and visualization of
+binary data, the <tt>BinaryMatrix</tt> object and subsequent functions accept a variety 
 of integer and numeric values. 
 
-Row and column names can be assigned as data frames.
-If no row or column headings are assigned, the BinaryMatrix takes the row and 
+Row and column names, along with optional annotations, can be assigned as data frames.
+If no row or column headings are assigned, the <tt>BinaryMatrix</tt> takes the row and 
 column names of the inital matrix as default. Here, we wish to keep the 
 column names associated with the parent matrix, but must create row names 
 to build the BinaryMatrix. 
 
-Notice also that the object always includes a "history" element that tracks how it has been processed.
+Notice also that the object always includes a "history" element that tracks how
+it has been processed.
 ```{r}
 my.data <- as.matrix(my.data)
-my.rows <- c(1:length(my.data[,1]))
-my.rows <- paste("C", my.rows, sep = "")
-my.rows <- data.frame(my.rows)
+my.rows <- data.frame(Labels = paste("C", 1:nrow(my.data), sep = ""))
 my.binmat <- BinaryMatrix(my.data, , my.rows)
 summary(my.binmat)
 ```
 
 We wish to cluster the whole karyotypes of each patient to identify the 
 patterns of important chromosomal abnormalities that link them. To proceed, 
-we must transpose the BinaryMatrix. Transposition meaningfully transposes
-the row and column headings of the BinaryMatrix, as well.
+we must transpose the <tt>BinaryMatrix</tt>. Transposition meaningfully transposes
+the row and column headings of the <tt>BinaryMatrix</tt>, as well.
 ```{r}
 my.binmat <- t(my.binmat)
 summary(my.binmat)
 ```
 
-### Remove Duplicate Features
+## Remove Duplicate Features
 The binary feature-vectors (viewed across a population of patient
 samples) are rarely unique. 
 Having identical feature vectors can complicate some of the
@@ -97,7 +98,7 @@ clustering and visualization routines that we want to use (often by
 introducing a division by zero). But they can also alter the
 biological implications, by automatically giving more "weight" to a
 single genomic event (like a trisomy or monosomy). To deal with this
-issue, the *Mercator* package includes a function to remove
+issue, the <tt>Mercator</tt> package includes a function to remove
 duplicate or redundant features.
 ```{r duplicateFeatures}
 my.binmat <- removeDuplicateFeatures(my.binmat)
@@ -109,6 +110,7 @@ Some of the karyotypes are "not used", in the sense that they contain
 none of the abnormalities selected for this limited subset.
 ```{r}
 length(my.binmat@info$notUsed)
+head(my.binmat@info$notUsed)
 ```
 
 By contrast, many features are *used* but are simply redundant.
@@ -116,22 +118,20 @@ By contrast, many features are *used* but are simply redundant.
 length(my.binmat@info$redundant)
 ```
 
-# Data Filtering with the Thresher Method
-*
-*Mercator* implements the functions of the *Thresher* R package, including 
-outlier detection, principal component analysis, the von Mises Fisher
-mixture method, and the Auer-Gervini statistic to identify and reduce to 
-only informative features for clustering. [Wang et al]
+# Data Filtering with Thresher
+
+<tt>Mercator</tt> provides easy access to functions of the <tt>Thresher</tt> R package,
+which includes outlier detection and estimates of the number of clusters [^Wang and colleagues].
 The underlying idea is that the features can be viewed as
 "weight vectors" in a principal component space trying to display the samples.
 The lengths of the vectors are a measure of their importance in the data set;
 short vectors can (and probably should) be removed since they do not carry
 much useful information. We have incorporated that feature into the
-*Mercator*  package.
+<tt>Mercator</tt>  package.
 
-We create a *ThreshedBinaryMatrix* to implement the algorithm. 
+We create a <tt>ThreshedBinaryMatrix</tt> to implement the algorithm. 
 In general, a delta cutoff above approximately 0.3 can be chosen as standard to 
-indicate informative feature. Then, we subset our ThreshedBinaryMatrix 
+indicate informative feature. Then, we subset our <tt>ThreshedBinaryMatrix</tt> 
 to only include features above our given cutoff.
 ```{r thresher}
 set.seed(21348)
@@ -143,64 +143,63 @@ The red vertical line in the figure indicates the cutoff we have chosen
 to separate uninformative features (<0.3) from informative ones (>0.3).
 ```{r delta, fig.cap="Histogram of weight vectors."}
 Delta <- my.binmat@thresher@delta
-hist(Delta, breaks=20, main="", xlab="Weight")
+hist(Delta, breaks=20, main="", xlab="Weight", col="gray")
 abline(v=0.3, col='red')
 ```
 
-We implement the *Reaper* functionality of *Thresher* for principal 
-component analysis. Principal components returned numerically...
+The <tt>ThreshedBinaryMatrix</tt> object contains a <tt>reaper</tt> slot
+that estimates the number of principal components and the number of clusters
+after outliers have been removed. These values can be viewed numerically...
 ```{r pcdim}
 my.binmat@reaper@pcdim
 my.binmat@reaper@nGroups
 ```
 
-... or they can be visualized with an *Auer-Gervini plot*... 
+... or they can be visualized with an *Auer-Gervini plot* (where we
+are looking for a "long step") ... 
 ```{r pcVis-1, fig.cap="Auer-Gervini plot."}
-plot(my.binmat@reaper@ag)
-abline(h=my.binmat@reaper@pcdim, col="blue")
-abline(h=my.binmat@reaper@nGroups, col="green")
-abline(h=8, col="orange")
+plot(my.binmat@reaper@ag, ylim=c(0, 30))
+abline(h=my.binmat@reaper@pcdim, col="forestgreen", lwd=2)
+abline(h=7, col="orange", lwd=2)
 ```
 
 ```{r pcVis-2, fig.cap="Scree plot."}
-screeplot(my.binmat@reaper)
-abline(h=my.binmat@reaper@pcdim, col="blue")
-abline(h=my.binmat@reaper@nGroups, col="green")
-abline(h=8, col="orange")
+pts <- screeplot(my.binmat@reaper, xlim=c(0,30))
+abline(v=pts[my.binmat@reaper@pcdim], col="forestgreen", lwd=2)
+abline(v=pts[7], col="orange", lwd=2)
 ```
 
-All three of these methods provide different, but imperfect, means of 
-estimating K. The blue line represents the result of the *pcdim* 
-calculation of principal components. The green line represents the result 
-of the nGroups calculation. The orange line represents an estimate of 
-principal components from visual inspection.
-
-From inspection of the plots, we determine an appropriate 
-K with which to proceed as 8.
+The default value provided by the Auer-Gervini analysis (N=2; green) is 
+somewhat conervative. The value provided by the broken-stick model (N=7; orange)
+overlaid on the scree plot is more aggressive, but is not too unreasonable
+based on the Auer-Gervini plot. We will proceed assuming that there are seven
+principal components and eight clusters.
 ```{r kk}
 kk <- 8
 ```
 
-# Selecting a Distance Metric
-The Mercator package implements 10 distance metrics: Jaccard, Sokal-Michener, Hamming, Russell-Rao, Pearson, Goodman-Kruskal, Manhattan, Canberra, Binary 
-and Euclidean. Although some of these metrics 
+# Visualization
+The Mercator Package allows visualization of data with four methods, including both 
+standard techniques (hierarchical clustering) and large-scale visualizations 
+(multidimensional scaling (MDS), 
+T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.) 
+
+## Selecting a Distance Metric
+The <tt>Mercator</tt> package implements or provides access to 10 distance metrics: 
+Jaccard, Sokal-Michener, Hamming, Russell-Rao, Pearson, Goodman-Kruskal, Manhattan,
+Canberra, Binaryand Euclidean. Although some of these metrics 
 can be used for continuous or categorical data, all are appropriate for 
-some or all binary matrices. Mercator allows the user to easily select 
+some or all binary matrices. <>tt>Mercator</tt> allows the user to easily select 
 the most appropriate metric to represent similarity and difference in a 
 biologically meaningful way within a given dataset.
 
-Here, we will proceed with the Jaccard distance, because of its ease of 
-interpretability, commoness of use, and its appropriatness of application 
+## Jaccard Distance
+Here, we will use the Jaccard distance, because of its ease of 
+interpretability, common usage, and its appropriatness of application 
 to asymmetric binary data, such as the binary vector output of CytoGPS 
 in this dataset.
 
-# Visualizing with 5 Methods
-The Mercator Package allows visualization of data with 5 methods, including both 
-standard techniques (hierarchical clustering, heat maps) and large-scale 
-multi-dimensional visualizations (multidimensional scaling (MDS), 
-T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.) 
-
-The initial Mercator function can be implemented with any visualization, 
+The  <tt>Mercator</tt> constructor can be called with any initial visualization, 
 and visualizations can be added in an arbitrary order.
 ```{r distance, echo=TRUE}
 jacc.Vis <- Mercator(my.binmat, "jaccard", "hclust", K=kk)
@@ -217,16 +216,11 @@ hist(jacc.Vis,
 Mercator allows us to implement common, standard visualizations 
 such as hierarchical clustering...
 ```{r jacc-hclust}
-plot(jacc.Vis@view[[1]], col="black", pch=jacc.Vis@symv)
+names(jacc.Vis@view)
+plot(jacc.Vis@view[["hclust"]], col="black", pch=jacc.Vis@symv)
 ```
 
-... and heat map.
-```{r jacc-heat}
-jacc.Vis <- addVisualization(jacc.Vis, "heat")
-plot(jacc.Vis@view[[2]], col=jacc.Vis@colv, pch=jacc.Vis@symv)
-```
-
-Mercator can be used to plot t-Stochastic Neighbor Embedding 
+<tt>Mercator</tt> can used tot-Stochastic Neighbor Embedding 
 (t-SNE) plots for visualizing large-scale, high-dimensional data in 
 2-dimensional space. 
 ```{r jacc-tsne5}
@@ -234,11 +228,12 @@ par(pty="s")
 jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
             perplexity=5, 
             xlab="T1", ylab="T2")
-plot(jacc.Vis@view[[3]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
+names(jacc.Vis@view)
+plot(jacc.Vis@view[["tsne"]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
      main="t-SNE; Jaccard Distance; perplexity=5")
 ```
 
-t-SNE parameters, such as perplexity, can be used to fine-tune 
+Optional t-SNE parameters, such as perplexity, can be used to fine-tune 
 the plot as the visualization is created. Using addVisualization 
 to create a new, tuned plot of an existing type overwrites the 
 existing plot of that type.
@@ -246,31 +241,34 @@ existing plot of that type.
 jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
             perplexity=10,
             xlab="T1", ylab="T2")
-plot(jacc.Vis@view[[3]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
+names(jacc.Vis@view)
+plot(jacc.Vis@view[["tsne"]]$Y, col=jacc.Vis@colv, pch=jacc.Vis@symv,
      main="t-SNE; Jaccard Distance; perplexity=10")
 par(pty="m")
 ```
 
-Mercator allows visualization of multi-dimensional scaling (MDS) plots, as well.
+<tt>Mercator</tt> allows visualization of multi-dimensional scaling (MDS) plots, as well.
 ```{r jacc-mds1}
 jacc.Vis <- addVisualization(jacc.Vis, "mds")
-plot(jacc.Vis@view[[4]], col=jacc.Vis@colv, pch=jacc.Vis@symv,
+names(jacc.Vis@view)
+plot(jacc.Vis@view[["mds"]], col=jacc.Vis@colv, pch=jacc.Vis@symv,
       main="MDS; Jaccard Distance", xlab="PC1", ylab="PC2")
 ```
 
-### IGraph
-Mercator can be used to visualize complex networks using 
-IGraph. To improve clarity of the visualization and computational 
+### iGraph
+<tt>Mercator</tt> can be used to visualize complex networks using 
+iGraph. To improve clarity of the visualization and computational 
 time, we implement the downsample function to reduce the 
 number of data points to be linked and visualized. 
 The idea goes back to Peng Qiu's implementation of the
 SPADE clustering algorithm for mass cytyometry data. The main point is to *under* sample
 the densest regions of the data space to make it more likely that rarer clusters
-will still be adequately sampled.
+will still be adequately sampled. (While not required with the current data set,
+this idea can be quite useful with data sets containng tens of thousands of objects.)
 
-**Note:** The *Mercator* class includes a "subset" operator that tries to preserve
+**Note:** The <tt>Mercator</tt> class includes a "subset" operator that tries to preserve
 earlier visualizations. This operator is fast for MDS or t-SNE models, but
-is very slow for large hierarchical clustering. (It uses the implementation in the *dendextend*
+is very slow for large hierarchical clustering. (It uses the implementation in the <tt>dendextend</tt>
 package, which works by removing a single leaf at a time from the tree.) In the
 next code chunk, we first throw away the dendrogram, then subset using the downsampled
 data, and then compute a new dendrogram.
@@ -281,8 +279,9 @@ set.seed(87530)
 P <- downsample(40, N, 0.1)
 J <- jacc.Vis[P]
 J <- addVisualization(J, "tsne", perplexity=5)
+names(J@view)
 par(pty="s")
-plot(J@view[[3]]$Y, col=J@colv, pch=J@symv, main="Down-sampled t-SNE Plot",
+plot(J@view[["tsne"]]$Y, col=J@colv, pch=J@symv, main="Down-sampled t-SNE Plot",
      xlab="T1", ylab="T2")
 par(pty="m")
 ```
@@ -290,7 +289,6 @@ par(pty="m")
 The densest "eyes" are heavily under-sampled.
 
 Now we can look at the resulting graph, using three different "layouts".
-BECAUSE OF A BUG IN IGRAPH, I DON'T WORK!
 ```{r igraph, eval=FALSE}
 set.seed(10967)
 J <- addVisualization(J, "mds")
@@ -332,3 +330,14 @@ Cl4
 
 recolor
 remapColors
+
+# References
+
+[^Abrams and colleagues]: Abrams ZB, Zhang L, Abruzzo LV, Heerema NA, Li S,
+Dillon T, Rodriguez R, Coombes KR, Payne PRO. CytoGPS: A Web-Enabled Karyotype
+Analysis Tool for Cytogenetics. Bioinformatics. 2019 Jul 2.
+doi: 10.1093/bioinformatics/btz520. (Epub ahead of print)
+
+[^Choi and colleagues]: Choi SS, Cha SH, Tappert CC. A Survey of Binary Similarity and Distance Measures. Systemics, Cybernetics, and Informatics 2010;8(1):43-48.
+
+[^Wang and colleagues]: Wang M, Abrams ZB, Kornblau SM, Coombes KR. Thresher: determining the number of clusters while removing outliers. BMC Bioinformatics 2018;19(1):9.
