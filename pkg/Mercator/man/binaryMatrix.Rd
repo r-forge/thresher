@@ -67,7 +67,7 @@ BinaryMatrix(binmat, columnInfo, rowInfo)
 \value{
 The \code{BinaryMatrix} function returns a new object of \code{binaryMatrix} class.
 }
-\author{Kevin R. Coombes <krc@silicovore.com}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \note{
 Attempting to construct or manipulate a \code{BinaryMatrix} containing NAs, missing values, 
 or columns containing exclusively 0 values may introduce error.

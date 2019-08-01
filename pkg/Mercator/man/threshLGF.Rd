@@ -56,7 +56,7 @@ Wang, M., Abrams, Z. B., Kornblau, S. M., & Coombes, K. R. (2018). Thresher:
 determining the number of clusters while removing outliers. BMC bioinformatics, 
 19(1), 9.
 }
-\author{Kevin R. Coombes <krc@silicovore.com}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \note{
 The \code{\link{Thresher}} R-package applies the Auer-Gervini statistic 
 for principal component analysis, outlier detection, and identification 

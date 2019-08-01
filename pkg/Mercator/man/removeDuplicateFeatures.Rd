@@ -30,7 +30,7 @@ of duplicate features removed.
 \value{
 Returns an object of class \code{binaryMatrix} with duplicate columns removed.
 }
-\author{Kevin R. Coombes <krc@silicovore.com}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \note{
 Transposing the \code{binaryMatrix} can allow the \code{removeDuplicateFeatures} 
 function to be applied to both features and observations, if desired.

@@ -1,13 +1,13 @@
 \name{downsample}
 \alias{downsample}
 \title{
-Downsampling a Distance Visualization to Facilitate IGraph
+Downsampling a Distance Visualization to Facilitate iGraph
 }
 \description{
 The \code{downsample} function implements a structured reduction 
 of data points with a parent \code{Mercator} distance visualization to 
 improve visualization and computational time, especially for the 
-implementation of the IGraph visualization.
+implementation of the iGraph visualization.
 }
 \usage{
 downsample(target, distanceMat, cutoff)
@@ -25,12 +25,13 @@ downsample(target, distanceMat, cutoff)
 }
 \details{
 Mercator can be used to visualize complex networks using 
-IGraph. To improve clarity of the visualization and computational 
+iGraph. To improve clarity of the visualization and computational 
 time, we implement the \code{downsample} function to reduce the 
 number of data points to be linked and visualized. The conceptual 
 grounding for \code{downsample} draws on Peng Qiu's implementation of the
-SPADE clustering algorithm for mass cytyometry data. The \code{downsample} 
-under samples the densest regions of the data space to make it more 
+SPADE clustering algorithm for mass cytometry data. The
+\code{downsample} function 
+under-samples the densest regions of the data space to make it more 
 likely that rarer clusters will still be adequately sampled.
 }
 \value{
@@ -40,7 +41,7 @@ a structured subset of items from the parent \code{Mercator} object.
 \references{
 Qiu, P., et. al. (2011). Extracting a cellular hierarchy from high-dimensional cytometry data with SPADE. Nature biotechnology, 29(10), 886.
 }
-\author{Kevin R. Coombes <krc@silicovore.com}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \examples{
 #Form a BinaryMatrix
 data("iris")

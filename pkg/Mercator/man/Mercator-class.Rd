@@ -12,7 +12,7 @@
 The \code{Mercator} Distance Visualization Object
 }
 \description{
-  The \code{Mercator} object represents a distance matrix togeher with
+  The \code{Mercator} object represents a distance matrix together with
   clustering assignments and a set of visualizations. It implements four
   visualizations for clusters of large-scale, multi-dimensional data:
   hierarchical clustering, multi-dimensional scaling, t-Stochastic
@@ -34,7 +34,8 @@ getClusters(DV)
     \code{russellRao}, \code{pearson}, \code{goodmanKruskal},
     \code{manhattan},
     \code{canberra}, \code{binary}, or \code{euclid}.}
-  \item{method}{A visualization method, limited to \code{hclust}, 
+  \item{method}{A visualization method, currently limited to
+    \code{hclust},
     \code{mds}, \code{tsne}, and \code{graph}.}
   \item{K}{An \code{integer} specifying the number of desired clusters.}
   \item{DV}{A distance visualization produced as the output of the 
@@ -43,13 +44,13 @@ getClusters(DV)
     implement different methods for \code{addVisualization} (possibly
     passed here through the \code{Mercator} function). These include
     \describe{
-      \item{\dots}{Any arguments to the \code{\link{cmdscale}} function for an
+      \item{\code{any}}{Any arguments to the \code{\link{cmdscale}} function for an
 	\code{mds} visualization. Most commonly, this is likely to
 	include \code{k}, the number of dimensions to compute.}
-      \item{\dots}{Any arguments to the \code{\link{Rtsne}} function for a
+      \item{\code{any}}{Any arguments to the \code{\link{Rtsne}} function for a
 	\code{tsne} visualization. Common examples include \code{dims}
 	and \code{perplexity}.}
-      \item{Q}{A quantile cutoff for the creation of the IGraph visualization.
+      \item{\code{Q}}{A quantile cutoff for the creation of the IGraph visualization.
 	By default, the value is set at the 10th percentile.}
     }
   }
@@ -59,50 +60,52 @@ getClusters(DV)
     \item{\code{metric}:}{Object of class \code{"character"}; the name 
       of the \code{\link{binaryDistance}} applied to create this object. }
     \item{\code{distance}:}{Object of class \code{"dist"}; the distance 
-      matrix calculated by this object.}
-    \item{\code{view}:}{Object of class \code{"list"}; contains the 
-      calculations to generate each visualization added to the object.}
+      matrix used and represented by this object.}
+    \item{\code{view}:}{Object of class \code{"list"}; contains the
+      results of calculations to generate each visualize the object.}
     \item{\code{colv}:}{Object of class \code{"character"}; a vector 
-      identifying the color assigned to each clustered feature.}
+      identifying the color assigned to each clustered element.}
     \item{\code{symv}:}{Object of class \code{"numeric"}; a vector 
-      identifying the cluster number assigned to each clustered feature.}
+      identifying the plotting symbol used to display each element.}
   }
 }
 \section{Methods}{
   \describe{
-    \item{plot}{\code{signature(object = "Mercator"@view[[n]], col = "Mercator"@colv, pch = "Mercator"@symv)}}:{
-      Produce a plot of the \code{nth} visualization created within a 
-      Mercator object. Producing a t-SNE plot requires the added 
-      information \code{"Mercator"@view[[n]]$Y}
-    }
-    \item{hist}{\code{signature(object = "Mercator")}}:{
+%    \item{plot}{\code{signature(object = "Mercator"@view[[n]], col = "Mercator"@colv, pch = "Mercator"@symv)}}:{
+%      Produce a plot of the \code{nth} visualization created within a 
+%      Mercator object. Producing a t-SNE plot requires the added 
+%      information \code{"Mercator"@view[[n]]$Y}
+%    }
+    \item{hist:}{\code{signature(object = "Mercator")}}{
       Produce a histogram of distances calculated in the dissimilarity 
       matrix generated in the \code{Mercator} object.
     }
-    \item{summary}{\code{signature(object = "Mercator")}}:{
+    \item{summary:}{\code{signature(object = "Mercator")}}{
       Returns the chosen distance metric, dimensions of the distance 
       matrix, and available, calculated visualizations in this object.
     }
-    \item{dim}{\code{signature(object = "Mercator")}}:{
+    \item{dim:}{\code{signature(object = "Mercator")}}{
       Returns the dimensions of the distance matrix of this object.
     }
-    \item{[}{\code{signature(object = "Mercator")}}:{
+    \item{[:}{\code{signature(object = "Mercator")}}{
       Subsets the distance matrix of this object.
     }
   }
 }
 \value{
   The \code{Mercator} function constructs and returns a distance
-  visualization object of 
+  visualization object of the
   \code{Mercator} class, including a distance matrix calculated on a 
-  given metric and given visualiations.
+  given metric and given visualizations. It is also possible (though not
+  advisable) to construct a \code{Mercator} obecject directly using the
+  \code{new} function.
   
   The \code{addVisualizations} function can be used to add additional 
-  visualizations to a given \code{Mercator} object.
+  visualizations to an existing \code{Mercator} object.
   
   The \code{getClusters} function returns a vector of cluster assignments.
 }
-\author{Kevin R. Coombes <krc@silicovore.com}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \examples{
 #Form a BinaryMatrix
 data("iris")

@@ -61,7 +61,7 @@ examples, including the Pearson distance (\code{pearson}) and the Goodman & Krus
 Choi SS, Cha SH, Tappert CC, A Survey of Binary Similarity and Distance Measures. 
 Systemics, Cybernetics, and Informatics. 2010; 8(1):43-48.
 }
-\author{Kevin R. Coombes <krc@silicovore.com>}
+\author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \note{Although the distance metrics provided in the \code{binaryDistance} function
 are explicitly offered for use on matrices of binary vectors, some metrics may 
 return useful distances when applied to non-binary matrices.

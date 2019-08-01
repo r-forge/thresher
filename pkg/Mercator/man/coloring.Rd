@@ -8,7 +8,7 @@ Changing Cluster and Color Assignments in Mercator
   Cluster assignments from unsupervised analyses typically assign
   arbitrary integers to the classes. When comparing the results of
   different algorithms or different distance metrics, it is helpful to
-  match the integers in order to use colors and symbois that are as
+  match the integers in order to use colors and symbols that are as
   consistent as possible. These functions help achieve that goal.
 }
 \usage{
@@ -45,7 +45,7 @@ remapColors(fix, vary)
 Both \code{recolor} and \code{remapColors} return an object of class
 \code{Mercator} in which only the cluster labels and associated color
 and symbol representations (but not the distance metric used, the number
-of clusters, the cluster assignmewnts, nor the views) have been updated.
+of clusters, the cluster assignments, nor the views) have been updated.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
 \seealso{ \code{\link{remap}} }
