@@ -1,5 +1,5 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
+R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -16,6 +16,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("Mercator")
+Loading required package: Thresher
+Loading required package: ClassDiscovery
+Loading required package: cluster
+Loading required package: oompaBase
+Loading required package: PCDimension
 > data("CML500")
 > 
 > # remove extra identical feature vectors
@@ -69,9 +74,9 @@ B     1   2   3   4   5   6   7   8
 > 
 > library(cluster)
 > clus <- pam(vis1@distance, k = 12, diss=TRUE, cluster.only=TRUE)
-> vis4 <- recolor(vis1, clus)
+> vis4 <- setClusters(vis1, clus)
 > plot(vis4@view[[1]], col=vis4@colv, pch=vis4@symv)
 > 
 > proc.time()
    user  system elapsed 
-   5.93    1.00    7.17 
+   6.12    0.85    6.95 

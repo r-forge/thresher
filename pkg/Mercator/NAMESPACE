@@ -38,7 +38,7 @@ export("Mercator", "addVisualization", "getClusters")
 
 exportMethods("hist")
 
-export(recolor, remapColors)
+export(setClusters, recolor, remapColors)
 
 # 05-graph
 export(downsample)

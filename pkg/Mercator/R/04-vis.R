@@ -121,7 +121,7 @@ remapColors <- function(fix, vary) {
       )
 }
 
-recolor <- function(DV, clusters) {
+setClusters <- function(DV, clusters) {
   dispSet <- makeDisplay(clusters)
   colv <- dispSet$colv
   symv <- dispSet$symv
@@ -133,6 +133,11 @@ recolor <- function(DV, clusters) {
       colv = colv,
       symv = symv
       )
+}
+recolor <- function(DV, clusters) {
+  .Deprecated("setClusters",
+              msg = "Please use the new, more descriptive name (setClusters) for this function.")
+  setClusters(DV, clusters)
 }
 
 Mercator <- function(binaryMat, metric, method, K, ...) {

@@ -1,4 +1,5 @@
-\name{recolor}
+\name{setClusters}
+\alias{setClusters}
 \alias{recolor}
 \alias{remapColors}
 \title{
@@ -12,6 +13,7 @@ Changing Cluster and Color Assignments in Mercator
   consistent as possible. These functions help achieve that goal.
 }
 \usage{
+setClusters(DV, clusters)
 recolor(DV, clusters)
 remapColors(fix, vary)
 }
@@ -36,16 +38,20 @@ remapColors(fix, vary)
   which labels from the different sets are closest to meaning the
   "same thing".
 
-  The functions \code{recolor} and \code{remapColors} solve this problem
+  The functions \code{setClusters} and \code{remapColors} solve this problem
   in the context of \code{Mercator} objects. They accaomplish this task
   using the greedy algorithm implemented and described in the
   \code{\link{remap}} function in the \code{\link{Thresher}} package.
 }
 \value{
-Both \code{recolor} and \code{remapColors} return an object of class
+Both \code{setClusters} and \code{remapColors} return an object of class
 \code{Mercator} in which only the cluster labels and associated color
 and symbol representations (but not the distance metric used, the number
 of clusters, the cluster assignments, nor the views) have been updated.
+
+The \code{recolor} function is currently an alias for
+\code{setClusters}. However, using \code{recolor} is deprecated, and the
+alias will likely be removed in the next version of the package.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
 \seealso{ \code{\link{remap}} }

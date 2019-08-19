@@ -22,5 +22,5 @@ table(B, X)
 
 library(cluster)
 clus <- pam(vis1@distance, k = 12, diss=TRUE, cluster.only=TRUE)
-vis4 <- recolor(vis1, clus)
+vis4 <- setClusters(vis1, clus)
 plot(vis4@view[[1]], col=vis4@colv, pch=vis4@symv)
