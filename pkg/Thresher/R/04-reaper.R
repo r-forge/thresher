@@ -18,7 +18,7 @@ setClassUnion("number or miss", c("numeric", "logical"))
     }
     fitted <- try(movMF(space, nc, start="S"), silent=TRUE)
     if (inherits(fitted, "try-error")) {
-      fitted <- try(movMF(space, nc, runs=10), silent=TRUE)
+      fitted <- try(movMF(space, nc, kappa=0.9, runs=10), silent=TRUE)
       if (inherits(fitted, "try-error")) {
         next
       }

@@ -78,7 +78,7 @@ removeDuplicateFeatures <- function(object) {
   I$notUsed <- object@columnInfo[neverHit,]
   binstring <- apply(object@binmat, 2, paste, collapse="") #vectors back to 0-1-strings
   dupstring <- duplicated(binstring)
-  I$redundant <- object@columnInfo[dupstring,]
+  I$redundant <- object@columnInfo[dupstring & !neverHit,]
   retainBand <- !(dupstring | neverHit)
   binmat <- object@binmat[, retainBand, drop = FALSE]
   columnInfo <- object@columnInfo[retainBand,, drop = FALSE]

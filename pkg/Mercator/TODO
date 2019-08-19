@@ -5,8 +5,8 @@
    (NOT SURE WHAT THIS MEANS)
 
 3. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
-   Removed this from the documentaiotn. Mainly because I'm no longer sure
-   what the default behavior of a heatmap shoudl be for a distance matrix
+   Removed this from the documentation. Mainly because I'm no longer sure
+   what the default behavior of a heatmap should be for a distance matrix
 
 4. Check the example RMD scripts in inst/Examples for correctness.
 
@@ -17,26 +17,21 @@
 6. Implement the option to add new visualization instead of
    overwriting.
 
-7. Figure out why accessing the list of views by name makes accessing
-   by integer not work properly.
-
-8. Fix bug in count of redundant features.
-
-9. Should the Mercator constructor take a list of visualizations to
+7. Should the Mercator constructor take a list of visualizations to
    create at start-up for an object?
 
-10. Shouold there be a function to compute the relative frequencies?
+8. Should there be a function to compute the relative frequencies?
     (See pipeline report 305.)
 
-11. Should the code to make the DT or ztable stuff be part of the
+9. Should the code to make the DT or ztable stuff be part of the
     package? What about the part trying to interpret features and
     samples, especially the final heatmap?
 
-12. Should the smoothed scatter plots be part of the package?
+10. Should the smoothed scatter plots be part of the package?
 
-13. Should the SOM plots be part of the package? note that these
+11. Should the SOM plots be part of the package? note that these
     depend on the actual data matrix, not just the distance matrixc.
 
-14. Make another Mercator constructor, this time for continuous
+12. Make another Mercator constructor, this time for continuous
     data. All distance matrices from 'dist' or 'sdidtanceMatrix'
     should be usable.
