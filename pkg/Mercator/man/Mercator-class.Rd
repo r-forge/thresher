@@ -6,6 +6,7 @@
 \alias{dim,Mercator-method}
 \alias{hist,Mercator-method}
 \alias{summary,Mercator-method}
+\alias{plot,Mercator,missing-method}
 \alias{addVisualization}
 \alias{getClusters}
 \title{
@@ -71,11 +72,16 @@ getClusters(DV)
 }
 \section{Methods}{
   \describe{
-%    \item{plot}{\code{signature(object = "Mercator"@view[[n]], col = "Mercator"@colv, pch = "Mercator"@symv)}}:{
-%      Produce a plot of the \code{nth} visualization created within a 
-%      Mercator object. Producing a t-SNE plot requires the added 
-%      information \code{"Mercator"@view[[n]]$Y}
-%    }
+    \item{plot(x, view = NULL, ask = NULL, ...):}{
+      Produce a plot of one or more visualizations within a 
+      Mercator object. The default \code{view}, when omitted, is the
+      first one contained in the object. You can request multiple views
+      at once; if the current plot layout doesn't have enough space in
+      an interactive session, the \code{ask} parameters detemines whether
+      the system will ask you before advancing to the next plot. When
+      plotting a graph view, you can use an optional \code{layout}
+      parameter to select a specific layout by name.
+    }
     \item{hist:}{\code{signature(object = "Mercator")}}{
       Produce a histogram of distances calculated in the dissimilarity 
       matrix generated in the \code{Mercator} object.

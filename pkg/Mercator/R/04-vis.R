@@ -71,6 +71,58 @@ setMethod("hist", signature(x = "Mercator"), function(x, breaks=123, ...) {
   hist(U, breaks=breaks, ...)
 })
 
+setMethod("plot", signature("Mercator", "missing"),
+          function(x, view = NULL, ask = NULL, ...) {
+### known kinds of visualizations
+  plotMDS <- function(x, ...) {
+    plot(x@view[["mds"]], col=x@colv, pch=x@symv, xlab = "PC1", ylab="PC2", ...)
+  }
+  plotTSNE <- function(x, ...) {
+    plot(x@view[["tsne"]]$Y, col=x@colv, pch=x@symv, xlab = "T1", ylab="T2", ...)
+  }
+  plotHC <- function(x, ...) {
+    dend <- x@view[["hclust"]]
+    plotColoredClusters(dend, cols = x@colv, labs = dend$labels, ...)
+  }
+  plotIG <- function(x, layout = NULL, ...) {
+    G <- x@view[["graph"]]
+    if (is.null(layout)) {
+      layout <- G$layouts[[1]]
+    }
+    if (is.character(layout)) {
+      layout <- G$layouts[[layout[1]]]
+    }
+    plot(G$graph, layout = layout, ...)
+  }
+### implications of 'view' and 'ask' parameters
+  if (is.null(view)) { # first attached view is the default
+    view <- list(names(x@view)[1])
+  }
+  if (length(view) ==1 & view == "all") {
+    view <- names(x@view)
+  }
+  if (!is.list(view)) { # can show more than one
+    view <- as.list(view)
+  }
+  if (is.null(ask)) {
+    ask <- prod(par("mfcol")) < length(view) && dev.interactive()
+  }
+  if (ask & length(view) > 1) { # ask politely
+    oask <- devAskNewPage(TRUE)
+    on.exit(devAskNewPage(oask))
+  }
+### actually plot stuff
+  for (V in view) {
+    switch(V,
+           mds = plotMDS(x, ...),
+           tsne = plotTSNE(x, ...),
+           hclust = plotHC(x, ...),
+           graph = plotIG(x, ...))
+  }
+  invisible(x)
+})
+
+
 
 makeDisplay <- function(clusters, master =  NULL) {
   Dark24 <- dark.colors(24)

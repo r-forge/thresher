@@ -3,21 +3,19 @@
 ###
 import(methods)
 import(Thresher)
-#importFrom("Thresher", "Thresher", "Reaper", "remap")
 
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
 importFrom("utils", "data")
-importFrom("graphics", "hist")
+importFrom("graphics", "hist", "par")
+importFrom("grDevices", "dev.interactive", "devAskNewPage")
 importFrom("cluster", "pam")
 importFrom("Rtsne", "Rtsne")
+importFrom("ClassDiscovery", "plotColoredClusters")
 importFrom("Polychrome", "dark.colors")
 importFrom("dendextend", "prune")
 importFrom("igraph", "vertex_attr", "set_vertex_attr",
            "layout_nicely", "graph_from_data_frame")
-# redefined S3 methods
-#importMethodsFrom(oompaBase, "summary", "plot", "image")
-
 
 # 01-metrics
 export("binaryDistance")
@@ -36,13 +34,10 @@ export("threshLGF")
 exportClasses("Mercator")
 export("Mercator", "addVisualization", "getClusters")
 
-exportMethods("hist")
+exportMethods("hist", "plot")
 
 export(setClusters, recolor, remapColors)
 
 # 05-graph
 export(downsample)
 
-
-# new methods for new classes
-# exportMethods("plot", "image", "screeplot")

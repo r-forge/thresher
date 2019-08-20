@@ -1,37 +1,29 @@
-1. Decide if we want to add any more binary distance measures from the
-   Choi paper.
+# Prioritized to-do list
 
-2. Fix bug in igraph with assuming mds view exists.
-   (NOT SURE WHAT THIS MEANS)
-
-3. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
-   Removed this from the documentation. Mainly because I'm no longer sure
-   what the default behavior of a heatmap should be for a distance matrix
-
-4. Check the example RMD scripts in inst/Examples for correctness.
-
-5. Add a "plot" method for Mercator objects that would look like
+1. Add a "plot" method for Mercator objects that would look like
    plot(myObject, view = c("tsne", "mds"))
    What should we use as the default 'view'?
-
-6. Implement the option to add new visualization instead of
+2. Implement the option to add new visualization instead of
    overwriting.
-
-7. Should the Mercator constructor take a list of visualizations to
+3. Should the Mercator constructor take a list of visualizations to
    create at start-up for an object?
-
-8. Should there be a function to compute the relative frequencies?
+4. Make another Mercator constructor, this time for continuous
+   data. All distance matrices from 'dist' or 'sdidtanceMatrix'
+   should be usable.
+5. Should the smoothed scatter plots be part of the package?
+6. Decide if we want to add any more binary distance measures from the
+   Choi paper.
+7. Fix bug in igraph with assuming mds view exists.
+   (NOT SURE WHAT THIS MEANS)
+8. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
+   Removed this from the documentation. Mainly because I'm no longer sure
+   what the default behavior of a heatmap should be for a distance matrix
+9. Check the example RMD scripts in inst/Examples for correctness.
+10. Should there be a function to compute the relative frequencies?
     (See pipeline report 305.)
-
-9. Should the code to make the DT or ztable stuff be part of the
+11. Should the code to make the DT or ztable stuff be part of the
     package? What about the part trying to interpret features and
     samples, especially the final heatmap?
-
-10. Should the smoothed scatter plots be part of the package?
-
-11. Should the SOM plots be part of the package? note that these
+12. Should the SOM plots be part of the package? note that these
     depend on the actual data matrix, not just the distance matrixc.
 
-12. Make another Mercator constructor, this time for continuous
-    data. All distance matrices from 'dist' or 'sdidtanceMatrix'
-    should be usable.
