@@ -90,7 +90,10 @@ setMethod("plot", signature("Mercator", "missing"),
       layout <- G$layouts[[1]]
     }
     if (is.character(layout)) {
-      layout <- G$layouts[[layout[1]]]
+      foo <- ifelse(layout %in% c("mds", "tsne"),
+                    jitter,
+                    function(x) x)
+      layout <- foo(G$layouts[[layout[1]]])
     }
     plot(G$graph, layout = layout, ...)
   }

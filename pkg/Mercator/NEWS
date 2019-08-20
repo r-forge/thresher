@@ -8,6 +8,14 @@
 
 		CHANGES IN R VERSION 0.9.1
 
+NEW FEATURES
+
+    o	Added a new "plot" method for the Meractor class, which
+        automatically sets the colors and symbols for different
+        views.
+
+		CHANGES IN R VERSION 0.9.1
+
 BUG FIXES
 
     o	Fixed the bug in overcounting "redundant" or "unused" features.
