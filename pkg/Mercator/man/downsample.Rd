@@ -55,9 +55,7 @@ summary(my.binmat)
 # Set K to the known number of species in the dataset
 my.vis <- Mercator(my.binmat, "euclid", "tsne", K=3)
 summary(my.vis)
-plot(my.vis@view[[1]]$Y, col=my.vis@colv, pch=my.vis@symv,
-     main="t-SNE plot of all data points",
-     xlab="T1", ylab="T2")
+plot(my.vis, view = "tsne", main="t-SNE plot of all data points")
 
 #Downsample the Mercator object
 M <- as.matrix(my.vis@distance)
@@ -66,8 +64,6 @@ DS <- downsample(50, M, 0.1)
 red.vis <- my.vis[DS]
 
 #Visualize the down sampled t-SNE plot
-plot(red.vis@view[[1]]$Y, col=red.vis@colv, pch=red.vis@symv,
-     main="Down sampled t-SNE Plot",
-     xlab="T1", ylab="T2")
+plot(red.vis, view = "tsne", main="Down sampled t-SNE Plot")
 }
 \keyword{ cluster }

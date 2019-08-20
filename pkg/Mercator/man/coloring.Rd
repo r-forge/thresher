@@ -82,12 +82,8 @@ table(Pearson = getClusters(my.vis2), Euclid = getClusters(my.vis))
 
 # view the results
 opar <- par(mfrow=c(1,2))
-plot(my.vis@view[[1]]$Y, col=my.vis@colv, pch=my.vis@symv,
-     main="t-SNE plot, Euclid",
-     xlab="T1", ylab="T2")
-plot(my.vis2@view[[1]]$Y, col=my.vis2@colv, pch=my.vis2@symv,
-     main="t-SNE plot, Pearson",
-     xlab="T1", ylab="T2")
+plot(my.vis, view = "tsne", main="t-SNE plot, Euclid")
+plot(my.vis2, view = "tsne",  main="t-SNE plot, Pearson")
 par(opar)
 }
 \keyword{ cluster }

@@ -82,7 +82,11 @@ setMethod("plot", signature("Mercator", "missing"),
   }
   plotHC <- function(x, ...) {
     dend <- x@view[["hclust"]]
-    plotColoredClusters(dend, cols = x@colv, labs = dend$labels, ...)
+    labs <- dend$labels
+    if (is.null(labs)) {
+      labs <- seq(1, length(dend$order))
+    }
+    plotColoredClusters(dend, cols = x@colv, labs = labs, ...)
   }
   plotIG <- function(x, layout = NULL, ...) {
     G <- x@view[["graph"]]

@@ -127,8 +127,8 @@ my.vis <- Mercator(my.binmat, "euclid", "hclust", K=3)
 summary(my.vis)
 hist(my.vis)
 my.vis <- addVisualization(my.vis, "mds")
-plot(my.vis@view[[1]], col=my.vis@colv, pch=my.vis@symv)
-plot(my.vis@view[[2]], col=my.vis@colv, pch=my.vis@symv)
+plot(my.vis, view = "hclust")
+plot(my.vis, view = "mds")
 
 #Recover cluster identities
 #What species comprise cluster 1?

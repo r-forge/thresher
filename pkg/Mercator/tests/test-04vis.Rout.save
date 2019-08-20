@@ -16,6 +16,11 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("Mercator")
+Loading required package: Thresher
+Loading required package: ClassDiscovery
+Loading required package: cluster
+Loading required package: oompaBase
+Loading required package: PCDimension
 > data("CML500")
 > 
 > # Jaccard
@@ -26,23 +31,21 @@ Type 'q()' to quit R.
 > head(vis1@colv)
    S3.2.0    S4.1.0   S35.1.0   S49.1.0   S57.1.0   S59.1.0 
 "#2E91E5" "#E15F99" "#E15F99" "#1CA71C" "#E15F99" "#E15F99" 
-> plot(vis1@view[[1]], col=vis1@colv, pch=vis1@symv)
+> plot(vis1) # default MDS view
 > 
 > vis1 <- addVisualization(vis1, "tsne", perplexity=30)
-> plot(vis1@view[[2]]$Y, col=vis1@colv, pch=vis1@symv)
+> plot(vis1, view = "mds")
 > 
 > vis1 <- addVisualization(vis1, "hclust")
-> plot(vis1@view[[3]])
+> plot(vis1, view = "hclust")
 > 
 > # now test the igraph part
 > vis1 <- addVisualization(vis1, "graph")
-> G <- vis1@view[["graph"]]
-> plot(G$graph, layout = G$layouts[["nicely"]])
-> M <- jitter( G$layouts[["mds"]] ) # work around a bug in igraph
-> plot(G$graph, layout = M)
-> M <- jitter( G$layouts[["tsne"]] ) # work around a bug in igraph
-> plot(G$graph, layout = M)
+> plot(vis1, view = "graph") # default layout
+> plot(vis1, view = "graph", layout = "nicely") # default layout
+> plot(vis1, view = "graph", layout = "mds")
+> plot(vis1, view = "graph", layout = "tsne")
 > 
 > proc.time()
    user  system elapsed 
-  14.49    4.24   18.78 
+  32.00   36.73   68.75 
