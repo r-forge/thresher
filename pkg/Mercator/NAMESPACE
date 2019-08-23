@@ -7,9 +7,9 @@ import(Thresher)
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
 importFrom("utils", "data")
-importFrom("graphics", "hist", "par")
+importFrom("graphics", "hist", "par", "barplot", "smoothScatter")
 importFrom("grDevices", "dev.interactive", "devAskNewPage")
-importFrom("cluster", "pam")
+importFrom("cluster", "pam", "silhouette")
 importFrom("Rtsne", "Rtsne")
 importFrom("ClassDiscovery", "plotColoredClusters")
 importFrom("Polychrome", "dark.colors")
@@ -34,7 +34,7 @@ export("threshLGF")
 exportClasses("Mercator")
 export("Mercator", "addVisualization", "getClusters")
 
-exportMethods("hist", "plot")
+exportMethods("hist", "plot", "barplot", "smoothScatter")
 
 export(setClusters, recolor, remapColors)
 

@@ -6,7 +6,9 @@
 \alias{dim,Mercator-method}
 \alias{hist,Mercator-method}
 \alias{summary,Mercator-method}
+\alias{barplot,Mercator-method}
 \alias{plot,Mercator,missing-method}
+\alias{smoothScatter,Mercator,missing-method}
 \alias{addVisualization}
 \alias{getClusters}
 \title{
@@ -82,6 +84,25 @@ getClusters(DV)
       plotting a graph view, you can use an optional \code{layout}
       parameter to select a specific layout by name.
     }
+    \item{barplot{height, maion = '', sub = NULL, border = NA, space =
+	0, ...}}{
+      Produce a (colored) barplot of the silhouette widths for elements
+      clustered in this class. Arguments are as described in te base
+      function \code{\link{barplot}}. 
+    }
+    \item{smoothScatter(x, view = NULL, ask = NULL, colramp = NULL, ...):}{
+      Produce a smooth scatter plot of one or more visualizations within a 
+      Mercator object. The default \code{view}, when omitted, is the
+      first one contained in the object. You can request multiple views
+      at once; if the current plot layout doesn't have enough space in
+      an interactive session, the \code{ask} parameters detemines whether
+      the system will ask you before advancing to the next plot. When
+      plotting a graph view, you can use an optional \code{layout}
+      parameter to select a specific layout by name. Arguments are
+      otherwise the same as the \code{\link{smoothScatter}} funciton,
+      execpt that the default color ramp uses a desaturated
+      \code{\link{wheel}} color map.
+    }
     \item{hist:}{\code{signature(object = "Mercator")}}{
       Produce a histogram of distances calculated in the dissimilarity 
       matrix generated in the \code{Mercator} object.
@@ -111,6 +132,9 @@ getClusters(DV)
   
   The \code{getClusters} function returns a vector of cluster assignments.
 }
+\seealso{
+  \code{\link{silhouette}}, \code{\link{smoothScatter}}, \code{\link{wheel}}.
+}
 \author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \examples{
 #Form a BinaryMatrix
@@ -126,9 +150,12 @@ summary(my.binmat)
 my.vis <- Mercator(my.binmat, "euclid", "hclust", K=3) 
 summary(my.vis)
 hist(my.vis)
+barplot(my.vis)
 my.vis <- addVisualization(my.vis, "mds")
 plot(my.vis, view = "hclust")
 plot(my.vis, view = "mds")
+
+smoothScatter(my.vis, view ="tsne")
 
 #Recover cluster identities
 #What species comprise cluster 1?

@@ -1,10 +1,21 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.7 SERIES NEWS			 *
+	*	       0.9 SERIES NEWS			 *
 	*						 *
 	**************************************************
 
+
+		CHANGES IN R VERSION 0.9.2
+
+NEW FEATURES
+
+    o	Added a new "barplot" method for the Meractor class, which
+        plots the silhouette widths in the colors already assigned to
+        clusters.
+
+    o	Added a new "smoothScatter" method for the Mercator class, which
+        displays some views as a smoothed scatter plot.
 
 		CHANGES IN R VERSION 0.9.2
 

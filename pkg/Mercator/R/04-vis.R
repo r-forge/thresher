@@ -71,6 +71,19 @@ setMethod("hist", signature(x = "Mercator"), function(x, breaks=123, ...) {
   hist(U, breaks=breaks, ...)
 })
 
+setMethod("barplot", signature("Mercator"),
+          function(height, main = '', sub = NULL, border = NA, space = 0, ...) {
+  clus <- getClusters(height)
+  silh <- silhouette(clus, height@distance)
+  od <- order(clus, silh[,'sil_width'])
+  if (is.null(sub)) {
+    swd <- silh[od, 'sil_width']
+    sub <- paste("Mean SW =", round(mean(swd), 5))
+  }
+  barplot(swd, col = height@colv[od], border=NA, 
+          sub=sub, main=main, ...)
+})
+
 setMethod("plot", signature("Mercator", "missing"),
           function(x, view = NULL, ask = NULL, ...) {
 ### known kinds of visualizations
@@ -129,6 +142,48 @@ setMethod("plot", signature("Mercator", "missing"),
   invisible(x)
 })
 
+if (!isGeneric("smoothScatter"))
+  setGeneric("smoothScatter",
+             function(x, y, ...) standardGeneric("smoothScatter"))
+setMethod("smoothScatter", signature(x = "Mercator", y = "missing"),
+          function(x, view = NULL, ask = NULL,
+                   colramp = NULL, ...) {
+### known kinds of visualizations
+  smoothMDS <- function(x, ...) {
+    graphics::smoothScatter(x = x@view[["mds"]], y = NULL, xlab = "PC1", ylab="PC2", ...)
+  }
+  smoothTSNE <- function(x, ...) {
+    graphics::smoothScatter(x = x@view[["tsne"]]$Y, y = NULL, xlab = "T1", ylab="T2", ...)
+  }
+### implications of 'view' and 'ask' parameters
+  if (is.null(view)) { # first attached view is the default
+    view <- list(names(x@view)[1])
+  }
+  if (length(view) ==1 & view == "all") {
+    view <- names(x@view)
+  }
+  if (!is.list(view)) { # can show more than one
+    view <- as.list(view)
+  }
+  if (is.null(ask)) {
+    ask <- prod(par("mfcol")) < length(view) && dev.interactive()
+  }
+  if (ask && length(view) > 1) { # ask politely
+    oask <- devAskNewPage(TRUE)
+    on.exit(devAskNewPage(oask))
+  }
+### actually smooth stuff
+  if (is.null(colramp)) {
+    colramp <- function(n) oompaBase::wheel(n, 0.7)
+  }
+  for (V in view) {
+    switch(V,
+           mds = smoothMDS(x, colramp = colramp, ...),
+           tsne = smoothTSNE(x, colramp = colramp, ...),
+           cat("No smooth scatter plot is available for view '", V, "'.\n"))
+  }
+  invisible(x)
+})
 
 
 makeDisplay <- function(clusters, master =  NULL) {

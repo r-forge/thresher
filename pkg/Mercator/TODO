@@ -1,29 +1,24 @@
 # Prioritized to-do list
 
-1. Add a "plot" method for Mercator objects that would look like
-   plot(myObject, view = c("tsne", "mds"))
-   What should we use as the default 'view'?
-2. Implement the option to add new visualization instead of
-   overwriting.
-3. Should the Mercator constructor take a list of visualizations to
-   create at start-up for an object?
-4. Make another Mercator constructor, this time for continuous
-   data. All distance matrices from 'dist' or 'sdidtanceMatrix'
-   should be usable.
-5. Should the smoothed scatter plots be part of the package?
-6. Decide if we want to add any more binary distance measures from the
-   Choi paper.
-7. Fix bug in igraph with assuming mds view exists.
-   (NOT SURE WHAT THIS MEANS)
-8. Fix bug in heatmap where heat does not produce a heatmap. HACKED:
-   Removed this from the documentation. Mainly because I'm no longer sure
-   what the default behavior of a heatmap should be for a distance matrix
-9. Check the example RMD scripts in inst/Examples for correctness.
-10. Should there be a function to compute the relative frequencies?
-    (See pipeline report 305.)
-11. Should the code to make the DT or ztable stuff be part of the
-    package? What about the part trying to interpret features and
-    samples, especially the final heatmap?
-12. Should the SOM plots be part of the package? note that these
-    depend on the actual data matrix, not just the distance matrixc.
+* Make another Mercator constructor, this time for continuous
+  data. All distance matrices from 'dist' or 'sdidtanceMatrix'
+  should be usable.
+* Implement an option to add new visualization instead of
+  overwriting?
+* Should the Mercator constructor take a list of visualizations to
+  create at start-up for an object?
+* Should the smoothed scatter plots be part of the package?
+* Decide if we want to add any more binary distance measures from the
+  Choi paper.
+* Fix bug in heatmap where heat does not produce a heatmap. HACKED:
+  Removed this from the documentation. Mainly because I'm no longer sure
+  what the default behavior of a heatmap should be for a distance matrix
+* Check the example RMD scripts in inst/Examples for correctness.
+* Should there be a function to compute the relative frequencies?
+  (See pipeline report 305.)
+* Should the code to make the DT or ztable stuff be part of the
+  package? What about the part trying to interpret features and
+  samples, especially the final heatmap?
+* Should the SOM plots be part of the package? note that these
+  depend on the actual data matrix, not just the distance matrix.
 
