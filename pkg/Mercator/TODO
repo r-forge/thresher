@@ -1,18 +1,10 @@
 # Prioritized to-do list
 
 * Make another Mercator constructor, this time for continuous
-  data. All distance matrices from 'dist' or 'sdidtanceMatrix'
+  data. All distance matrices from 'dist' or 'distanceMatrix'
   should be usable.
-* Implement an option to add new visualization instead of
-  overwriting?
-* Should the Mercator constructor take a list of visualizations to
-  create at start-up for an object?
-* Should the smoothed scatter plots be part of the package?
 * Decide if we want to add any more binary distance measures from the
   Choi paper.
-* Fix bug in heatmap where heat does not produce a heatmap. HACKED:
-  Removed this from the documentation. Mainly because I'm no longer sure
-  what the default behavior of a heatmap should be for a distance matrix
 * Check the example RMD scripts in inst/Examples for correctness.
 * Should there be a function to compute the relative frequencies?
   (See pipeline report 305.)

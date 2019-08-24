@@ -8,7 +8,7 @@
 \alias{summary,Mercator-method}
 \alias{barplot,Mercator-method}
 \alias{plot,Mercator,missing-method}
-\alias{smoothScatter,Mercator,missing-method}
+\alias{scatter,Mercator-method}
 \alias{addVisualization}
 \alias{getClusters}
 \title{
@@ -90,7 +90,7 @@ getClusters(DV)
       clustered in this class. Arguments are as described in te base
       function \code{\link{barplot}}. 
     }
-    \item{smoothScatter(x, view = NULL, ask = NULL, colramp = NULL, ...):}{
+    \item{scatter(object, view = NULL, ask = NULL, colramp = NULL, ...):}{
       Produce a smooth scatter plot of one or more visualizations within a 
       Mercator object. The default \code{view}, when omitted, is the
       first one contained in the object. You can request multiple views
@@ -99,9 +99,8 @@ getClusters(DV)
       the system will ask you before advancing to the next plot. When
       plotting a graph view, you can use an optional \code{layout}
       parameter to select a specific layout by name. Arguments are
-      otherwise the same as the \code{\link{smoothScatter}} funciton,
-      execpt that the default color ramp uses a desaturated
-      \code{\link{wheel}} color map.
+      otherwise the same as the \code{\link{smoothScatter}} function,
+      execpt that the default color ramp is \code{topo.colors}.
     }
     \item{hist:}{\code{signature(object = "Mercator")}}{
       Produce a histogram of distances calculated in the dissimilarity 
@@ -133,7 +132,7 @@ getClusters(DV)
   The \code{getClusters} function returns a vector of cluster assignments.
 }
 \seealso{
-  \code{\link{silhouette}}, \code{\link{smoothScatter}}, \code{\link{wheel}}.
+  \code{\link{silhouette}}, \code{\link{smoothScatter}}, \code{\link{topo.colors}}.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \examples{
@@ -155,7 +154,7 @@ my.vis <- addVisualization(my.vis, "mds")
 plot(my.vis, view = "hclust")
 plot(my.vis, view = "mds")
 
-smoothScatter(my.vis, view ="tsne")
+scatter(my.vis, view ="mds")
 
 #Recover cluster identities
 #What species comprise cluster 1?

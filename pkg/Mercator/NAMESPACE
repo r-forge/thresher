@@ -8,7 +8,7 @@ importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
 importFrom("utils", "data")
 importFrom("graphics", "hist", "par", "barplot", "smoothScatter")
-importFrom("grDevices", "dev.interactive", "devAskNewPage")
+importFrom("grDevices", "dev.interactive", "devAskNewPage", "topo.colors")
 importFrom("cluster", "pam", "silhouette")
 importFrom("Rtsne", "Rtsne")
 importFrom("ClassDiscovery", "plotColoredClusters")
@@ -34,7 +34,7 @@ export("threshLGF")
 exportClasses("Mercator")
 export("Mercator", "addVisualization", "getClusters")
 
-exportMethods("hist", "plot", "barplot", "smoothScatter")
+exportMethods("hist", "plot", "barplot", "scatter")
 
 export(setClusters, recolor, remapColors)
 

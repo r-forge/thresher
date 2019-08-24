@@ -24,7 +24,7 @@ shrinkView <- function(name, object, i) {
     }
     L <- L[!i]
     P <- prune(dend, L) # this step does not scale well
-                        # since it removes one leaf at a time
+                        # since it removes one leaf at a tim
     as.hclust(P)
   }
   switch(name,
@@ -142,25 +142,22 @@ setMethod("plot", signature("Mercator", "missing"),
   invisible(x)
 })
 
-if (!isGeneric("smoothScatter"))
-  setGeneric("smoothScatter",
-             function(x, y, ...) standardGeneric("smoothScatter"))
-setMethod("smoothScatter", signature(x = "Mercator", y = "missing"),
-          function(x, view = NULL, ask = NULL,
+setMethod("scatter", signature(object = "Mercator"),
+          function(object, view = NULL, ask = NULL,
                    colramp = NULL, ...) {
 ### known kinds of visualizations
-  smoothMDS <- function(x, ...) {
-    graphics::smoothScatter(x = x@view[["mds"]], y = NULL, xlab = "PC1", ylab="PC2", ...)
+  smoothMDS <- function(object, ...) {
+    smoothScatter(x = object@view[["mds"]], xlab = "PC1", ylab="PC2", ...)
   }
-  smoothTSNE <- function(x, ...) {
-    graphics::smoothScatter(x = x@view[["tsne"]]$Y, y = NULL, xlab = "T1", ylab="T2", ...)
+  smoothTSNE <- function(object, ...) {
+    smoothScatter(x = object@view[["tsne"]]$Y, xlab = "T1", ylab="T2", ...)
   }
 ### implications of 'view' and 'ask' parameters
   if (is.null(view)) { # first attached view is the default
-    view <- list(names(x@view)[1])
+    view <- list(names(object@view)[1])
   }
   if (length(view) ==1 & view == "all") {
-    view <- names(x@view)
+    view <- names(object@view)
   }
   if (!is.list(view)) { # can show more than one
     view <- as.list(view)
@@ -174,15 +171,15 @@ setMethod("smoothScatter", signature(x = "Mercator", y = "missing"),
   }
 ### actually smooth stuff
   if (is.null(colramp)) {
-    colramp <- function(n) oompaBase::wheel(n, 0.7)
+    colramp <- topo.colors
   }
   for (V in view) {
     switch(V,
-           mds = smoothMDS(x, colramp = colramp, ...),
-           tsne = smoothTSNE(x, colramp = colramp, ...),
+           mds = smoothMDS(object, colramp = colramp, ...),
+           tsne = smoothTSNE(object, colramp = colramp, ...),
            cat("No smooth scatter plot is available for view '", V, "'.\n"))
   }
-  invisible(x)
+  invisible(object)
 })
 
 

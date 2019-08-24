@@ -6,7 +6,7 @@
 	**************************************************
 
 
-		CHANGES IN R VERSION 0.9.2
+		CHANGES IN R VERSION 0.9.4
 
 NEW FEATURES
 
@@ -14,7 +14,7 @@ NEW FEATURES
         plots the silhouette widths in the colors already assigned to
         clusters.
 
-    o	Added a new "smoothScatter" method for the Mercator class, which
+    o	Added a new "scatter" method for the Mercator class, which
         displays some views as a smoothed scatter plot.
 
 		CHANGES IN R VERSION 0.9.2

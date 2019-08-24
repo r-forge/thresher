@@ -33,8 +33,13 @@ Loading required package: PCDimension
 "#2E91E5" "#E15F99" "#E15F99" "#1CA71C" "#E15F99" "#E15F99" 
 > plot(vis1) # default MDS view
 > 
+> barplot(vis1)
+> scatter(vis1, view = "mds")
+> 
 > vis1 <- addVisualization(vis1, "tsne", perplexity=30)
-> plot(vis1, view = "mds")
+> plot(vis1, view = "tsne")
+> 
+> scatter(vis1, view = "tsne", colramp = grDevices::terrain.colors)
 > 
 > vis1 <- addVisualization(vis1, "hclust")
 > plot(vis1, view = "hclust")
@@ -48,4 +53,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-  32.00   36.73   68.75 
+  19.78   13.18   33.21 
