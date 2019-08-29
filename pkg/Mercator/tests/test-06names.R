@@ -12,8 +12,12 @@ G <- J@view[["graph"]]
 ## There used to be a bug that caused thie next line to fail when row names
 ## or column names were NULL. If this works, then we haven't broken it again.
 plot(G$graph, layout=G$layouts[["nicely"]])
-plot(G$graph, layout=G$layouts[["mds"]])
-plot(G$graph, layout=G$layouts[["tsne"]])
+plot(J, view = "graph", layout = "nicely")
+## There is an issue in igraph if nodes are placed at (nearly?) identical
+## locations. This was fixed inside the 'plot' method  by 'jittering" the
+## locations.
+plot(J, view = "graph", layout = "mds")
+plot(J, view = "graph", layout = "tsne")
 
 ## Need to see if we still assume that visualizations exist
 J <- Mercator(B, "jaccard", "hclust", 3)
