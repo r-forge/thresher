@@ -1,0 +1,10 @@
+###
+### NAMESPACE
+###
+import(methods)
+importFrom("graphics", "hist")
+export("")
+exportClasses("")
+exportMethods("")
+
+
