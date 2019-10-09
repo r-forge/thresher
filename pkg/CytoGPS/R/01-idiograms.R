@@ -1,17 +1,10 @@
-### get idioGPSRaw.csv and save it as idio
-### make these into Rdata files
-idiocolors <- c(acen='#aa0000', gneg='white', 
-                gpos100='black', gpos25='gray75',
-                gpos50='gray50', gpos75='gray25',
-                gvar='darkblue', stalk='lightblue')
-
 ### from European/302-summaryFigs
 makeIdiogram <- function(colname, color, res=1368) {
   par(mfrow=c(2,24), mai=c(0, 0.1, 1, 0.1), bg='white')
   for (I in c(1:22, "X", "Y")) {
     chrname <- paste('chr', I, sep='')
     dumbposn <- seq(1, 250000000, length=2500)
-    clap <- idio[idio$Chromosome == chrname,]
+    clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
     segset <- euroFreq[euroFreq$Chromosome == chrname,]
     y <- rep(NA, length(dumbposn))
     v <- rep(NA, length(dumbposn))
@@ -68,7 +61,7 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     chrname <- paste('chr', I, sep='')
     dumbposn <- seq(1, 250000000, length=2500)
-    clap <- idio[idio$Chromosome == chrname,]
+    clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
     segset <- DATA[DATA$Chromosome == chrname,]
     leftvals <- rightvals <- y <- rep(NA, length(dumbposn))
     for(J in 1:nrow(clap)) {
@@ -169,7 +162,7 @@ horizontalStacks  <- function(DATA, columns,
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     chrname <- paste('chr', I, sep='')
     dumbposn <- seq(1, 250000000, length=2500)
-    clap <- idio[idio$Chromosome == chrname,]
+    clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
     segset <- DATA[DATA$Chromosome == chrname,]
     resn <- max(max(segset[,columns]))
     y <- rep(NA, length(dumbposn))
@@ -241,14 +234,14 @@ stackIdiogram  <- function(DATA, columns,
            heights = c(1,1, 1, 1), widths=rep(c(0.8, rep(1.1, ncolumn)), times = 6))
   }
   N <- length(columns)
-  if (N < 1) stop("You need to supply the name of at elast one data column.")
+  if (N < 1) stop("You need to supply the name of at least one data column.")
   if (N > 10) stop("Unable to show more than ten data columns.")
   switch(nrows, L1(N), L2(N), L3(N), L4(N))
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     chrname <- paste('chr', I, sep='')
     dumbposn <- seq(1, 250000000, length=2500)
-    clap <- idio[idio$Chromosome == chrname,]
+    clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
     segset <- DATA[DATA$Chromosome == chrname,]
     resn <- max(max(segset[,columns]))
     y <- rep(NA, length(dumbposn))

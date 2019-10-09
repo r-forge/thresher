@@ -2,9 +2,10 @@
 ### NAMESPACE
 ###
 import(methods)
-importFrom("graphics", "hist")
-export("")
-exportClasses("")
-exportMethods("")
+importFrom("graphics", "image", "barplot", "abline", "layout",
+           "legend", "lines", "mtext", "par")
+export("makeIdiogram", "biIdiogram", "stackIdiogram")
+#exportClasses("")
+#exportMethods("")
 
 

@@ -1,4 +1,4 @@
-### get idioGPSRaw.csv and save it as idio
+### get idioGPS.csv and save it as cytobandLocations
 ### make these into Rdata files
 idiocolors <- c(acen='#aa0000', gneg='white', 
                 gpos100='black', gpos25='gray75',
@@ -8,4 +8,4 @@ idiocolors <- c(acen='#aa0000', gneg='white',
 cytobandLocations <- read.csv("idioGPS.csv", row.names=1)
 
 save(cytobandLocations, idiocolors,
-     file = file.path("..", "..", "data", "idiogram.rda"))
+     file = file.path("..", "..", "data", "cytobandLocations.rda"))
