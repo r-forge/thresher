@@ -5,7 +5,9 @@ import(methods)
 importFrom("graphics", "image", "barplot", "abline", "layout",
            "legend", "lines", "mtext", "par")
 export("makeIdiogram", "biIdiogram", "stackIdiogram")
-#exportClasses("")
-#exportMethods("")
+
+exportClasses("Chromosome")
+export("Chromosome")
+exportMethods("image")
 
 
