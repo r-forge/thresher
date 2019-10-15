@@ -1,0 +1,224 @@
+---
+title: "Parsing Mitelman"
+author: "Dwayne Tally"
+date: "5/22/2019"
+output:
+  html_document:
+    theme: yeti
+    highlight: kate
+    toc: true
+editor_options: 
+  chunk_output_type: inline
+---
+
+# Get some data
+```{r load.json}
+
+#setwd("C:/Users/firem/Documents/OSU/MyStuff")
+# Load the package required to read JSON files.
+if (!require("rjson")) {
+  install.packages("rjson")
+  library("rjson")
+}
+
+wd <<- choose.dir()
+setwd(wd)
+message(sprintf("Current working dir: %s\n", wd))
+
+
+filenames <- list.files(".", pattern="*.json", full.names=TRUE) # this should give you a character vector, with each file name represented by an entry
+
+#doesn't work if you load in more than one json file
+myJSON <- lapply(filenames, function(x) rjson::fromJSON(file=filenames)) # a list in which each element is one of your original JSON files
+
+```
+
+```{r output}
+if (!require("splitstackshape")) {
+  install.packages("splitstackshape")
+  library("splitstackshape")
+}
+if (!require("dplyr")) {
+  install.packages("dplyr")
+  library("dplyr")
+}
+library(jsonlite)
+Status <- sapply(myJSON[[1]]$output, "[", "status") #pulls out all the status object list
+
+
+ID <-  sapply(myJSON[[1]]$output, "[[", "id")#pulls ID from second level
+
+bands <- myJSON[[1]]$iscn2016_bands#pulls bands from top level
+
+ index <- sapply(myJSON[[1]]$output, function(x){ #function to get to the level of the karyotype index
+   if((x$status)=="Success") x$parsing_result[[1]]
+ })
+ n.index <- lapply(index, function(x) length(x)) #function to essentially pull the karyotype/index from the data
+ n.index1 <- as.numeric(n.index)#converts it to numeric so we could manipulate the data
+
+```
+
+```{r LGF}
+id.status <- data.frame(id=ID, status=Status)#stores the variables into a dataframe called id.status
+id.index <- data.frame(loss.ID=ID, index=n.index1)#stores the variables into a dataframe called id.index
+
+loss1 <- lapply(myJSON[[1]]$output, function(x){ #Function to parse all the loss data from parsing_result
+  if((x$status)=="Success") x$parsing_result[[1]]$loss_gain_fusion_computing$loss
+})
+
+gain1 <- lapply(myJSON[[1]]$output, function(x){ #Function to parse all the gain data from parsing_result
+  if((x$status)=="Success") x$parsing_result[[1]]$loss_gain_fusion_computing$gain
+})
+
+fusion1 <- lapply(myJSON[[1]]$output, function(x){ #Function to parse all the fusion data from parsing_result
+  if((x$status)=="Success") x$parsing_result[[1]]$loss_gain_fusion_computing$fusion
+})
+
+```
+
+
+```{r seperate}
+df_Loss <- data.frame(matrix(loss1),stringsAsFactors=FALSE)#converts the loss data to a matrix/dataframe to change the data
+
+colnames(df_Loss) <- c("Loss")
+sep_Loss1<- cSplit(df_Loss,"Loss", sep = ",")#sepeartes by ,
+colnames(sep_Loss1) <- bands#Gives the column names their associated bands
+nw.df_Loss1 <- data.frame(ID= ID, sep_Loss1, check.names = FALSE, stringsAsFactors = FALSE) #combines the ID and sep_Loss1
+clean_Loss1 <- na.omit(nw.df_Loss1)#removes the NULL/NA rows along with their associated ID
+
+#converts the dataframe to a matrix, to manipulate the data
+m.clean_Loss1 <- as.matrix(clean_Loss1)
+#converts c(0 or 0) to 0
+m.clean_Loss1[m.clean_Loss1 =="c(0"] <- 0 
+m.clean_Loss1[m.clean_Loss1 =="c(1"] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="0)"] <- 0 
+#converts nonzeros to 1
+m.clean_Loss1[m.clean_Loss1 =="1)"] <- 1 
+m.clean_Loss1[m.clean_Loss1 ==2] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(2"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="2)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==3] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(3"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="3)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==4] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(4"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="4)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==5] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(5"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="5)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==6] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(6"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="6)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==7] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(7"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="7)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==8] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(8"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="8)"] <- 1
+m.clean_Loss1[m.clean_Loss1 ==9] <- 1 
+m.clean_Loss1[m.clean_Loss1 =="c(9"] <- 1
+m.clean_Loss1[m.clean_Loss1 =="9)"] <- 1
+
+
+df_Gain <- data.frame(matrix(gain1),stringsAsFactors = FALSE)
+colnames(df_Gain) <- c("Gain")
+sep_Gain1<- cSplit(df_Gain,"Gain", sep = ",")
+colnames(sep_Gain1) <- bands
+nw.df_Gain1 <- data.frame(sep_Gain1, check.names = FALSE, stringsAsFactors = FALSE)
+clean_Gain1 <- na.omit(nw.df_Gain1)
+#converts the dataframe to matrix
+m.clean_Gain1 <- as.matrix(clean_Gain1)
+#converts c(0 or 0) to 0
+m.clean_Gain1[m.clean_Gain1 =="c(0"] <- 0
+m.clean_Gain1[m.clean_Gain1 =="c(1"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="0)"] <- 0
+#converts nonzeros to 1
+m.clean_Gain1[m.clean_Gain1 =="1)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==2] <- 1
+m.clean_Gain1[m.clean_Gain1 =="c(2"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="2)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==3] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(3"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="3)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==4] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(4"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="4)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==5] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(5"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="5)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==6] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(6"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="6)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==7] <- 1
+m.clean_Gain1[m.clean_Gain1 =="c(7"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="7)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==8] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(8"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="8)"] <- 1
+m.clean_Gain1[m.clean_Gain1 ==9] <- 1 
+m.clean_Gain1[m.clean_Gain1 =="c(9"] <- 1
+m.clean_Gain1[m.clean_Gain1 =="9)"] <- 1
+
+df_Fusion <- data.frame(matrix(fusion1),stringsAsFactors = FALSE)
+colnames(df_Fusion) <- c("Fusion")
+sep_Fusion1<- cSplit(df_Fusion,"Fusion", sep = ",")
+colnames(sep_Fusion1) <- bands
+nw.df_Fusion1 <- data.frame(sep_Fusion1, check.names = FALSE, stringsAsFactors = FALSE)
+clean_Fusion1 <- na.omit(nw.df_Fusion1)
+#converts the dataframe to a matrix
+m.clean_Fusion1 <- as.matrix(clean_Fusion1)
+#converts c(0 or 0) to 0
+m.clean_Fusion1[m.clean_Fusion1 =="c(0"] <- 0
+m.clean_Fusion1[m.clean_Fusion1 =="c(1"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="0)"] <- 0
+#converts nonzeros to 1
+m.clean_Fusion1[m.clean_Fusion1 =="1)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==2] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="c(2"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="2)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==3] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(3"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="3)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==4] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(4"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="4)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==5] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(5"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="5)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==6] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(6"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="6)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==7] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(7"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="7)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==8] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="c(8"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="8)"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 ==9] <- 1 
+m.clean_Fusion1[m.clean_Fusion1 =="c(9"] <- 1
+m.clean_Fusion1[m.clean_Fusion1 =="9)"] <- 1
+
+```
+
+```{r format}
+#id.lgf is a temporary variable to store the dataframe of Fusion, Gain, Loss
+id.lgf <- data.frame(loss = m.clean_Loss1, gain = m.clean_Gain1, fusion = m.clean_Fusion1, stringsAsFactors = FALSE)
+id.lgf <- merge(id.lgf,id.index,by="loss.ID",all=TRUE)#merges the id.index to the id.lgf dataframe creates NA since id.index has ids that were previously removed
+id.lgf <- na.omit(id.lgf)#removes any NA data made when merging the id.index
+id.lgf$ID <- paste(id.lgf$loss.ID,id.lgf$index,sep = "_") #produces a new column with the number of replicants 
+
+id.lgf1<- id.lgf %>% dplyr::select(2751,2750,everything())#rearranges the columns to have the id, and index to the left
+id.lgf1[2:3] <- NULL #removes old id and index
+
+gc()# built in function to free up excess memory
+```
+
+
+
+
+
+
+
+
+
+
