@@ -1,5 +1,5 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
+R Under development (unstable) (2019-12-05 r77528) -- "Unsuffered Consequences"
 Copyright (C) 2019 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -67,8 +67,8 @@ Loading required package: PCDimension
 > reap@nGroups # and two clusters
 [1] 2
 > reap@bic     # check the BIC levels
-     NC=2      NC=3      NC=4 
--2563.702 -2136.005 -1698.085 
+     NC=2      NC=3      NC=4      NC=5 
+-2563.702  2476.929  3308.706  4140.482 
 > screeplot(reap, col='gold', lcol='black')
 > plot(reap)
 > scatter(reap)
@@ -90,4 +90,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-   2.85    0.64    3.45 
+   1.07    0.09    1.18 

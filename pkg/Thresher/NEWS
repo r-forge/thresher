@@ -6,6 +6,13 @@
 	**************************************************
 
 
+		CHANGES IN R VERSION 1.1.3
+
+BUG FIXES
+
+    o	Fixed a bug that appeared when R-4.0.0 cjanged the definition
+    	of the class of a matrix.
+
 		CHANGES IN R VERSION 1.1.0
 
 NEW FEATURES

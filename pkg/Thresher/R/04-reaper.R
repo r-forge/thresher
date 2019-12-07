@@ -63,7 +63,7 @@ setClass("SignalSet",
   # order signals by strength along PCs
   if (ncol(foo) > 1) {
     temp <- sqrt(apply(foo^2, 2, cumsum))
-    if (class(temp) == "numeric") temp <- matrix(temp, nrow=1)
+    if (inherits(temp, "numeric")) temp <- matrix(temp, nrow=1)
     cumulative <- apply(temp, 2, sum)
     oc <- rev(order(cumulative)) # biggest is first
     featureNames <- featureNames[oc]
