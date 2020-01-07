@@ -5,12 +5,31 @@
 	*						 *
 	**************************************************
 
+		CHANGES IN R VERSION 0.9.6
+
+BUG FIXES
+
+    o	Fixed a bug in "addVisualization" to make sure all matrices
+    	have non-NULL rownames.
+
+    o	Fixed a NAMESPACE/import bug. The 'scatter' method calls the
+    	'smoothScatter' function from 'graphics'. This in turn calls a
+    	hidden (unexported) function from 'grDevices' using three
+    	colons (:::), which calls 'KernSmooth::bkde2D' without
+    	importing anything. CRAN checks force my package to know this
+    	internal implementation anhd import the function explicitly.
+
+		CHANGES IN R VERSION 0.9.5
+
+BUG FIXES
+
+    o	Fixed an igraph "jitter" bug in a test script.
 
 		CHANGES IN R VERSION 0.9.4
 
 NEW FEATURES
 
-    o	Added a new "barplot" method for the Meractor class, which
+    o	Added a new "barplot" method for the Mercator class, which
         plots the silhouette widths in the colors already assigned to
         clusters.
 
@@ -21,7 +40,7 @@ NEW FEATURES
 
 NEW FEATURES
 
-    o	Added a new "plot" method for the Meractor class, which
+    o	Added a new "plot" method for the Mercator class, which
         automatically sets the colors and symbols for different
         views.
 

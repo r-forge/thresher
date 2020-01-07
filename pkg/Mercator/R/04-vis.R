@@ -283,7 +283,11 @@ addVisualization <- function(DV, method, ...) {
   }
   FUN <- METHODS[[method]]
   argList <- c(list(DV), list(...))
-  DV@view[[method]] <- do.call(FUN, argList)
+  temp <- do.call(FUN, argList)
+  if (is.matrix(temp) && is.null(rownames(temp))) {
+    rownames(temp) <- attr(DV@distance, "Labels")
+  }
+  DV@view[[method]] <- temp
   DV
 }
 

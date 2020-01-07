@@ -16,6 +16,7 @@ importFrom("Polychrome", "dark.colors")
 importFrom("dendextend", "prune")
 importFrom("igraph", "vertex_attr", "set_vertex_attr",
            "layout_nicely", "graph_from_data_frame")
+importFrom("KernSmooth", "bkde2D") # called without import by' smoothScatter' through 'grDevices'
 
 # 01-metrics
 export("binaryDistance")
