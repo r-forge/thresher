@@ -1,23 +1,56 @@
-plot1Chrom <- function(DATA, column,  chr) {
+plot1Chrom <- function(DATA, columns,  chr, pal = palette()) {
+  ## check valid short chromsome  name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
-  if ( !(column %in% colnames(DATA)) ) stop("Unrecognized column name.")
-  mai <- par("mai")
+  chrname <- paste("chr", chr, sep="")
+  ## check valid stack height
+  NC <- length(columns)
+  if (NC < 1) stop("You need to supply the name of at least one data column.")
+  if (NC > 10) stop("Unable to show more than ten data columns.")
+  while(length(pal) < NC) pal <- c(pal, pal)
+  ## check that all columns exist
+  if ( !all(columns %in% colnames(DATA)) ) stop("Unrecognized column name.")
+  ## get the figure size in inches
   fin = par("fin")
-  mai[1] <- fin[2]/5
-  opar <- par(bg = "white", mai = mai)
+  ## create a "vertical resolution" near 200
+  V0     <- c(25, 25, 25, 20, 33, 28, 25, 22, 20, 18)
+  V1     <- c(75, 50, 25, 20, 33, 28, 25, 22, 20, 18)
+  vres <- fin[2]/(V0[NC] + NC*V1[NC])
+  hres <- fin[1]/100
+  opar <- par(c("new", "mai"))
   on.exit(par(opar))
+  par(bg = "white")
+  ## fake plot to white screen
+  plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
 
   dumbposn <- seq(1, 250000000, length=2500)
-  clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
+  CL <- cytobandLocations
+  clap <- CL[CL$Chromosome == chrname,]
   segset <- DATA[DATA$Chromosome == chrname,]
-  resn <- max(max(segset[, column]))
+  resn <- max(max(segset[, columns]))
   y <- rep(NA, length(dumbposn))
   for(J in 1:nrow(clap)) {
     y[clap[J, "loc.start"] <= dumbposn & 
       dumbposn <= clap[J, "loc.end"] ] <- as.numeric(clap[J, "Stain"])
   }
-  ## chromosomes
-  par(mai=c(0.05, 0.6, 0.02, 0))
+  ## data bars
+  for (II in 1:length(columns)) {
+    K <- NC - II + 1
+    column <- columns[K]
+    vals <- NA * y
+    for(J in 1:nrow(clap)) {
+      vals[clap[J, "loc.start"] <= dumbposn & 
+           dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, column])
+    }
+    par(new = TRUE,
+        mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
+              vres * (1 + (II-1)*V1[NC]), hres))
+    barplot(vals, horiz=F, border=NA, col = pal[K], 
+            ylim=c(0, 1.05*resn), xaxs="i", ylab=paste("Percent"),
+            space=0)
+  }
+  ## chromosome
+  par(new=TRUE,
+      mai=c(2*vres, 10*hres, vres * (1 + NC*V1[NC]), hres))
   image(dumbposn, 1:1, matrix(y, ncol=1), col=idiocolors, bty='n',
         xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
         cex=0.8)
@@ -26,27 +59,17 @@ plot1Chrom <- function(DATA, column,  chr) {
   abline(v=pts)
   lines(pts, c(1.4, 1.4))
   lines(pts, c(0.6, 0.6))
-  ## right bars
-  for (K in 1:length(columns)) {
-    cname <- column[K]
-    vals <- NA*y
-    for(J in 1:nrow(clap)) {
-      vals[clap[J, "loc.start"] <= dumbposn & 
-           dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, cname])
-    }
-    par(mai=c(0.001, 0.6, 0.001, 0))
-    barplot(vals, horiz=F, border=NA, col=pal[K],
-            ylim=c(0, 1.05*resn), xaxs="i", ylab=paste("%", I),
-            space=0)
-  }
+  invisible(DATA)
 }
 
 
-
-singles  <- function(DATA, columns, chr,pal = mypal) {
+singles  <- function(DATA, columns, chr, pal = palette()) {
   N <- length(columns)
   if (N < 1) stop("You need to supply the name of at least one data column.")
   if (N > 10) stop("Unable to show more than ten data columns.")
+
+  if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
+  chrname <- paste("chr", chr, sep="")
 
   opar <- par(bg="white")
   on.exit(par(opar))

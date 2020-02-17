@@ -1,4 +1,4 @@
-library(CytoGPS)
+library(RCytoGPS)
 
 try( x <- Chromosome(0) )   # fail?
 try( x <- Chromosome("Z") ) # fail
