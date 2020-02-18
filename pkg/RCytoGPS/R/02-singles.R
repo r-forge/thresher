@@ -1,4 +1,5 @@
-plot1Chrom <- function(DATA, columns,  chr, labels = columns, pal = palette()) {
+plot1Chrom <- function(DATA, columns,  chr, labels = columns,
+                       pal = palette(), horiz = FALSE) {
   ## check valid short chromsome  name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -17,8 +18,13 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns, pal = palette()) {
   ## create a "vertical resolution" near 200
   V0     <- c(25, 25, 15, 10, 17, 14, 13, 12, 11, 10)
   V1     <- c(75, 50, 30, 20, 33, 28, 25, 22, 20, 18)
-  vres <- fin[2]/(V0[NC] + NC*V1[NC])
-  hres <- fin[1]/100
+  if (horiz) {
+    vres <- fin[2]/100
+    hres <- fin[1]/(V0[NC] + NC*V1[NC])
+  } else {
+    vres <- fin[2]/(V0[NC] + NC*V1[NC])
+    hres <- fin[1]/100
+  }
   opar <- par(c("new", "mai"))
   on.exit(par(opar))
   par(bg = "white")
@@ -44,17 +50,36 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns, pal = palette()) {
       vals[clap[J, "loc.start"] <= dumbposn & 
            dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, column])
     }
-    par(new = TRUE,
-        mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
-              vres * (1 + (II-1)*V1[NC]), hres))
-    barplot(vals, horiz=F, border=NA, col = pal[K], 
-            ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
-            space=0)
+    if (horiz) {
+      par(new = TRUE,
+          mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
+                10*vres, hres * (1 + (II-1)*V1[NC])))
+      xlab <- labels[K]
+      ylab = ""
+      barplot(rev(vals), horiz = horiz, border=NA, col = pal[K], 
+              xlim=c(0, 1.05*resn), yaxs="i", xlab=labels[K],
+              space=0, axes=FALSE)
+      axis(3)
+    } else {
+      par(new = TRUE,
+          mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
+                vres * (1 + (II-1)*V1[NC]), hres))
+      xlab = ""
+      ylab = labels[K]
+      barplot(vals, horiz = horiz, border=NA, col = pal[K], 
+              ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
+              space=0)
+    }
   }
   ## chromosome
-  par(new=TRUE,
-      mai=c(2*vres, 10*hres, vres * (1 + NC*V1[NC]), hres))
-  image(Chromosome(chr), mai=par("mai"), horizontal=TRUE)
+  if (horiz) {
+    par(new=TRUE,
+        mai=c(vres, 2*hres, 10*vres, hres * (1 + NC*V1[NC])))
+  } else {
+    par(new=TRUE,
+        mai=c(2*vres, 10*hres, vres * (1 + NC*V1[NC]), hres))
+  }
+  image(Chromosome(chr), mai=par("mai"), horiz = horiz)
   invisible(DATA)
 }
 

@@ -29,9 +29,3 @@ genomeBarplot <- function(V, col = "blue", altcol = "#FED4C4", ylab="Percent", h
   par(new=TRUE, mai=c(10*vres, 86*hres, 81*vres, 63*hres))
   showGenome()
 }
-
-## test
-if(FALSE) {
-  genomeBarplot(runif(868), "blue")
-  showGenome()
-}

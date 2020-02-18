@@ -27,32 +27,28 @@ Chromosome <- function(I, res = 2500, maxbase = 250000000) {
 }
 
 setMethod("image", signature = "Chromosome", function(x,
-            horizontal = FALSE, mai = NULL, ...) {
+            horiz = FALSE, mai = NULL, ...) {
   if (is.null(mai)) {
-    if (horizontal) {
-      mai <- c(0.05, 0.6, 0.02, 0)
-    } else {
+    if (horiz) {
       mai <- c(0, 0.1, 0.5, 0.05)
+    } else {
+      mai <- c(0.05, 0.6, 0.02, 0)
     }
   }
   opar <- par(mai=mai)
   on.exit(par(opar))
-  if (horizontal) {
+  if (horiz) {
+    pts <- max(x@grid) - x@range
+    image(1:1, x@grid, matrix(rev(x@stain), nrow=1), col=idiocolors, bty='n',
+          xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
+          main=x@label)
+    rect(0.6, pts[1], 1.4, pts[2])
+  } else {
     pts <- x@range
     image(x@grid, 1:1, matrix(x@stain, ncol=1), col=idiocolors, bty='n',
           xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
           cex=0.8)
     mtext(x@label, side=2, at=1, las=2, line=0.5)
-    abline(v=pts)
-    lines(pts, c(1.4, 1.4))
-    lines(pts, c(0.6, 0.6))
-  } else {
-    pts <- max(x@grid) - x@range
-    image(1:1, x@grid, matrix(rev(x@stain), nrow=1), col=idiocolors, bty='n',
-          xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
-          main=x@label)
-    abline(h=pts)
-    lines(c(1.4, 1.4), pts)
-    lines(c(0.6, 0.6), pts)
+    rect(pts[1], 0.6, pts[2], 1.4)
   }
 })

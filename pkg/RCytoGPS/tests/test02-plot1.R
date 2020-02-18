@@ -12,6 +12,9 @@ plot1Chrom(CL, c("V1", "V2"), 11)
 plot1Chrom(CL, c("V1", "V2", "V3","V4", "V5", "V6"), 13)
 plot1Chrom(CL, paste("V", 1:10, sep=""), 6)
 
+#windows(width=18, height=10)
+plot1Chrom(CL, paste("V", 1:2, sep=""), 6, horiz = TRUE)
+
 if (FALSE) {
 par(ask=TRUE)
 for (J in 1:10) {

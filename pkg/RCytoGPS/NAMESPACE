@@ -3,7 +3,8 @@
 ###
 import(methods)
 importFrom("graphics", "image", "barplot", "abline", "layout",
-           "legend", "lines", "mtext", "par")
+           "legend", "lines", "mtext", "par",
+           "axis", "plot", "rect", "text")
 importFrom("grDevices", "palette")
 #export("makeIdiogram", "biIdiogram", "stackIdiogram")
 
