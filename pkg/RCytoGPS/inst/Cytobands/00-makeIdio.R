@@ -6,6 +6,11 @@ idiocolors <- c(acen='#aa0000', gneg='white',
                 gvar='darkblue', stalk='lightblue')
 
 cytobandLocations <- read.csv("idioGPS.csv", row.names=1)
+cytobandLocations$Chromosome <- factor(cytobandLocations$Chromosome,
+                                       levels = paste("chr", c(1:22,"X", "Y"),
+                                                      sep=""))
+cytobandLocations <- cytobandLocations[order(cytobandLocations$Chromosome,
+                                             cytobandLocations$loc.start),]
 
 save(cytobandLocations, idiocolors,
      file = file.path("..", "..", "data", "cytobandLocations.rda"))
