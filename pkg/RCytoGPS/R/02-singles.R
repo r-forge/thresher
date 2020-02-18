@@ -22,7 +22,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns, pal = palette()) {
   opar <- par(c("new", "mai"))
   on.exit(par(opar))
   par(bg = "white")
-  ## fake plot to white screen
+  ## fake plot to white screen so we can use par(new=TRUE) in loop below
   plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
 
   dumbposn <- seq(1, 250000000, length=2500)
@@ -54,14 +54,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns, pal = palette()) {
   ## chromosome
   par(new=TRUE,
       mai=c(2*vres, 10*hres, vres * (1 + NC*V1[NC]), hres))
-  image(dumbposn, 1:1, matrix(y, ncol=1), col=idiocolors, bty='n',
-        xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
-        cex=0.8)
-  mtext(chrname, side=2, at=1, las=2, line=0.5)
-  pts <- c(min(clap$loc.start), max(clap$loc.end))
-  abline(v=pts)
-  lines(pts, c(1.4, 1.4))
-  lines(pts, c(0.6, 0.6))
+  image(Chromosome(chr), mai=par("mai"), horizontal=TRUE)
   invisible(DATA)
 }
 
