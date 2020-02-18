@@ -11,4 +11,4 @@ exportClasses("Chromosome")
 export("Chromosome")
 exportMethods("image")
 
-export("plot1Chrom", "singles")
+export("plot1Chrom", "singles", "showGenome",  "genomeBarplot")
