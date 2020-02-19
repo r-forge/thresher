@@ -91,14 +91,21 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   }
   opar <- par("mfrow")
   on.exit(par(opar))
-  # vertical layout, two rows
-  L1 <- function() { par(mfrow = c(1, 24)) }
-  L2 <- function() { par(mfrow = c(2, 12)) }
-  L3 <- function() { par(mfrow = c(3, 8)) }
-  L4 <- function() { par(mfrow = c(4, 6)) }
+
+  if (horiz) { # horizontal layout of verttical plots
+    L1 <- function() { par(mfrow = c(24, 1)) }
+    L2 <- function() { par(mfrow = c(12, 2)) }
+    L3 <- function() { par(mfrow = c(8, 3)) }
+    L4 <- function() { par(mfrow = c(6, 4)) }
+  } else { # vertical layout of horizontal plots
+    L1 <- function() { par(mfrow = c(1, 24)) }
+    L2 <- function() { par(mfrow = c(2, 12)) }
+    L3 <- function() { par(mfrow = c(3, 8)) }
+    L4 <- function() { par(mfrow = c(4, 6)) }
+  }
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot2Chrom(DATA, leftcol, rightcol, I, pal, horiz)
+    plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz)
   }
 }

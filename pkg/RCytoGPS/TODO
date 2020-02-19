@@ -1,5 +1,7 @@
 1. Add an option to suppress labels in `plot1Chrom` so we can use it
-in `makeIdiogram`.
-. Add an option to suppress labels in `plot2Chrom` so we can use it
-in `biIdiogram`.
+   in `makeIdiogram`.
+2. Add an option to suppress labels in `plot2Chrom` so we can use it
+   in `biIdiogram`.
+3. Dexide what "horizontal" means and use it consistently. Is it the
+   orientation of the chromosome plot, or the direction of the bars?
 
