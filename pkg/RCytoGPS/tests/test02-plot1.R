@@ -33,4 +33,4 @@ colnames(CL)[6:14]  <- paste(rep(LETTERS[1:3], each=3),
                              sep=".")
 singles(CL, LETTERS[1:3], 3)
 
-makeIdiogram(CL, "V1", "forestgreen")
+makeIdiogram(CL, "V10", "forestgreen")
