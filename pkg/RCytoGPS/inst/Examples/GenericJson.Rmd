@@ -20,16 +20,22 @@ if (!require("rjson")) {
   install.packages("rjson")
   library("rjson")
 }
+```
 
+
+Do not use this, since it trequires user interaction
+```{r eval=FALSE}
 wd <<- choose.dir()
 setwd(wd)
 message(sprintf("Current working dir: %s\n", wd))
+```
 
+```{r}
+filenames <- list.files("JSONfiles", pattern="*.json", full.names=TRUE) 
+# this should give a character vector, with each file name represented by an entry
 
-filenames <- list.files(".", pattern="*.json", full.names=TRUE) # this should give you a character vector, with each file name represented by an entry
-
-#doesn't work if you load in more than one json file
-myJSON <- lapply(filenames, function(x) rjson::fromJSON(file=filenames)) # a list in which each element is one of your original JSON files
+myJSON <- lapply(filenames, function(x) rjson::fromJSON(file = x))
+# a list in which each element is one of your original JSON files
 
 ```
 

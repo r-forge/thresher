@@ -6,7 +6,7 @@ importFrom("graphics", "image", "barplot", "abline", "layout",
            "legend", "lines", "mtext", "par",
            "axis", "plot", "rect", "text")
 importFrom("grDevices", "palette")
-#export("makeIdiogram", "biIdiogram", "stackIdiogram")
+#export("makeIdiogram", "stackIdiogram")
 
 exportClasses("Chromosome")
 export("Chromosome")
@@ -14,4 +14,5 @@ exportMethods("image")
 
 export("plot1Chrom", "singles",
        "showGenome",  "genomeBarplot",
-       "makeIdiogram")
+       "makeIdiogram",
+       "plot2Chrom", "biIdiogram")

@@ -25,7 +25,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
   }
   opar <- par(c("bg", "new", "mai"))
   on.exit(par(opar))
-  par(bg = "white")
+  par(bg = "white", mai=c(0,0,0,0))
   ## fake plot to white screen so we can use par(new=TRUE) in loop below
   plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
 
@@ -81,4 +81,24 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
             space=0)
   }
   invisible(DATA)
+}
+
+biIdiogram  <- function(DATA, leftcol, rightcol, 
+                        pal = c("blue", "red"), 
+                        horiz = FALSE, nrows = 2) {
+  if(!nrows %in% 1:4) {
+    stop("Number of rows must be 1, 2, 3, or 4.")
+  }
+  opar <- par("mfrow")
+  on.exit(par(opar))
+  # vertical layout, two rows
+  L1 <- function() { par(mfrow = c(1, 24)) }
+  L2 <- function() { par(mfrow = c(2, 12)) }
+  L3 <- function() { par(mfrow = c(3, 8)) }
+  L4 <- function() { par(mfrow = c(4, 6)) }
+  switch(nrows, L1(), L2(), L3(), L4())
+
+  for (I in c(1:22, "X", "Y")) { # for each chromosome
+    plot2Chrom(DATA, leftcol, rightcol, I, pal, horiz)
+  }
 }
