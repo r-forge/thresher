@@ -92,7 +92,7 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   opar <- par("mfrow")
   on.exit(par(opar))
 
-  if (horiz) { # horizontal layout of verttical plots
+  if (horiz) { # horizontal layout of vertical plots
     L1 <- function() { par(mfrow = c(24, 1)) }
     L2 <- function() { par(mfrow = c(12, 2)) }
     L3 <- function() { par(mfrow = c(8, 3)) }

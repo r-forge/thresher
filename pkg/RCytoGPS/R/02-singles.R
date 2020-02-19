@@ -29,6 +29,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   on.exit(par(opar))
   par(bg = "white")
   ## fake plot to white screen so we can use par(new=TRUE) in loop below
+  par(mai = c(0,0,0,0))
   plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
 
   dumbposn <- seq(1, 250000000, length=2500)
@@ -103,3 +104,27 @@ singles  <- function(DATA, columns, chr, pal = palette()) {
   invisible(DATA)
 }
 
+stackIdiogram  <- function(DATA, columns, pal = palette(), horiz = TRUE, nrows = 2) {
+  if(!nrows %in% 1:4) {
+    stop("Number of rows must be 1, 2, 3, or 4.")
+  }
+  opar <- par(bg="white")
+  on.exit(par(opar))
+
+  if (horiz) { # horizontal layout of vertical plots
+    L1 <- function() { par(mfrow = c(24, 1)) }
+    L2 <- function() { par(mfrow = c(12, 2)) }
+    L3 <- function() { par(mfrow = c(8, 3)) }
+    L4 <- function() { par(mfrow = c(6, 4)) }
+  } else { # vertical layout of horizontal plots
+    L1 <- function() { par(mfrow = c(1, 24)) }
+    L2 <- function() { par(mfrow = c(2, 12)) }
+    L3 <- function() { par(mfrow = c(3, 8)) }
+    L4 <- function() { par(mfrow = c(4, 6)) }
+  }
+  switch(nrows, L1(), L2(), L3(), L4())
+
+  for (I in c(1:22, "X", "Y")) { # for each chromosome
+    plot1Chrom(DATA, columns, I, pal = pal, horiz)
+  }
+}
