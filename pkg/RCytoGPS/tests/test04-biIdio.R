@@ -1,0 +1,12 @@
+library(RCytoGPS)
+
+#windows(width=10, height=18)
+
+set.seed(53106)
+CL <- RCytoGPS:::cytobandLocations
+fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))
+CL <- cbind(CL, fake) # extra colnames V1, ..., V10
+
+plot1Chrom(CL, "V1", 3)
+RCytoGPS:::plot2Chrom(CL, "V1", "V2", 3)
+RCytoGPS:::plot2Chrom(CL, "V1", "V2", 3, horiz = TRUE)

@@ -1,33 +1,3 @@
-### from European/302-summaryFigs
-makeIdiogram <- function(colname, color, res=1368) {
-  par(mfrow=c(2,24), mai=c(0, 0.1, 1, 0.1), bg='white')
-  for (I in c(1:22, "X", "Y")) {
-    chrname <- paste('chr', I, sep='')
-    dumbposn <- seq(1, 250000000, length=2500)
-    clap <- cytobandLocations[cytobandLocations$Chromosome == chrname,]
-    segset <- euroFreq[euroFreq$Chromosome == chrname,]
-    y <- rep(NA, length(dumbposn))
-    v <- rep(NA, length(dumbposn))
-    for(i in 1:nrow(clap)) {
-      y[clap[i, "loc.start"] <= dumbposn & 
-        dumbposn <= clap[i, "loc.end"] ] <- as.numeric(clap[i, "Stain"])
-      v[clap[i, "loc.start"] <= dumbposn & 
-        dumbposn <= clap[i, "loc.end"] ] <- as.numeric(segset[i, colname])
-    }
-    par(mai=c(0, 0.1, 0.5, 0.05))
-    image(1:1, dumbposn, matrix(rev(y), nrow=1), col=idiocolors, bty='n',
-          xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8), 
-          main=paste("Chr", I))
-    pts <- max(dumbposn)-c(min(clap$loc.start), max(clap$loc.end))
-    abline(h=pts)
-    lines(c(1.4, 1.4), pts)
-    lines(c(0.6, 0.6), pts)
-    par(mai=c(0, 0.01, 0.5, 0.05))
-    barplot(rev(v), horiz=T, border=NA, col=color,
-            xlim=c(0, res/100), yaxs="i", xaxt="n", space=0)
-  }
-}
-
 ### from02-wicell-biIdiogram
 ### DATA must have three columns, one of shich is "Chromosome" containing
 ### entries of the form "chr1".

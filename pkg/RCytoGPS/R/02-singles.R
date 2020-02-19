@@ -1,6 +1,6 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
                        pal = palette(), horiz = FALSE) {
-  ## check valid short chromsome  name
+  ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
   ## check valid stack height
@@ -14,7 +14,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   if (is.null(labels)) labels <- rep("", NC)
   while (length(labels) < NC) labels <- c(labels, labels)
   ## get the figure size in inches
-  fin = par("fin")
+  fin<- par("fin")
   ## create a "vertical resolution" near 200
   V0     <- c(25, 25, 15, 10, 17, 14, 13, 12, 11, 10)
   V1     <- c(75, 50, 30, 20, 33, 28, 25, 22, 20, 18)
@@ -54,8 +54,6 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       par(new = TRUE,
           mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
                 10*vres, hres * (1 + (II-1)*V1[NC])))
-      xlab <- labels[K]
-      ylab = ""
       barplot(rev(vals), horiz = horiz, border=NA, col = pal[K], 
               xlim=c(0, 1.05*resn), yaxs="i", xlab=labels[K],
               space=0, axes=FALSE)
@@ -64,8 +62,6 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       par(new = TRUE,
           mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
                 vres * (1 + (II-1)*V1[NC]), hres))
-      xlab = ""
-      ylab = labels[K]
       barplot(vals, horiz = horiz, border=NA, col = pal[K], 
               ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
               space=0)
@@ -83,6 +79,13 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   invisible(DATA)
 }
 
+makeIdiogram <- function(DATA, colname, color) {
+  opar <- par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
+  on.exit(par(opar))
+  for (I in c(1:22, "X", "Y")) {
+    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE)
+  }
+}
 
 singles  <- function(DATA, columns, chr, pal = palette()) {
   N <- length(columns)

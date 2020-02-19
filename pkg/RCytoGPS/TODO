@@ -1,1 +1,5 @@
-Everything....
+1. Add an option to suppress labels in `plot1Chrom` so we can use it
+in `makeIdiogram`.
+. Add an option to suppress labels in `plot2Chrom` so we can use it
+in `biIdiogram`.
+
