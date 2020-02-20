@@ -1,0 +1,76 @@
+---
+title: "Graphing Tools in RCytoGPS"
+author: "Kevin R. Coombes"
+data: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Graphing Tools in RCytoGPS}
+  %\VignetteKeywords{OOMPA,CytoGPS,karyotypes,idiograms,graphics}
+  %\VignetteDepends{RCytoGPS}
+  %\VignettePackage{RCytoGPS}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r opts, echo=FALSE}
+knitr::opts_chunk$set(fig.width=8, fig.height=5)
+```
+# Introduction
+
+```{r}
+library(RCytoGPS)
+data(cytoData)
+ls()
+summary(cytoData)
+```
+
+# Plotting Cytoband Data Along the Genome
+
+```{r gb, fig.cap="Cytoband level data along the genome."}
+opar <- par(mfrow=c(2,1))
+genomeBarplot(cytoData$A.Loss, col="forestgreen")
+genomeBarplot(cytoData$B.Loss, col="orange")
+par(opar)
+```
+
+# Single Chromosome Plots
+## Plotting Cytoband-Level Data Along One Chromosome
+```{r v.plot2Chrom, fig.cap = "Stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+plot1Chrom(cytoData, colnames(cytoData)[4:6], chr = 3)
+```
+
+```{r h.plot2Chrom, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+plot1Chrom(cytoData, colnames(cytoData)[4:6], chr = 3, horiz = TRUE)
+```
+
+## Plotting Cytoband-Level Data Along Both Sides of One Chromosome
+```{r v.plot1Chrom, fig.cap = "Stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+plot2Chrom(cytoData, "A.Loss", "B.Loss", chr = 13)
+```
+
+```{r h.plot1Chrom, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+plot2Chrom(cytoData, "A.Loss", "B.Loss", chr = 13, horiz = TRUE)
+```
+
+## Plotting LGF Summary Data Along One Chromosome
+
+```{r singles, fig.cap = "Barplot of LGF frequency data along chromosome 6."}
+singles(cytoData, c("A", "B", "C"), 6)
+```
+
+# Idiograms
+
+## One Data Column
+```{r makeid, fig.cap="Idiogram for one data columm."}
+makeIdiogram(cytoData, "A.Loss", "orange")
+```
+
+## Contrasting Two Data Columns
+```{r biid, fig.cap="Idiogram to contrast two data columms."}
+biIdiogram(cytoData, "A.Loss", "A.Gain", pal=c("orange", "forestgreen"))
+```
+
+## Many Data Columns
+```{r stackid, fig.cap="Idiogram for many data columns."}
+stackIdiogram(cytoData, paste(LETTERS[1:3], "Loss", sep="."),
+              pal=c("forestgreen", "orange", "purple"), nrows=3)
+```

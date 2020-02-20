@@ -40,21 +40,25 @@ myJSON <- lapply(filenames, function(x) rjson::fromJSON(file = x))
 ```
 
 ```{r output}
-if (!require("splitstackshape")) {
+if (!require("splitstackshape")) { # what do we need this pacakge for?
   install.packages("splitstackshape")
   library("splitstackshape")
 }
-if (!require("dplyr")) {
+if (!require("dplyr")) { # what do we need this pacakge for?
   install.packages("dplyr")
   library("dplyr")
 }
 library(jsonlite)
+```
+
+Why are we hand-coding the first JSON file instead of doing the same thing for all of them?
+```{r}
 Status <- sapply(myJSON[[1]]$output, "[", "status") #pulls out all the status object list
 
 
 ID <-  sapply(myJSON[[1]]$output, "[[", "id")#pulls ID from second level
 
-bands <- myJSON[[1]]$iscn2016_bands#pulls bands from top level
+bands <- myJSON[[1]]$iscn2016_bands #pulls bands from top level
 
  index <- sapply(myJSON[[1]]$output, function(x){ #function to get to the level of the karyotype index
    if((x$status)=="Success") x$parsing_result[[1]]
