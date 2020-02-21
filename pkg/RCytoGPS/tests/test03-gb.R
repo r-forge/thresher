@@ -8,10 +8,11 @@ CL <- cbind(CL, fake) # extra colnames V1, ..., V10
 plot(as.numeric(CL$Chromosome)) # check chromosome order
 showGenome()
 
-genomeBarplot(CL$V1, "brown")
+CD <- CytobandData(CL)
+barplot(CD, what = "V10")
 
 opar <- par(mfrow = c(3,1))
-genomeBarplot(CL$V2, "green")
-genomeBarplot(CL$V3, "orange")
-genomeBarplot(CL$V5, "purple")
+barplot(CD, "V2", "green")
+barplot(CD, "V3", "orange")
+barplot(CD, "V5", "purple")
 par(opar)

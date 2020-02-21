@@ -15,3 +15,7 @@ export("plot1Chrom", "singles",
        "showGenome",  "genomeBarplot",
        "makeIdiogram",
        "plot2Chrom", "biIdiogram", "stackIdiogram")
+
+export("CytobandData")
+exportClasses("CytobandData")
+exportMethods("barplot")
