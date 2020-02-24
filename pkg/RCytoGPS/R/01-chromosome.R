@@ -8,6 +8,7 @@ setClass("Chromosome",
 )
 
 Chromosome <- function(I, res = 2500, maxbase = 250000000) {
+  if (length(I) > 1) stop("Can only handle one chromosome at a time.")
   if (!(I %in% c(1:22, "X", "Y"))) stop("Invalid chromosome name!")
   chrname <- paste('chr', I, sep='')
   label <- paste('Chr', I)

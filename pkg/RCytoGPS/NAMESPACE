@@ -7,15 +7,11 @@ importFrom("graphics", "image", "barplot", "abline", "layout",
            "axis", "plot", "rect", "text")
 importFrom("grDevices", "palette")
 
-exportClasses("Chromosome")
-export("Chromosome")
-exportMethods("image")
+exportClasses("Chromosome", "CytobandData")
+export("Chromosome", "CytobandData")
+exportMethods("image", "barplot", "summary")
 
 export("plot1Chrom", "singles",
        "showGenome",  "genomeBarplot",
        "makeIdiogram",
        "plot2Chrom", "biIdiogram", "stackIdiogram")
-
-export("CytobandData")
-exportClasses("CytobandData")
-exportMethods("barplot")

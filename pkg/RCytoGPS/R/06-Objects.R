@@ -35,6 +35,11 @@ CytobandData <- function(data, info, genome = NULL) {
   new("CytobandData", DATA = data, INFO = info)
 }
 
+setMethod("summary", "CytobandData", function(object, ...) {
+  cat("A object of the 'CytobandData' class.\n")
+  summary(object@DATA)
+})
+
 setMethod("barplot", "CytobandData",
           function(height, what, col = "blue", altcol = "#FE4C4",
                    ylab = "Percent", h = NULL, ...) {
@@ -54,19 +59,23 @@ setMethod("image", "CytobandData", function(x, what, chr,
       biIdiogram(x@DATA, what[[1]], what[[2]],
                  pal = pal, horiz = horiz, nrows = nrows)
     } else {
-      plot2Chrom(x@DATA, what[[1]], what[[2]], chr = chr,
-                 pal = pal, horiz = horiz)
+      plot2Chrom(x@DATA, what[[1]], what[[2]],
+                 chr = chr, pal = pal,
+                 horiz = !horiz) # changed our minds about what "horiz" means
     }
   } else { # now we must have chr equal to a character vector
     if (chr == "all") {
-      if (length(what == 1)) {
+      if (length(what) == 1) {
         makeIdiogram(x@DATA, what, color = pal)
       } else {
-        stackIdiogram(x@DATA, what, pal = pal, horiz = horiz, nrows = nrows)
+        stackIdiogram(x@DATA, what, pal = pal,
+                      horiz = !horiz, # changed our minds about "horiz"
+                      nrows = nrows)
       }
     } else {
       plot1Chrom(x@DATA, what, chr = chr,
-                 labels = labels, pal = pal, horiz = horiz)
+                 labels = labels, pal = pal,
+                 horiz = !horiz) # changed our minds about what "horiz" means
     }
   }
   invisible(x)

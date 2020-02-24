@@ -104,7 +104,9 @@ singles  <- function(DATA, columns, chr, pal = palette()) {
   invisible(DATA)
 }
 
-stackIdiogram  <- function(DATA, columns, pal = palette(), horiz = TRUE, nrows = 2) {
+stackIdiogram  <- function(DATA, columns, pal = palette(),
+                           horiz = FALSE, nrows = 2) {
+  cat("horiz =", horiz, "and nrows =", nrows, "\n", file=stderr())
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
@@ -125,6 +127,6 @@ stackIdiogram  <- function(DATA, columns, pal = palette(), horiz = TRUE, nrows =
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot1Chrom(DATA, columns, I, pal = pal, horiz)
+    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz)
   }
 }
