@@ -14,7 +14,8 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   if (is.null(labels)) labels <- rep("", NC)
   while (length(labels) < NC) labels <- c(labels, labels)
   ## get the figure size in inches
-  fin<- par("fin")
+  g <- dev.size()/par("din")
+  fin <- g*par("fin")
   ## create a "vertical resolution" near 200
   V0     <- c(25, 25, 15, 10, 17, 14, 13, 12, 11, 10)
   V1     <- c(75, 50, 30, 20, 33, 28, 25, 22, 20, 18)

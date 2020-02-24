@@ -48,7 +48,7 @@ setMethod("barplot", "CytobandData",
   genomeBarplot(height@DATA[ , what], col = col, altcol = altcol, ylab = ylab, h=h)
 })
 
-setMethod("image", "CytobandData", function(x, what, chr,
+setMethod("image", "CytobandData", function(x, chr, what,
            pal = palette(), horiz = FALSE, nrows = 2, labels = NULL) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
