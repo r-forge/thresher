@@ -11,7 +11,4 @@ exportClasses("Chromosome", "CytobandData")
 export("Chromosome", "CytobandData")
 exportMethods("image", "barplot", "summary")
 
-export("plot1Chrom", "singles",
-       "showGenome",  "genomeBarplot",
-       "makeIdiogram",
-       "plot2Chrom", "biIdiogram", "stackIdiogram")
+export("singles", "showGenome")

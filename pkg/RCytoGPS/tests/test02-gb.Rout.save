@@ -1,0 +1,51 @@
+
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(RCytoGPS)
+> 
+> try( showGenome(altcol = palette()) ) # unexpected behavior
+> try( showGenome(altcol = 42) )        # unexpected behavior
+> 
+> 
+> set.seed(53106)
+> CL <- RCytoGPS:::cytobandLocations
+> fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))
+> CL <- cbind(CL, fake) # extra colnames V1, ..., V10
+> all(diff(as.numeric(CL$Chromosome)) >= 0) # check chromosome order
+[1] TRUE
+> 
+> CD <- CytobandData(CL)
+> barplot(CD, what = "V10")
+> barplot(CD, what = list("V1")) # automagically converts list to vector
+> 
+> try( barplot(CD, what = c("V1", "V10")) )    # fail
+Error in .local(height, ...) : 
+  'what' must identify exactly one data column.
+> try( barplot(CD, what = list("V1", "V10")) ) # fail
+Error in .local(height, ...) : 
+  'what' must identify exactly one data column.
+> 
+> # confirm usability within preset par grid
+> opar <- par(mfrow = c(3,1))
+> barplot(CD, "V2", "green")
+> barplot(CD, "V3", "orange")
+> barplot(CD, "V5", "purple")
+> par(opar)
+> 
+> proc.time()
+   user  system elapsed 
+   0.20    0.04    0.23 

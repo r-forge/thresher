@@ -1,0 +1,41 @@
+
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(RCytoGPS)
+> 
+> try( x <- Chromosome(0) )   # fail
+Error in Chromosome(0) : Invalid chromosome name!
+> try( x <- Chromosome("Z") ) # fail
+Error in Chromosome("Z") : Invalid chromosome name!
+> try( x <- Chromosome(1:2) ) # fail
+Error in Chromosome(1:2) : Can only handle one chromosome at a time.
+> try (x <- Chromosome(c(1, "Z"))) # fail
+Error in Chromosome(c(1, "Z")) : 
+  Can only handle one chromosome at a time.
+> try (x <- Chromosome(list(1, "Z"))) # fail
+Error in Chromosome(list(1, "Z")) : 
+  Can only handle one chromosome at a time.
+> 
+> x <- Chromosome(11)
+> image(x)
+> image(x, horiz = TRUE)
+> 
+> image(x, col="red") # silently ignores bad input?
+> 
+> proc.time()
+   user  system elapsed 
+   0.21    0.04    0.25 

@@ -31,7 +31,7 @@ summary(bandData)
 
 # Plotting Cytoband Data Along the Genome
 
-```{r gb, fig.cap="Cytoband level data along the genome."}
+```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=10, fig.height=5}
 opar <- par(mfrow=c(2,1))
 barplot(bandData, "A.Loss", col = "forestgreen")
 barplot(bandData, "B.Loss", col="orange")
@@ -39,61 +39,56 @@ par(opar)
 ```
 
 # Single Chromosome Plots
+Note: "Horizontal" and "vertical" refer to the direction of the chromosome with its cytoband shading.
 ## Plotting Cytoband-Level Data Along One Chromosome
-```{r v.plot2Chrom, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
 Acolumns <- c("A.Loss", "A.Gain", "A.Fusion")
 image(bandData, what = Acolumns, chr = 3)
 ```
 
-```{r h.plot2Chrom, fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+```{r h.plot2Chrom, fig.width=5, fig.height=8, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
 image(bandData, Acolumns, chr = 3, horiz = TRUE)
 ```
 
 ## Plotting Cytoband-Level Data Along Both Sides of One Chromosome
-```{r v.plot1Chrom, fig.cap = "Stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+```{r v.plot1Chrom, fig.width=8, fig.height=5, fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
 image(bandData, what = list("A.Loss", "B.Loss"), chr = 13)
 ```
 
-```{r h.plot1Chrom, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+```{r h.plot1Chrom, fig.width=5, fig.height=8, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
 image(bandData, what = list("A.Loss", "B.Loss"), chr = 13, horiz = TRUE)
-```
-
-## Plotting LGF Summary Data Along One Chromosome
-
-```{r singles, eval=FALSE, echo=FALSE, fig.cap = "Barplot of LGF frequency data along chromosome 6."}
-singles(cytoData, c("A", "B", "C"), 6)
 ```
 
 # Idiograms
 
 ## One Data Column
-```{r makeid, fig.cap="Idiogram for one data columm."}
+```{r makeid, fig.width=10, fig.height=8, fig.cap="Idiogram for one data columm."}
 image(bandData, what = "A.Loss", chr = "all", pal = "orange")
 ```
 
 ## Contrasting Two Data Columns
-```{r biid, fig.cap="Idiogram to contrast two data columms."}
+```{r biid, fig.width=10, fig.height=8, fig.cap="Idiogram to contrast two data columms."}
 image(bandData, what = list("A.Loss", "A.Gain"), chr = "all", 
       pal=c("orange", "forestgreen"))
 ```
 
-```{r biid3, fig.cap="Idiogram to contrast two data columms."}
+```{r biid3, fig.width=10, fig.height=10, fig.cap="Idiogram to contrast two data columms."}
 image(bandData, what = list("A.Loss", "A.Gain"), chr = "all", nrows = 3,
       pal=c("orange", "forestgreen"))
 ```
 
-```{r hbiid, fig.cap="Idiogram to contrast two data columms."}
+```{r hbiid, fig.width=8, fig.height=10, fig.cap="Idiogram to contrast two data columms."}
 image(bandData, what = list("A.Loss", "A.Gain"), chr = "all", 
       pal=c("orange", "forestgreen"), horiz = TRUE)
 ```
 
 ## Many Data Columns
-```{r stackid, fig.cap="Idiogram for many data columns."}
+```{r stackid, fig.width=6, fig.height=14, fig.cap="Idiogram for many data columns."}
 image(bandData, what = paste(LETTERS[1:3], "Loss", sep="."), chr = "all", 
               pal=c("forestgreen", "orange", "purple"), nrows=3, horiz = FALSE)
 ```
 
-```{r hstackid, fig.cap="Idiogram for many data columns."}
+```{r hstackid, fig.width=14, fig.height=5, fig.cap="Idiogram for many data columns."}
 image(bandData, what = paste(LETTERS[1:3], "Loss", sep="."), chr = "all", 
               pal=c("forestgreen", "orange", "purple"), nrows=3, horiz= TRUE)
 ```
