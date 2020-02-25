@@ -13,6 +13,11 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   ## get the labels ready
   if (is.null(labels)) labels <- rep("", NC)
   while (length(labels) < NC) labels <- c(labels, labels)
+  opar <- par(c("new", "mai", "bg"))
+  on.exit(par(opar))
+  ## fake plot to white screen so we can use par(new=TRUE) in loop below
+  par(bg = "white", mai = c(0,0,0,0))
+  plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
   ## get the figure size in inches
   g <- dev.size()/par("din")
   fin <- g*par("fin")
@@ -26,12 +31,6 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
     vres <- fin[2]/(V0[NC] + NC*V1[NC])
     hres <- fin[1]/100
   }
-  opar <- par(c("new", "mai"))
-  on.exit(par(opar))
-  par(bg = "white")
-  ## fake plot to white screen so we can use par(new=TRUE) in loop below
-  par(mai = c(0,0,0,0))
-  plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
 
   dumbposn <- seq(1, 250000000, length=2500)
   CL <- cytobandLocations

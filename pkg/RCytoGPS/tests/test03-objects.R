@@ -29,6 +29,7 @@ par(opar)
 
 image(CD, "all", "V10", pal = "forestgreen")
 
+
 # one chromosome, two-sided
 image(CD, 3, list("V1", "V2"))
 image(CD, 3, list("V1", "V2"), horiz = TRUE)

@@ -11,23 +11,16 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     stop("Unrecognized (left) column name.")
   if ( !(rightcol %in% colnames(DATA)) )
     stop("Unrecognized (right) column name.")
-  ## get the figure size in inches
-  fin  <- par("fin")
-  ## set the resolution
-  V0 <- 15
-  V1 <- 45
-  if (horiz) {
-    vres <- fin[2]/100
-    hres <- fin[1]/(V0 + 2*V1)
-  } else {
-    vres <- fin[2]/(V0 + 2*V1)
-    hres <- fin[1]/100
-  }
   opar <- par(c("bg", "new", "mai"))
   on.exit(par(opar))
   par(bg = "white", mai=c(0,0,0,0))
   ## fake plot to white screen so we can use par(new=TRUE) in loop below
   plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
+  ## get the figure size in inches
+  fin  <- par("fin")
+  ## set the resolution
+  V0 <- 15
+  V1 <- 45
 
   dumbposn <- seq(1, 250000000, length=2500)
   CL <- cytobandLocations
@@ -44,25 +37,31 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
          dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, rightcol])
   }
   if(horiz) {
+    vres <- fin[2]/100
+    hres <- fin[1]/(V0 + 2*V1)
+
     ## right 
     par(new = TRUE,
-        mai=c(vres, (1 + V0 + V1)*hres, 10*vres, 2*hres))
+        mai=c(vres, (1 + V0 + V1)*hres, 15*vres, 2*hres))
     barplot(rev(right), horiz=TRUE, border=NA, col = pal[2],
             xlim=c(0, 1.05*resn), yaxs="i", xlab = rightcol,
             space=0, axes = FALSE)
     axis(side = 3, line = 1)
     ## chromosome in the middle
     par(new=TRUE,
-        mai=c(vres, (V1 + 2)*hres, 10*vres, (V1 + 2)*hres))
+        mai=c(vres, (V1 + 2)*hres, 15*vres, (V1 + 2)*hres))
     image(Chromosome(chr), mai=par("mai"), horiz = TRUE)
     ## left, pointing backwards
     par(new = TRUE,
-        mai=c(vres, 2*hres, 10*vres, (1 + V0 + V1)*hres))
+        mai=c(vres, 2*hres, 15*vres, (1 + V0 + V1)*hres))
     barplot(-rev(left), horiz=TRUE, border=NA, col = pal[1], 
             xlim=c(-1.05*resn, 0), yaxs="i", xlab = leftcol,
             space=0, axes=FALSE)
     axis(side = 3, line=1)
   } else {
+    vres <- fin[2]/(V0 + 2*V1)
+    hres <- fin[1]/100
+
     ## right goes on top, pointing up
     par(new = TRUE,
         mai=c((1 + V0 + V1)*vres, 10*hres, 2*vres, hres))
