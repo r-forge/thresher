@@ -1,5 +1,5 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
-                       pal = palette(), horiz = FALSE) {
+                       pal = palette(), horiz = FALSE, axes=TRUE) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -56,16 +56,21 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
           mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
                 10*vres, hres * (1 + (II-1)*V1[NC])))
       barplot(rev(vals), horiz = horiz, border=NA, col = pal[K], 
-              xlim=c(0, 1.05*resn), yaxs="i", xlab=labels[K],
+              xlim=c(0, 1.05*resn), yaxs="i", 
               space=0, axes=FALSE)
-      axis(3)
+      if (axes) {
+        axis(3) # on top
+        U <- par("usr")
+        W <- (U[1] + U[2])/2
+        mtext(labels[K], at = W, side=3, line=2.5)
+      }
     } else {
       par(new = TRUE,
           mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
                 vres * (1 + (II-1)*V1[NC]), hres))
       barplot(vals, horiz = horiz, border=NA, col = pal[K], 
               ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
-              space=0)
+              space=0, axes = axes)
     }
   }
   ## chromosome
@@ -80,11 +85,11 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   invisible(DATA)
 }
 
-makeIdiogram <- function(DATA, colname, color) {
+makeIdiogram <- function(DATA, colname, color, axes = TRUE) {
   opar <- par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
   on.exit(par(opar))
   for (I in c(1:22, "X", "Y")) {
-    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE)
+    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE, axes = axes)
   }
 }
 
@@ -104,14 +109,13 @@ singles  <- function(DATA, columns, chr, pal = palette()) {
   invisible(DATA)
 }
 
-stackIdiogram  <- function(DATA, columns, pal = palette(),
-                           horiz = FALSE, nrows = 2) {
-  cat("horiz =", horiz, "and nrows =", nrows, "\n", file=stderr())
+stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
+                           horiz = FALSE, axes = TRUE) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
-  opar <- par(bg="white")
-  on.exit(par(opar))
+  opar <- par("mfrow")
+  on.exit(par(mfrow = opar))
 
   if (horiz) { # horizontal layout of vertical plots
     L1 <- function() { par(mfrow = c(24, 1)) }
@@ -127,6 +131,6 @@ stackIdiogram  <- function(DATA, columns, pal = palette(),
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz)
+    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz, axes = axes)
   }
 }

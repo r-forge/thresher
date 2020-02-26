@@ -49,34 +49,41 @@ setMethod("barplot", "CytobandData",
 })
 
 setMethod("image", "CytobandData", function(x, chr, what,
-           pal = palette(), horiz = FALSE, nrows = 2, labels = NULL) {
+         pal = palette(), nrows = 2, labels = NULL,
+         horiz = FALSE, axes = TRUE, debug = FALSE) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
   }
   if (is.list(what)) {
     if (length(what) != 2) {
-      stop("'what' must be a list o length exactly two.")
+      stop("'what' must be a list of length exactly two.")
     }
     if(chr == "all") {
+      if(debug) cat("biIdiogram\n", file = stderr())
       biIdiogram(x@DATA, what[[1]], what[[2]],
-                 pal = pal, horiz = horiz, nrows = nrows)
+                 pal = pal, nrows = nrows, horiz = horiz, axes = axes)
     } else {
+      if(debug) cat("plot2Chrom\n", file = stderr())
       plot2Chrom(x@DATA, what[[1]], what[[2]],
                  chr = chr, pal = pal,
-                 horiz = !horiz) # changed our minds about what "horiz" means
+                 horiz = !horiz, # changed our minds about what "horiz" means
+                 axes = axes)
     }
   } else { # now we must have chr equal to a character vector
     if (chr == "all") {
       if (length(what) == 1) {
-        makeIdiogram(x@DATA, what, color = pal)
+        if(debug) cat("makeIdiogram\n", file = stderr())
+        makeIdiogram(x@DATA, what, color = pal, axes = axes)
       } else {
+        if(debug) cat("stackIdiogram\n", file = stderr())
         stackIdiogram(x@DATA, what, pal = pal,
                       horiz = !horiz, # changed our minds about "horiz"
-                      nrows = nrows)
+                      axes = axes, nrows = nrows)
       }
     } else {
+      if(debug) cat("plot1Chrom\n", file = stderr())
       plot1Chrom(x@DATA, what, chr = chr,
-                 labels = labels, pal = pal,
+                 labels = labels, pal = pal, axes = axes,
                  horiz = !horiz) # changed our minds about what "horiz" means
     }
   }

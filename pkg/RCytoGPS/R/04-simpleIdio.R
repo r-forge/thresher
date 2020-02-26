@@ -1,6 +1,6 @@
 plot2Chrom <- function(DATA, leftcol, rightcol, chr,
                        pal = c("blue", "red"),
-                       horiz = FALSE) {
+                       horiz = FALSE, axes = TRUE) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -44,9 +44,14 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     par(new = TRUE,
         mai=c(vres, (1 + V0 + V1)*hres, 15*vres, 2*hres))
     barplot(rev(right), horiz=TRUE, border=NA, col = pal[2],
-            xlim=c(0, 1.05*resn), yaxs="i", xlab = rightcol,
+            xlim=c(0, 1.05*resn), yaxs="i",
             space=0, axes = FALSE)
-    axis(side = 3, line = 1)
+    if (axes) {
+      axis(3) # on top
+      U <- par("usr")
+      W <- (U[1] + U[2])/2
+      mtext(rightcol, at = W, side=3, line=2.5)
+    }
     ## chromosome in the middle
     par(new=TRUE,
         mai=c(vres, (V1 + 2)*hres, 15*vres, (V1 + 2)*hres))
@@ -54,10 +59,15 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     ## left, pointing backwards
     par(new = TRUE,
         mai=c(vres, 2*hres, 15*vres, (1 + V0 + V1)*hres))
-    barplot(-rev(left), horiz=TRUE, border=NA, col = pal[1], 
-            xlim=c(-1.05*resn, 0), yaxs="i", xlab = leftcol,
+    barplot(-rev(left), horiz=TRUE, border=NA, col = pal[1],
+            xlim=c(-1.05*resn, 0), yaxs="i",
             space=0, axes=FALSE)
-    axis(side = 3, line=1)
+    if (axes) {
+      axis(3) # on top
+      U <- par("usr")
+      W <- (U[1] + U[2])/2
+      mtext(leftcol, at = W, side=3, line=2.5)
+    }
   } else {
     vres <- fin[2]/(V0 + 2*V1)
     hres <- fin[1]/100
@@ -67,7 +77,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
         mai=c((1 + V0 + V1)*vres, 10*hres, 2*vres, hres))
     barplot(right, border=NA, col = pal[2],
             ylim=c(0, 1.05*resn), xaxs="i", ylab = rightcol,
-            space=0)
+            space=0, axes = axes)
     ## chromosome in the middle
     par(new=TRUE,
         mai=c((V1 + 2)*vres, 10*hres, (V1 + 2)*vres, hres))
@@ -75,21 +85,21 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     ## left goes on the bottom, and points down
     par(new = TRUE,
         mai=c(2*vres, 10*hres, (1 + V0 + V1)*vres, hres))
-    barplot(-(left), border=NA, col = pal[1], 
+    barplot(-(left), border=NA, col = pal[1],
             ylim=c(-1.05*resn, 0), xaxs="i", ylab = leftcol,
-            space=0)
+            space=0, axes = axes)
   }
   invisible(DATA)
 }
 
-biIdiogram  <- function(DATA, leftcol, rightcol, 
-                        pal = c("blue", "red"), 
-                        horiz = FALSE, nrows = 2) {
+biIdiogram  <- function(DATA, leftcol, rightcol,
+                        pal = c("blue", "red"), nrows = 2,
+                        horiz = FALSE, axes = TRUE) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
   opar <- par("mfrow")
-  on.exit(par(opar))
+  on.exit(par(mfrow = opar))
 
   if (horiz) { # horizontal layout of vertical plots
     L1 <- function() { par(mfrow = c(24, 1)) }
@@ -105,6 +115,6 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz)
+    plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz, axes = axes)
   }
 }
