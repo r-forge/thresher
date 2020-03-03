@@ -50,7 +50,7 @@ setMethod("barplot", "CytobandData",
 
 setMethod("image", "CytobandData", function(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
-         horiz = FALSE, axes = TRUE, debug = FALSE) {
+         horiz = FALSE, axes = TRUE, debug = FALSE, legend = FALSE) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
   }
@@ -61,30 +61,32 @@ setMethod("image", "CytobandData", function(x, chr, what,
     if(chr == "all") {
       if(debug) cat("biIdiogram\n", file = stderr())
       biIdiogram(x@DATA, what[[1]], what[[2]],
-                 pal = pal, nrows = nrows, horiz = horiz, axes = axes)
+                 pal = pal, nrows = nrows, horiz = horiz,
+                 axes = axes, legend = legend)
     } else {
       if(debug) cat("plot2Chrom\n", file = stderr())
       plot2Chrom(x@DATA, what[[1]], what[[2]],
                  chr = chr, pal = pal,
                  horiz = !horiz, # changed our minds about what "horiz" means
-                 axes = axes)
+                 axes = axes, legend = legend)
     }
   } else { # now we must have chr equal to a character vector
     if (chr == "all") {
       if (length(what) == 1) {
         if(debug) cat("makeIdiogram\n", file = stderr())
-        makeIdiogram(x@DATA, what, color = pal, axes = axes)
+        makeIdiogram(x@DATA, what, color = pal, axes = axes, legend = legend)
       } else {
         if(debug) cat("stackIdiogram\n", file = stderr())
         stackIdiogram(x@DATA, what, pal = pal,
                       horiz = !horiz, # changed our minds about "horiz"
-                      axes = axes, nrows = nrows)
+                      axes = axes, nrows = nrows, legend = legend)
       }
     } else {
       if(debug) cat("plot1Chrom\n", file = stderr())
       plot1Chrom(x@DATA, what, chr = chr,
                  labels = labels, pal = pal, axes = axes,
-                 horiz = !horiz) # changed our minds about what "horiz" means
+                 horiz = !horiz, # changed our minds about what "horiz" means
+                 legend = legend)
     }
   }
   invisible(x)

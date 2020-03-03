@@ -1,5 +1,6 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
-                       pal = palette(), horiz = FALSE, axes=TRUE) {
+                       pal = palette(), horiz = FALSE, axes=TRUE,
+                       legend = FALSE) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -85,7 +86,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   invisible(DATA)
 }
 
-makeIdiogram <- function(DATA, colname, color, axes = TRUE) {
+makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE) {
   opar <- par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
   on.exit(par(opar))
   for (I in c(1:22, "X", "Y")) {
@@ -110,7 +111,7 @@ singles  <- function(DATA, columns, chr, pal = palette()) {
 }
 
 stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
-                           horiz = FALSE, axes = TRUE) {
+                           horiz = FALSE, axes = TRUE, legend = FALSE) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }

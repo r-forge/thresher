@@ -1,6 +1,6 @@
 plot2Chrom <- function(DATA, leftcol, rightcol, chr,
                        pal = c("blue", "red"),
-                       horiz = FALSE, axes = TRUE) {
+                       horiz = FALSE, axes = TRUE, legend = FALSE) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -94,7 +94,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
 
 biIdiogram  <- function(DATA, leftcol, rightcol,
                         pal = c("blue", "red"), nrows = 2,
-                        horiz = FALSE, axes = TRUE) {
+                        horiz = FALSE, axes = TRUE, legend = FALSE) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
@@ -116,5 +116,12 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz, axes = axes)
+  }
+  if (legend) {
+    if (horiz) {
+      legend("right", c(leftcol, rightcol), col=pal, lwd=5)
+    } else {
+      legend("bottom", c(leftcol, rightcol), col=pal, lwd=5)
+    }
   }
 }
