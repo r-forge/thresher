@@ -3,6 +3,9 @@ setClass("Mercator",
            metric ="character",
            distance = "dist",
            view = "list",
+           palette = "character",
+           symbols = "numeric",
+           cluster = "numeric",
            colv = "character",
            symv = "numeric")
          )
@@ -49,8 +52,11 @@ setMethod("[", signature = "Mercator", function(x, i, j, ..., drop=FALSE) {
       metric = x@metric,
       distance = as.dist(M),
       view = V,
-      colv = x@colv[i],
-      symv = x@symv[i]
+      palette = x@palette,
+      symbols = x@symbols,
+      cluster = x@cluster[i],
+      colv = colv(x)[i],
+      symv = symv(x)[i]
       )
 })
 
@@ -80,7 +86,7 @@ setMethod("barplot", signature("Mercator"),
     swd <- silh[od, 'sil_width']
     sub <- paste("Mean SW =", round(mean(swd), 5))
   }
-  barplot(swd, col = height@colv[od], border=NA, 
+  barplot(swd, col = colv(height)[od], border=NA, 
           sub=sub, main=main, ...)
 })
 
@@ -88,10 +94,10 @@ setMethod("plot", signature("Mercator", "missing"),
           function(x, view = NULL, ask = NULL, ...) {
 ### known kinds of visualizations
   plotMDS <- function(x, ...) {
-    plot(x@view[["mds"]], col=x@colv, pch=x@symv, xlab = "PC1", ylab="PC2", ...)
+    plot(x@view[["mds"]], col=colv(x), pch=symv(x), xlab = "PC1", ylab="PC2", ...)
   }
   plotTSNE <- function(x, ...) {
-    plot(x@view[["tsne"]]$Y, col=x@colv, pch=x@symv, xlab = "T1", ylab="T2", ...)
+    plot(x@view[["tsne"]]$Y, col=colv(x), pch=symv(x), xlab = "T1", ylab="T2", ...)
   }
   plotHC <- function(x, ...) {
     dend <- x@view[["hclust"]]
@@ -99,7 +105,7 @@ setMethod("plot", signature("Mercator", "missing"),
     if (is.null(labs)) {
       labs <- seq(1, length(dend$order))
     }
-    plotColoredClusters(dend, cols = x@colv, labs = labs, ...)
+    plotColoredClusters(dend, cols = colv(x), labs = labs, ...)
   }
   plotIG <- function(x, layout = NULL, ...) {
     G <- x@view[["graph"]]
@@ -214,19 +220,25 @@ RC <- function(colv, symv) {
   24*lead + units
 }
 
+colv <- function(object) { object@colv }
+symv <- function(object) { object@symv }
+
 getClusters <- function(DV) {
-  RC(DV@colv, DV@symv)
+  RC(colv(DV), symv(DV))
 }
 
 remapColors <- function(fix, vary) {
-  fixCluster <- RC(fix@colv, fix@symv)
-  varyCluster <- RC(vary@colv, vary@symv)
+  fixCluster <- getClusters(fix)
+  varyCluster <- getClusters(vary)
   newCluster <- remap(fixCluster, varyCluster)
   newDisplay <- makeDisplay(newCluster)
   new("Mercator",
       metric = vary@metric,
       distance = vary@distance,
       view = vary@view,
+      palette = vary@palette,
+      symbols = vary@symbols,
+      cluster = newCluster,
       colv = newDisplay$colv,
       symv = newDisplay$symv
       )
@@ -241,6 +253,9 @@ setClusters <- function(DV, clusters) {
       metric = DV@metric,
       distance = DV@distance,
       view = DV@view,
+      palette = DV@palette,
+      symbols = DV@symbols,
+      cluster = clusters,
       colv = colv,
       symv = symv
       )
@@ -265,6 +280,9 @@ Mercator <- function(binaryMat, metric, method, K, ...) {
             metric = metric,
             distance = DistMat,
             view = view,
+            palette = dark.colors(24),
+            symbols = c(16, 15, 17, 18, 10, 7, 11, 9),
+            cluster = poof,
             colv = colv,
             symv = symv
             )
