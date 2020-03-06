@@ -24,3 +24,7 @@ library(cluster)
 clus <- pam(vis1@distance, k = 12, diss=TRUE, cluster.only=TRUE)
 vis4 <- setClusters(vis1, clus)
 plot(vis4)
+
+slot(vis4, "palette") <- c("red", "green", "blue",
+                           "cyan", "purple", "black")
+table(Mercator:::symv(vis4))

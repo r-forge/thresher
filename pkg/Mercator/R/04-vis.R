@@ -8,14 +8,6 @@ setClass("Mercator",
            clusters = "numeric")
          )
 
-setPalette <- function(object, pal) {
-  object@palette <- pal
-}
-
-getPalette <- function(object) {
-  object@palette
-  }
-
 shrinkView <- function(name, object, i) {
   shrinkTSNE <- function(tis, i) {
     tis$Y <- tis$Y[i,]
@@ -197,12 +189,13 @@ makeDisplay <- function(clusters,
                         pal = dark.colors(24),
                         baseSyms = c(16, 15, 17, 18, 10, 7, 11, 9)) {
   K <- max(clusters)
-  R <- ifelse(K %% 24 == 0, K/24, 1 + trunc(K/24))
+  L <- length(pal)
+  R <- ifelse(K %% L == 0, K/L, 1 + trunc(K/L))
   if (R > length(baseSyms)) {
     stop("Are you kidding me? You can't possibly want that many (", K, ") clusters.")
   }
   mycol <- rep(pal, R)
-  mysym <- rep(baseSyms[1:R], each=24)
+  mysym <- rep(baseSyms[1:R], each=L)
   colv <- mycol[clusters]
   symv <- mysym[clusters]
   names(colv) <- names(symv) <- names(clusters)

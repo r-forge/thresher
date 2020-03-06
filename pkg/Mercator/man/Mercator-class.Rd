@@ -156,6 +156,10 @@ plot(my.vis, view = "mds")
 
 scatter(my.vis, view ="mds")
 
+# change the color palette
+slot(my.vis, "palette") <- c("purple", "red", "orange", "green")
+scatter(my.vis, view ="mds")
+
 #Recover cluster identities
 #What species comprise cluster 1?
 my.clust <- getClusters(my.vis)

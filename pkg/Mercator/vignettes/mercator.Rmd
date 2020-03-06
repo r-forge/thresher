@@ -335,7 +335,21 @@ plot(SV, view = "tsne", main="t-SNE; Sokal-Michener Distance; perplexity=10")
 
 Now colors have been matched (as well as possible) between the two sets of visualizations.
 
-
+# Changing the Color Palette
+Each `Mercator` object stores its own palette internally, but you can change
+the palette using the `slot` funciton.
+```{r sv2}
+slot(jacc.Vis, "palette") <- c("red", "orange", "green", "blue",
+                               "cyan", "magenta", "purple", "black")
+plot(jacc.Vis, view = "tsne")
+```
+If the number of colors in the palette is smaller thant he numbe of clusters,
+they will be recycled, and other plotting symbols will be introduced.
+```{r small}
+slot(jacc.Vis, "palette") <- c("red", "green", "blue",
+                               "cyan", "purple")
+plot(jacc.Vis, view = "tsne")
+```
 
 # References
 
