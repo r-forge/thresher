@@ -1,9 +1,23 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.9 SERIES NEWS			 *
+	*	       0.10 SERIES NEWS			 *
 	*						 *
 	**************************************************
+
+		CHANGES IN R VERSION 0.10.0
+
+NEW FEATURES
+
+    o	Can now use `slot(object, "palette") <- ...1 to change the
+        palette associated with a Mercator object.
+
+BREAKING CHANGES
+
+    o	Mercator objects no longer have `colvv` or `symv` slots. To
+`    retain the old functionality, you must instead use the new
+     internal functions with same names; for example, write
+     `Mercator:::colv(object)` instead  of `object@colv`.
 
 		CHANGES IN R VERSION 0.9.6
 
