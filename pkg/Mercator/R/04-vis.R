@@ -5,10 +5,16 @@ setClass("Mercator",
            view = "list",
            palette = "character",
            symbols = "numeric",
-           cluster = "numeric",
-           colv = "character",
-           symv = "numeric")
+           clusters = "numeric")
          )
+
+setPalette <- function(object, pal) {
+  object@palette <- pal
+}
+
+getPalette <- function(object) {
+  object@palette
+  }
 
 shrinkView <- function(name, object, i) {
   shrinkTSNE <- function(tis, i) {
@@ -54,9 +60,7 @@ setMethod("[", signature = "Mercator", function(x, i, j, ..., drop=FALSE) {
       view = V,
       palette = x@palette,
       symbols = x@symbols,
-      cluster = x@cluster[i],
-      colv = colv(x)[i],
-      symv = symv(x)[i]
+      clusters = x@clusters[i]
       )
 })
 
@@ -189,26 +193,19 @@ setMethod("scatter", signature(object = "Mercator"),
 })
 
 
-makeDisplay <- function(clusters, master =  NULL) {
-  Dark24 <- dark.colors(24)
+makeDisplay <- function(clusters,
+                        pal = dark.colors(24),
+                        baseSyms = c(16, 15, 17, 18, 10, 7, 11, 9)) {
   K <- max(clusters)
-  if (!is.null(master)) {
-    L <- max(master)
-    if (K != L) {
-      warning("Mismatch in number of clusters; ignoring.")
-    } else {
-      clusters <- remap(master, clusters)
-    }
-  }
   R <- ifelse(K %% 24 == 0, K/24, 1 + trunc(K/24))
-  baseSyms <- c(16, 15, 17, 18, 10, 7, 11, 9)
   if (R > length(baseSyms)) {
     stop("Are you kidding me? You can't possibly want that many (", K, ") clusters.")
   }
-  mycol <- rep(Dark24, R)
+  mycol <- rep(pal, R)
   mysym <- rep(baseSyms[1:R], each=24)
   colv <- mycol[clusters]
   symv <- mysym[clusters]
+  names(colv) <- names(symv) <- names(clusters)
   list(colv = colv, symv = symv)
 }
 
@@ -220,44 +217,41 @@ RC <- function(colv, symv) {
   24*lead + units
 }
 
-colv <- function(object) { object@colv }
-symv <- function(object) { object@symv }
+colv <- function(object) {
+  md <- makeDisplay(object@clusters, object@palette, object@symbols)
+  md$colv
+}
+symv <- function(object) {
+  md <- makeDisplay(object@clusters, object@palette, object@symbols)
+  md$symv
+}
 
 getClusters <- function(DV) {
-  RC(colv(DV), symv(DV))
+  DV@clusters
 }
 
 remapColors <- function(fix, vary) {
   fixCluster <- getClusters(fix)
   varyCluster <- getClusters(vary)
   newCluster <- remap(fixCluster, varyCluster)
-  newDisplay <- makeDisplay(newCluster)
   new("Mercator",
       metric = vary@metric,
       distance = vary@distance,
       view = vary@view,
       palette = vary@palette,
       symbols = vary@symbols,
-      cluster = newCluster,
-      colv = newDisplay$colv,
-      symv = newDisplay$symv
+      clusters = newCluster
       )
 }
 
 setClusters <- function(DV, clusters) {
-  dispSet <- makeDisplay(clusters)
-  colv <- dispSet$colv
-  symv <- dispSet$symv
-  names(colv) <- names(symv) <- attr(DV@distance, "Labels")
   new("Mercator",
       metric = DV@metric,
       distance = DV@distance,
       view = DV@view,
       palette = DV@palette,
       symbols = DV@symbols,
-      cluster = clusters,
-      colv = colv,
-      symv = symv
+      clusters = clusters
       )
 }
 recolor <- function(DV, clusters) {
@@ -271,10 +265,6 @@ Mercator <- function(binaryMat, metric, method, K, ...) {
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
   poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
-  dispSet <- makeDisplay(poof)
-  colv <- dispSet$colv
-  symv <- dispSet$symv
-  names(colv) <- names(symv) <- labels(DistMat)
   view <- list()
   ob <- new("Mercator",
             metric = metric,
@@ -282,9 +272,7 @@ Mercator <- function(binaryMat, metric, method, K, ...) {
             view = view,
             palette = dark.colors(24),
             symbols = c(16, 15, 17, 18, 10, 7, 11, 9),
-            cluster = poof,
-            colv = colv,
-            symv = symv
+            clusters = poof
             )
   addVisualization(ob, method, ...)
 }

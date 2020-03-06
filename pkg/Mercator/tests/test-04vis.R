@@ -3,8 +3,9 @@ data("CML500")
 
 # Jaccard
 vis1 <- Mercator(CML500, "jacc", "mds", K=20)
-head(vis1@symv) # make sure names propagate correctly
-head(vis1@colv)
+head(Mercator:::symv(vis1)) # make sure names propagate correctly
+head(Mercator:::colv(vis1))
+head(vis1@clusters)
 plot(vis1) # default MDS view
 
 barplot(vis1)

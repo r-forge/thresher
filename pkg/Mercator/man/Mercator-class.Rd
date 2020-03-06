@@ -66,10 +66,10 @@ getClusters(DV)
       matrix used and represented by this object.}
     \item{\code{view}:}{Object of class \code{"list"}; contains the
       results of calculations to generate each visualize the object.}
-    \item{\code{colv}:}{Object of class \code{"character"}; a vector 
-      identifying the color assigned to each clustered element.}
-    \item{\code{symv}:}{Object of class \code{"numeric"}; a vector 
-      identifying the plotting symbol used to display each element.}
+    \item{\code{clusters}:}{A numeric vector of cluster assignments.}
+    \item{\code{symbols}:}{A numeric vector of valid plotting
+      characters, as used by \code{par(pch)}.}
+    \item{\code{palette}:}{A character vector of color names.}
   }
 }
 \section{Methods}{

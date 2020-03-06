@@ -25,12 +25,15 @@ Loading required package: PCDimension
 > 
 > # Jaccard
 > vis1 <- Mercator(CML500, "jacc", "mds", K=20)
-> head(vis1@symv) # make sure names propagate correctly
+> head(Mercator:::symv(vis1)) # make sure names propagate correctly
  S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
      16      16      16      16      16      16 
-> head(vis1@colv)
+> head(Mercator:::colv(vis1))
    S3.2.0    S4.1.0   S35.1.0   S49.1.0   S57.1.0   S59.1.0 
 "#2E91E5" "#E15F99" "#E15F99" "#1CA71C" "#E15F99" "#E15F99" 
+> head(vis1@clusters)
+ S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
+      1       2       2       3       2       2 
 > plot(vis1) # default MDS view
 > 
 > barplot(vis1)
@@ -53,4 +56,4 @@ Loading required package: PCDimension
 > 
 > proc.time()
    user  system elapsed 
-  19.78   13.18   33.21 
+  32.15   36.78   69.04 

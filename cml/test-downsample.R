@@ -20,13 +20,14 @@ flipped <- t(bm)
 rm(CMLData, CMLInfo, lgfFeatures, bm)
 
 ### Compute two visualizations based on Jaccard distance
-### This takes a fair amount oif time, since there are more
+### This takes a fair amount of time, since there are more
 ### than 5000 samples to cluster.
 vis <- Mercator(flipped, "jacc", "mds", K=48)
-plot(vis@view[[1]], col=vis@colv, pch=vis@symv)
+plot(vis, view = "mds")
+plot(vis@view[[1]], col=colv(vis), pch=symv(vis))
 ### Add a t-SNE plot, which is also slow
 vis <- addVisualization(vis, "tsne")
-plot(vis@view[[2]]$Y, col=vis@colv, pch=vis@symv, cex=1.5)
+plot(vis@view[[2]]$Y, col=colv(vis), pch=symv(vis), cex=1.5)
 
 ### Test the "downsample" routine. This requires a distance matrix
 ### (like Jaccard) along with a parameter to define which neighbors
