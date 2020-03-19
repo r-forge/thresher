@@ -5,6 +5,12 @@
 	*						 *
 	**************************************************
 
+		CHANGES IN R VERSION 0.10.1
+
+BUG FIX
+
+    o	Fixed the bug with missing names on `clusters` slot. Again.
+
 		CHANGES IN R VERSION 0.10.0
 
 NEW FEATURES

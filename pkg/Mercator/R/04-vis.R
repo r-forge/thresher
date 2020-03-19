@@ -185,9 +185,13 @@ setMethod("scatter", signature(object = "Mercator"),
 })
 
 
-makeDisplay <- function(clusters,
-                        pal = dark.colors(24),
-                        baseSyms = c(16, 15, 17, 18, 10, 7, 11, 9)) {
+makeDisplay <- function(object) {
+  pal  <-  object@palette
+  baseSyms  <-  object@symbols
+  clusters <- object@clusters
+  if (is.null(names(clusters))) {
+    names(clusters) <- attr(object@distance, "Labels")
+  }
   K <- max(clusters)
   L <- length(pal)
   R <- ifelse(K %% L == 0, K/L, 1 + trunc(K/L))
@@ -211,11 +215,11 @@ RC <- function(colv, symv) {
 }
 
 colv <- function(object) {
-  md <- makeDisplay(object@clusters, object@palette, object@symbols)
+  md <- makeDisplay(object)
   md$colv
 }
 symv <- function(object) {
-  md <- makeDisplay(object@clusters, object@palette, object@symbols)
+  md <- makeDisplay(object)
   md$symv
 }
 
@@ -227,6 +231,7 @@ remapColors <- function(fix, vary) {
   fixCluster <- getClusters(fix)
   varyCluster <- getClusters(vary)
   newCluster <- remap(fixCluster, varyCluster)
+  names(newCluster) <- names(varyCluster)
   new("Mercator",
       metric = vary@metric,
       distance = vary@distance,
@@ -238,6 +243,18 @@ remapColors <- function(fix, vary) {
 }
 
 setClusters <- function(DV, clusters) {
+  if (is.null(names(clusters))) {
+    names(clusters) <- names(DV@clusters)
+  }
+  L <- attr(DV@distance, "Labels")
+  if (any(names(clusters) != L)) {
+    if (all(names(clusters) %in% L)) {
+      warning("Reordering cluster info to match existing names.")
+      clusters <- clusters[L]
+    } else {
+      stop("Cluster names do not match existing names.")
+    }
+  }
   new("Mercator",
       metric = DV@metric,
       distance = DV@distance,
@@ -257,7 +274,8 @@ Mercator <- function(binaryMat, metric, method, K, ...) {
   DistMat <- binaryDistance(binaryMat@binmat, metric)
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
-  poof <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+  clust <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+  if (is.null(names(clust))) names(clust) <- attr(DistMat, "Labels")
   view <- list()
   ob <- new("Mercator",
             metric = metric,
@@ -265,7 +283,7 @@ Mercator <- function(binaryMat, metric, method, K, ...) {
             view = view,
             palette = dark.colors(24),
             symbols = c(16, 15, 17, 18, 10, 7, 11, 9),
-            clusters = poof
+            clusters = clust
             )
   addVisualization(ob, method, ...)
 }
