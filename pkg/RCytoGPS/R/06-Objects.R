@@ -42,10 +42,12 @@ setMethod("summary", "CytobandData", function(object, ...) {
 
 setMethod("barplot", "CytobandData",
           function(height, what, col = "blue", altcol = "#FE4C4",
-                   ylab = "Percent", h = NULL, ...) {
+                   ylab = "Percent", hline = NULL,
+                   xform = function(x) x, ...) {
   if (is.list(what)) what <- unlist(what)
   if ( length(what) != 1) stop("'what' must identify exactly one data column.")
-  genomeBarplot(height@DATA[ , what], col = col, altcol = altcol, ylab = ylab, h=h)
+  genomeBarplot(xform(height@DATA[ , what]),
+                col = col, altcol = altcol, ylab = ylab, h=hline)
 })
 
 setMethod("image", "CytobandData", function(x, chr, what,

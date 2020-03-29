@@ -1,6 +1,6 @@
 plot2Chrom <- function(DATA, leftcol, rightcol, chr,
                        pal = c("blue", "red"),
-                       horiz = FALSE, axes = TRUE, legend = FALSE) {
+                       horiz = FALSE, axes = TRUE, legend = FALSE, resn = NULL) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -26,7 +26,9 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
   CL <- cytobandLocations
   clap <- CL[CL$Chromosome == chrname,]
   segset <- DATA[DATA$Chromosome == chrname,]
-  resn <- max(max(segset[, c(leftcol, rightcol)]))
+  if (is.null(resn)) {
+    resn <- max(max(segset[, c(leftcol, rightcol)]))
+  }
   y <- left <- right <- rep(NA, length(dumbposn))
   for(J in 1:nrow(clap)) {
     y[clap[J, "loc.start"] <= dumbposn &
@@ -98,7 +100,7 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
-  opar <- par("mfrow")
+  opar <- par("mfrow", "mai", "usr")
   on.exit(par(mfrow = opar))
 
   if (horiz) { # horizontal layout of vertical plots
@@ -114,14 +116,19 @@ biIdiogram  <- function(DATA, leftcol, rightcol,
   }
   switch(nrows, L1(), L2(), L3(), L4())
 
+  resn <- max(max(DATA[, c(leftcol, rightcol)]))
+  
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz, axes = axes)
+    plot2Chrom(DATA, leftcol, rightcol, I, pal, !horiz,
+               axes = axes, resn = resn)
   }
   if (legend) {
+    par(opar)
+    par(mai=c(1, 1, 1, 1), usr = c(0,1, 0, 1))
     if (horiz) {
-      legend("right", c(leftcol, rightcol), col=pal, lwd=5)
+      legend("right", c(leftcol, rightcol), col = pal, lwd = 5)
     } else {
-      legend("bottom", c(leftcol, rightcol), col=pal, lwd=5)
+      legend("bottom", c(leftcol, rightcol), col = pal, lwd = 5)
     }
   }
 }
