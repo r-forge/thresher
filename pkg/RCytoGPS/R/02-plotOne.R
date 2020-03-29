@@ -1,6 +1,7 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
                        pal = palette(), horiz = FALSE, axes=TRUE,
-                       legend = FALSE) {
+                       legend = FALSE,
+                       sigcolumn = NULL, sigcut = 0.01, alpha = 63) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -20,8 +21,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   par(bg = "white", mai = c(0,0,0,0))
   plot(0, 0, xaxt="n", yaxt="n", xlab="", ylab="", type="n", axes=FALSE)
   ## get the figure size in inches
-  g <- dev.size()/par("din")
-  fin <- g*par("fin")
+  fin <- par("fin")
   ## create a "vertical resolution" near 200
   V0     <- c(25, 25, 15, 10, 17, 14, 13, 12, 11, 10)
   V1     <- c(75, 50, 30, 20, 33, 28, 25, 22, 20, 18)
@@ -47,16 +47,27 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   for (II in 1:length(columns)) {
     K <- NC - II + 1
     column <- columns[K]
+    kcolors <- c(makeTransparent(pal[K], alpha), pal[K])
     vals <- NA * y
+    shades <- NA * y
     for(J in 1:nrow(clap)) {
       vals[clap[J, "loc.start"] <= dumbposn & 
            dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, column])
+      if (!is.null(sigcolumn)) {
+#        cat("K =", K, ", J =", J, "", segset[J, sigcolumn], "\n", file=stderr())
+        shades[clap[J, "loc.start"] <= dumbposn & 
+               dumbposn <= clap[J, "loc.end"] ] <-
+                    kcolors[1 + 1*(segset[J, sigcolumn] < sigcut)]
+      } else {
+        shades[clap[J, "loc.start"] <= dumbposn & 
+               dumbposn <= clap[J, "loc.end"] ] <- pal[K]
+      }
     }
     if (horiz) {
       par(new = TRUE,
           mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
                 10*vres, hres * (1 + (II-1)*V1[NC])))
-      barplot(rev(vals), horiz = horiz, border=NA, col = pal[K], 
+      barplot(rev(vals), horiz = horiz, border=NA, col = shades, 
               xlim=c(0, 1.05*resn), yaxs="i", 
               space=0, axes=FALSE)
       if (axes) {
@@ -69,7 +80,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       par(new = TRUE,
           mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
                 vres * (1 + (II-1)*V1[NC]), hres))
-      barplot(vals, horiz = horiz, border=NA, col = pal[K], 
+      barplot(vals, horiz = horiz, border=NA, col = shades, 
               ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
               space=0, axes = axes)
     }

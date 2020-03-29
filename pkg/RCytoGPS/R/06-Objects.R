@@ -52,7 +52,8 @@ setMethod("barplot", "CytobandData",
 
 setMethod("image", "CytobandData", function(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
-         horiz = FALSE, axes = TRUE, debug = FALSE, legend = FALSE) {
+         horiz = FALSE, axes = TRUE, debug = FALSE, legend = FALSE,
+         sigcolumn = NULL, sigcut = 0.01, alpha = 63) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
   }
@@ -88,7 +89,8 @@ setMethod("image", "CytobandData", function(x, chr, what,
       plot1Chrom(x@DATA, what, chr = chr,
                  labels = labels, pal = pal, axes = axes,
                  horiz = !horiz, # changed our minds about what "horiz" means
-                 legend = legend)
+                 legend = legend,
+                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
     }
   }
   invisible(x)

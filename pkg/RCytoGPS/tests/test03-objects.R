@@ -3,6 +3,7 @@ library(RCytoGPS)
 set.seed(53106)
 CL <- RCytoGPS:::cytobandLocations
 fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))
+fake$PV <- runif(nrow(fake), 0, 1)
 CL <- cbind(CL, fake) # extra colnames V1, ..., V10
 CD <- CytobandData(CL)
 
@@ -20,6 +21,8 @@ image(CD, chr = 6, what = paste("V", 1:10, sep=""))
 ## windows(width=18, height=10)
 # one chromsome, stacks, horizontal
 image(CD, 6, paste("V", 1:2, sep=""), horiz = TRUE)
+
+image(CD, 10, paste("V", 1:2, sep=""), horiz = TRUE, sigcolumn = "PV")
 
 # combined
 opar <- par(mfrow=c(2,1))
