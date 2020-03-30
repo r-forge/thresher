@@ -47,6 +47,13 @@ image(CD, 3, list("V1", "V2"), axes = FALSE, debug = FALSE)
 image(CD, 3, list("V1", "V2"), horiz = TRUE, debug = TRUE)
 image(CD, 3, list("V1", "V2"), horiz = TRUE, axes = FALSE, debug = TRUE) # still names?
 
+image(CD, 8, list("V1", "V2"),
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(127, 192),
+      debug = TRUE)
+image(CD, 8, list("V1", "V2"), horiz = TRUE,
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(127, 192),
+      debug = TRUE)
+
 ## (biIdiogram)
 image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, debug = TRUE) # default axes = FALSE
 image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, debug  = TRUE)
@@ -62,6 +69,12 @@ image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, nrows = 1)
 image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, legend = TRUE, debug = TRUE)
 image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, legend = TRUE, debug  = TRUE)
 
+image(CD, chr = "all", list("V1", "V2"),
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(127, 192),
+      debug = TRUE)
+image(CD, chr = "all", list("V1", "V2"), horiz = TRUE,
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(127, 192),
+      debug = TRUE)
 
 # stackIdiograms
 mycolumns <- paste("V", 1:3, sep="")
@@ -75,3 +88,8 @@ image(CD, chr = "all", mycolumns, nrows = 4, axes=TRUE, horiz=TRUE, debug = TRUE
 
 image(CD, chr = "all", mycolumns, debug = TRUE, legend = TRUE) # no good place to put it
 image(CD, chr = "all", mycolumns, horiz = TRUE, debug = TRUE, legend = TRUE) # no good place to put it
+
+
+image(CD, chr = "all", mycolumns, horiz = TRUE,
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(63, 155),
+      debug = TRUE)

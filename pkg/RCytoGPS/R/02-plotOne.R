@@ -9,7 +9,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
     sigcut <- sort(sigcut)
     alpha <- sort(alpha)
   }
-  ## check valid short chromsome name
+  ## check valid short chromosome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
   ## check valid stack height
@@ -61,7 +61,6 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       vals[clap[J, "loc.start"] <= dumbposn & 
            dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, column])
       if (!is.na(sigcolumn)) {
-#        cat("K =", K, ", J =", J, "", segset[J, sigcolumn], "\n", file=stderr())
         shades[clap[J, "loc.start"] <= dumbposn & 
                dumbposn <= clap[J, "loc.end"] ] <-
                     kcolors[1 + sum(segset[J, sigcolumn] < sigcut)]
@@ -161,7 +160,8 @@ stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz, axes = axes)
+    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz, axes = axes,
+               sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
   }
   if (legend) {
     par(opar)

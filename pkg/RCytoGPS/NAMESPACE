@@ -4,7 +4,7 @@
 import(methods)
 importFrom("graphics", "image", "barplot", "abline", "layout",
            "legend", "lines", "mtext", "par",
-           "axis", "plot", "rect", "text")
+           "axis", "plot", "rect", "text", "box")
 importFrom("grDevices", "palette", "col2rgb", "rgb")
 
 exportClasses("Chromosome", "CytobandData")
