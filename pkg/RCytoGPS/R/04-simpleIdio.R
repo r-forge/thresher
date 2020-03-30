@@ -1,6 +1,7 @@
 plot2Chrom <- function(DATA, leftcol, rightcol, chr,
                        pal = c("blue", "red"),
-                       horiz = FALSE, axes = TRUE, legend = FALSE, resn = NULL) {
+                       horiz = FALSE, axes = TRUE, legend = FALSE, resn = NULL,
+                       sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -11,7 +12,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     stop("Unrecognized (left) column name.")
   if ( !(rightcol %in% colnames(DATA)) )
     stop("Unrecognized (right) column name.")
-  opar <- par(c("bg", "new", "mai"))
+  opar <- par(c("bg", "new", "mai", "usr"))
   on.exit(par(opar))
   par(bg = "white", mai=c(0,0,0,0))
   ## fake plot to white screen so we can use par(new=TRUE) in loop below
@@ -91,17 +92,19 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
             ylim=c(-1.05*resn, 0), xaxs="i", ylab = leftcol,
             space=0, axes = axes)
   }
+  par(opar)
   invisible(DATA)
 }
 
 biIdiogram  <- function(DATA, leftcol, rightcol,
                         pal = c("blue", "red"), nrows = 2,
-                        horiz = FALSE, axes = TRUE, legend = FALSE) {
+                        horiz = FALSE, axes = TRUE, legend = FALSE,
+                        sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
-  opar <- par("mfrow", "mai", "usr")
-  on.exit(par(mfrow = opar))
+  opar <- par(c("mfrow", "mai", "usr"))
+  on.exit(par(opar))
 
   if (horiz) { # horizontal layout of vertical plots
     L1 <- function() { par(mfrow = c(24, 1)) }

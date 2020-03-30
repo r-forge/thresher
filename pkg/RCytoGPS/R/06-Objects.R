@@ -65,25 +65,28 @@ setMethod("image", "CytobandData", function(x, chr, what,
       if(debug) cat("biIdiogram\n", file = stderr())
       biIdiogram(x@DATA, what[[1]], what[[2]],
                  pal = pal, nrows = nrows, horiz = horiz,
-                 axes = axes, legend = legend)
+                 axes = axes, legend = legend,
+                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
     } else {
       if(debug) cat("plot2Chrom\n", file = stderr())
       plot2Chrom(x@DATA, what[[1]], what[[2]],
                  chr = chr, pal = pal,
                  horiz = !horiz, # changed our minds about what "horiz" means
-                 axes = axes, legend = legend)
+                 axes = axes, legend = legend,
+                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
     }
   } else { # now we must have chr equal to a character vector
     if (chr == "all") {
       if (length(what) == 1) {
         if(debug) cat("makeIdiogram\n", file = stderr())
         makeIdiogram(x@DATA, what, color = pal, axes = axes, legend = legend,
-                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
+                     sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
       } else {
         if(debug) cat("stackIdiogram\n", file = stderr())
         stackIdiogram(x@DATA, what, pal = pal,
                       horiz = !horiz, # changed our minds about "horiz"
-                      axes = axes, nrows = nrows, legend = legend)
+                      axes = axes, nrows = nrows, legend = legend,
+                      sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
       }
     } else {
       if(debug) cat("plot1Chrom\n", file = stderr())

@@ -22,7 +22,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   ## get the labels ready
   if (is.null(labels)) labels <- rep("", NC)
   while (length(labels) < NC) labels <- c(labels, labels)
-  opar <- par(c("new", "mai", "bg"))
+  opar <- par(c("new", "mai", "bg", "usr"))
   on.exit(par(opar))
   ## fake plot to white screen so we can use par(new=TRUE) in loop below
   par(bg = "white", mai = c(0,0,0,0))
@@ -101,11 +101,12 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
         mai=c(2*vres, 10*hres, vres * (1 + NC*V1[NC]), hres))
   }
   image(Chromosome(chr), mai=par("mai"), horiz = horiz)
+  par(opar)
   invisible(DATA)
 }
 
 makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE,
-                         sigcolumn, sigcut, alpha) {
+                       sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   opar <- par(c("mfrow", "mai", "usr", "bg"))
   on.exit(par(opar))
   par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
@@ -116,6 +117,7 @@ makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE,
   if (legend) {
     par(opar)
     par(mai=c(1, 1, 1, 1), usr = c(0,1, 0, 1))
+    box(lty="blank")
     legend("bottom", colname, col = color, lwd = 5)
   }
 }
@@ -137,12 +139,13 @@ singles  <- function(DATA, columns, chr, pal = palette()) {
 }
 
 stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
-                           horiz = FALSE, axes = TRUE, legend = FALSE) {
+                           horiz = FALSE, axes = TRUE, legend = FALSE,
+                           sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   if(!nrows %in% 1:4) {
     stop("Number of rows must be 1, 2, 3, or 4.")
   }
-  opar <- par("mfrow")
-  on.exit(par(mfrow = opar))
+  opar <- par(c("mfrow", "mai", "usr"))
+  on.exit(par(opar))
 
   if (horiz) { # horizontal layout of vertical plots
     L1 <- function() { par(mfrow = c(24, 1)) }
@@ -159,5 +162,15 @@ stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz, axes = axes)
+  }
+  if (legend) {
+    par(opar)
+    par(mai=c(1, 1, 1, 1), usr = c(0,1, 0, 1), new=TRUE)
+    box(lty = "blank") # weird graphics hack
+    if (horiz) {
+      legend("right", columns, col = pal, lwd = 5)
+    } else {
+      legend("bottom", columns, col = pal, lwd = 5)
+    }
   }
 }
