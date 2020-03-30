@@ -12,17 +12,21 @@ try( image(CD, 3) ) # fails, since you also need 'what'
 
 ## windows(width=10, height=18)
 
-## one chromsome, stacks, vertical
+## (plot1Chrom) one chromsome, stacks, vertical
 image(CD, chr = 1, what = "V1")
 image(CD, chr = 1, what = c("V1", "V2"))
 image(CD, chr = 13, what = c("V1", "V2", "V3","V4", "V5", "V6"))
 image(CD, chr = 6, what = paste("V", 1:10, sep=""))
 
 ## windows(width=18, height=10)
-# one chromsome, stacks, horizontal
+# (plot1Chrom) one chromosome, stacks, horizontal
 image(CD, 6, paste("V", 1:2, sep=""), horiz = TRUE)
 
-image(CD, 10, paste("V", 1:2, sep=""), horiz = TRUE, sigcolumn = "PV")
+image(CD, 8, paste("V", 1:2, sep=""), horiz = TRUE,
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(75, 150))
+
+image(CD, 8, paste("V", 1:2, sep=""), horiz = FALSE,
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(75, 150))
 
 # combined
 opar <- par(mfrow=c(2,1))
@@ -30,7 +34,11 @@ image(CD, 2, c("V1", "V2", "V3"))
 image(CD, 13, c("V4", "V5", "V6"))
 par(opar)
 
+## (makeIdiogram)
 image(CD, "all", "V10", pal = "forestgreen")
+image(CD, "all", "V10", pal = "forestgreen", legend = TRUE)
+image(CD, "all", "V10", pal = "forestgreen",
+      sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(63, 155))
 
 
 # one chromosome, two-sided

@@ -53,7 +53,7 @@ setMethod("barplot", "CytobandData",
 setMethod("image", "CytobandData", function(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
          horiz = FALSE, axes = TRUE, debug = FALSE, legend = FALSE,
-         sigcolumn = NULL, sigcut = 0.01, alpha = 63) {
+         sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
   }
@@ -77,7 +77,8 @@ setMethod("image", "CytobandData", function(x, chr, what,
     if (chr == "all") {
       if (length(what) == 1) {
         if(debug) cat("makeIdiogram\n", file = stderr())
-        makeIdiogram(x@DATA, what, color = pal, axes = axes, legend = legend)
+        makeIdiogram(x@DATA, what, color = pal, axes = axes, legend = legend,
+                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
       } else {
         if(debug) cat("stackIdiogram\n", file = stderr())
         stackIdiogram(x@DATA, what, pal = pal,

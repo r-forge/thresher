@@ -1,7 +1,14 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
                        pal = palette(), horiz = FALSE, axes=TRUE,
                        legend = FALSE,
-                       sigcolumn = NULL, sigcut = 0.01, alpha = 63) {
+                       sigcolumn = NA, sigcut = 0.01, alpha = 63) {
+  ## check sigcolumn, sigcut, alpha
+  if (!is.na(sigcolumn)) {
+    if (length(sigcut) == 0) stop("You must supply at least one significance cutoff!")
+    if (length (sigcut) != length(alpha)) stop("Lengths of 'sigcut' and 'alpha' do not match.")
+    sigcut <- sort(sigcut)
+    alpha <- sort(alpha)
+  }
   ## check valid short chromsome name
   if ( !(chr %in% c(1:22, "X", "Y")) ) stop("Invalid chromosome number.")
   chrname <- paste("chr", chr, sep="")
@@ -53,11 +60,11 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
     for(J in 1:nrow(clap)) {
       vals[clap[J, "loc.start"] <= dumbposn & 
            dumbposn <= clap[J, "loc.end"] ] <- as.numeric(segset[J, column])
-      if (!is.null(sigcolumn)) {
+      if (!is.na(sigcolumn)) {
 #        cat("K =", K, ", J =", J, "", segset[J, sigcolumn], "\n", file=stderr())
         shades[clap[J, "loc.start"] <= dumbposn & 
                dumbposn <= clap[J, "loc.end"] ] <-
-                    kcolors[1 + 1*(segset[J, sigcolumn] < sigcut)]
+                    kcolors[1 + sum(segset[J, sigcolumn] < sigcut)]
       } else {
         shades[clap[J, "loc.start"] <= dumbposn & 
                dumbposn <= clap[J, "loc.end"] ] <- pal[K]
@@ -67,7 +74,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       par(new = TRUE,
           mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
                 10*vres, hres * (1 + (II-1)*V1[NC])))
-      barplot(rev(vals), horiz = horiz, border=NA, col = shades, 
+      barplot(rev(vals), horiz = horiz, border=NA, col = rev(shades), 
               xlim=c(0, 1.05*resn), yaxs="i", 
               space=0, axes=FALSE)
       if (axes) {
@@ -97,11 +104,19 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   invisible(DATA)
 }
 
-makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE) {
-  opar <- par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
+makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE,
+                         sigcolumn, sigcut, alpha) {
+  opar <- par(c("mfrow", "mai", "usr", "bg"))
   on.exit(par(opar))
+  par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
   for (I in c(1:22, "X", "Y")) {
-    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE, axes = axes)
+    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE, axes = axes,
+                         sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
+  }
+  if (legend) {
+    par(opar)
+    par(mai=c(1, 1, 1, 1), usr = c(0,1, 0, 1))
+    legend("bottom", colname, col = color, lwd = 5)
   }
 }
 

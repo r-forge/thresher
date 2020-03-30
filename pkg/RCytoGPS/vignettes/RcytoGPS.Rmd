@@ -92,3 +92,8 @@ image(bandData, what = paste(LETTERS[1:3], "Loss", sep="."), chr = "all",
 image(bandData, what = paste(LETTERS[1:3], "Loss", sep="."), chr = "all", 
               pal=c("forestgreen", "orange", "purple"), nrows=3, horiz= TRUE)
 ```
+
+# Appendix
+```{r si}
+sessionInfo()
+```
