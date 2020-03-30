@@ -52,7 +52,7 @@ setMethod("barplot", "CytobandData",
 
 setMethod("image", "CytobandData", function(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
-         horiz = FALSE, axes = TRUE, debug = FALSE, legend = FALSE,
+         horiz = FALSE, axes = chr != "all", debug = FALSE, legend = FALSE,
          sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")

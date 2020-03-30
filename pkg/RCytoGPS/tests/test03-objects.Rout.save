@@ -20,6 +20,7 @@ Type 'q()' to quit R.
 > set.seed(53106)
 > CL <- RCytoGPS:::cytobandLocations
 > fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))
+> fake$PV <- runif(nrow(fake), 0, 1)
 > CL <- cbind(CL, fake) # extra colnames V1, ..., V10
 > CD <- CytobandData(CL)
 > 
@@ -28,55 +29,88 @@ Error in .local(x, ...) : argument "chr" is missing, with no default
 > try( image(CD, 3) ) # fails, since you also need 'what'
 Error in .local(x, ...) : argument "what" is missing, with no default
 > 
-> ## windows(width=10, height=18)
+> ### windows(width=10, height=18)
+> ## (plot1Chrom) one chromsome, stacks, vertical
+> image(CD, chr = 1, what = "V1", debug = TRUE)
+plot1Chrom
+> image(CD, chr = 1, what = c("V1", "V2"), debug = TRUE)
+plot1Chrom
+> image(CD, chr = 13, what = c("V1", "V2", "V3","V4", "V5", "V6"), debug = TRUE)
+plot1Chrom
+> image(CD, chr = 6, what = paste("V", 1:10, sep=""), debug = TRUE)
+plot1Chrom
 > 
-> ## one chromsome, stacks, vertical
-> image(CD, chr = 1, what = "V1")
-> image(CD, chr = 1, what = c("V1", "V2"))
-> image(CD, chr = 13, what = c("V1", "V2", "V3","V4", "V5", "V6"))
-> image(CD, chr = 6, what = paste("V", 1:10, sep=""))
+> ### windows(width=18, height=10)
+> ## (plot1Chrom) one chromosome, stacks, horizontal
+> image(CD, 6, paste("V", 1:2, sep=""), horiz = TRUE, debug = TRUE)
+plot1Chrom
 > 
-> ## windows(width=18, height=10)
-> # one chromsome, stacks, horizontal
-> image(CD, 6, paste("V", 1:2, sep=""), horiz = TRUE)
+> image(CD, 8, paste("V", 1:2, sep=""), horiz = TRUE, debug = TRUE,
++       sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(75, 150))
+plot1Chrom
 > 
-> # combined
+> image(CD, 8, paste("V", 1:2, sep=""), horiz = FALSE,
++       sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(127, 192))
+> 
+> # combined (plot1Chrom)
 > opar <- par(mfrow=c(2,1))
-> image(CD, 2, c("V1", "V2", "V3"))
-> image(CD, 13, c("V4", "V5", "V6"))
+> image(CD, 2, c("V1", "V2", "V3"), debug = TRUE)
+plot1Chrom
+> image(CD, 13, c("V4", "V5", "V6"), debug = TRUE)
+plot1Chrom
 > par(opar)
 > 
-> image(CD, "all", "V10", pal = "forestgreen")
+> ## (makeIdiogram)
+> image(CD, "all", "V10", pal = "forestgreen", debug = TRUE) # no names  is better
+makeIdiogram
+> image(CD, "all", "V10", pal = "forestgreen", debug = TRUE, axes = TRUE) # names
+makeIdiogram
+> image(CD, "all", "V10", pal = "forestgreen", legend = TRUE, debug = TRUE) # currently broken
+makeIdiogram
+> image(CD, "all", "V10", pal = "forestgreen", debug = TRUE,
++       sigcolumn = "PV", sigcut = c(0.01, 0.05), alpha = c(63, 155))
+makeIdiogram
 > 
 > 
-> # one chromosome, two-sided
-> image(CD, 3, list("V1", "V2"))
-> image(CD, 3, list("V1", "V2"), horiz = TRUE)
+> ## (plot2Chrom) one chromosome, two-sided
+> image(CD, 3, list("V1", "V2"), debug = TRUE) # default axes = TRUE and horiz = FALSE
+plot2Chrom
+> image(CD, 3, list("V1", "V2"), axes = FALSE, debug = FALSE)
+> image(CD, 3, list("V1", "V2"), horiz = TRUE, debug = TRUE)
+plot2Chrom
+> image(CD, 3, list("V1", "V2"), horiz = TRUE, axes = FALSE, debug = TRUE) # still names?
+plot2Chrom
 > 
-> # biIdiograms
-> image(CD, chr = "all", list("V1", "V2"), horiz=TRUE)
-> image(CD, chr = "all", list("V1", "V2"), horiz=FALSE)
+> ## (biIdiogram)
+> image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, debug = TRUE) # default axes = FALSE
+biIdiogram
+> image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, debug  = TRUE)
+biIdiogram
+> image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, axes = TRUE, debug = TRUE)
+biIdiogram
+> image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, axes = TRUE, debug  = TRUE)
+biIdiogram
 > image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, nrows = 3)
 > image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, nrows = 3)
 > image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, nrows = 4)
 > image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, nrows = 4)
 > image(CD, chr = "all", list("V1", "V2"), horiz=TRUE, nrows = 1)
 > image(CD, chr = "all", list("V1", "V2"), horiz=FALSE, nrows = 1)
+> ## still need to test legend and sigcolumn
 > 
 > # stackIdiograms
-> mycolumns <- paste("V", 1:6, sep="")
-> image(CD, chr = "all", mycolumns)
-horiz = TRUE and nrows = 2 
-> image(CD, chr = "all", mycolumns, nrows = 3)
-horiz = TRUE and nrows = 3 
-> image(CD, chr = "all", mycolumns, nrows = 4, horiz=FALSE)
-horiz = TRUE and nrows = 4 
-> image(CD, chr = "all", mycolumns, nrows = 4, horiz=TRUE)
-horiz = FALSE and nrows = 4 
+> mycolumns <- paste("V", 1:3, sep="")
+> image(CD, chr = "all", mycolumns, debug = TRUE)
+stackIdiogram
+> image(CD, chr = "all", mycolumns, nrows = 3, debug = TRUE)
+stackIdiogram
+> image(CD, chr = "all", mycolumns, nrows = 4, horiz=FALSE, debug = TRUE)
+stackIdiogram
+> image(CD, chr = "all", mycolumns, nrows = 4, horiz=TRUE, debug = TRUE)
+stackIdiogram
+> ## still need to check axes, legend, and sigcolumn
 > 
-> 
-> ## need to fix H-V
 > 
 > proc.time()
    user  system elapsed 
-   6.73    0.14    6.96 
+  11.32    0.23   11.61 
