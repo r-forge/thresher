@@ -160,7 +160,7 @@ stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
   switch(nrows, L1(), L2(), L3(), L4())
 
   for (I in c(1:22, "X", "Y")) { # for each chromosome
-    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = horiz, axes = axes,
+    plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = !horiz, axes = axes,
                sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
   }
   if (legend) {
