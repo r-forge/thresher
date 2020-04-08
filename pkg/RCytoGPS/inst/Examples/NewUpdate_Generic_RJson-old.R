@@ -201,7 +201,7 @@ clone.lgf1<- df.lgf %>% dplyr::select(2750,2749,everything())#rearranges the col
 
 write.csv(clone.lgf1, file = "NewTest.csv", row.names = FALSE)
 gc()# built in function to free up excess memory
-
+```
 
 
 
