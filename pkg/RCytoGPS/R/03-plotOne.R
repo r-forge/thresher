@@ -1,6 +1,6 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
                        pal = palette(), horiz = FALSE, axes=TRUE,
-                       legend = FALSE,
+                       legend = FALSE, resn = NULL,
                        sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   ## check sigcolumn, sigcut, alpha
   if (!is.na(sigcolumn)) {
@@ -44,7 +44,9 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
   CL <- cytobandLocations
   clap <- CL[CL$Chromosome == chrname,]
   segset <- DATA[DATA$Chromosome == chrname,]
-  resn <- max(max(segset[, columns]))
+  if (is.null(resn)) {
+    resn <- max(max(segset[, columns]))
+  }
   y <- rep(NA, length(dumbposn))
   for(J in 1:nrow(clap)) {
     y[clap[J, "loc.start"] <= dumbposn & 
@@ -108,10 +110,14 @@ makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE,
                        sigcolumn = NA, sigcut = 0.01, alpha = 63) {
   opar <- par(c("mfrow", "mai", "usr", "bg"))
   on.exit(par(opar))
+
+  resn  <- max(max(DATA[, colname]))
+
   par(mfrow=c(2,12), mai=c(0, 0.1, 1, 0.1), bg='white')
   for (I in c(1:22, "X", "Y")) {
-    plot1Chrom(DATA, colname, I, pal = color,  horiz=TRUE, axes = axes,
-                         sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
+    plot1Chrom(DATA, colname, chr = I, pal = color,  horiz=TRUE, axes = axes,
+               resn = resn,
+               sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
   }
   if (legend) {
     par(opar)
@@ -159,8 +165,11 @@ stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
   }
   switch(nrows, L1(), L2(), L3(), L4())
 
+  resn  <- max(max(DATA[, columns]))
+
   for (I in c(1:22, "X", "Y")) { # for each chromosome
     plot1Chrom(DATA, columns, chr = I, pal = pal, horiz = !horiz, axes = axes,
+               resn = resn,
                sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
   }
   if (legend) {
