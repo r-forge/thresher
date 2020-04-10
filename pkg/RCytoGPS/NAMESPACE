@@ -6,9 +6,11 @@ importFrom("graphics", "image", "barplot", "abline", "layout",
            "legend", "lines", "mtext", "par",
            "axis", "plot", "rect", "text", "box")
 importFrom("grDevices", "palette", "col2rgb", "rgb")
+importFrom("rjson", "fromJSON")
 
 exportClasses("Chromosome", "CytobandData")
 export("Chromosome", "CytobandData")
 exportMethods("image", "barplot", "summary")
 
 export("singles", "showGenome")
+export("readLGF")
