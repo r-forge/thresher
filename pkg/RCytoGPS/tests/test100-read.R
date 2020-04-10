@@ -8,12 +8,14 @@ temp <- readLGF("CytoGPS_Result1.json", folder = sf)
 class(temp)
 length(temp)
 temp <- temp[[1]]
-dim(temp)
-temp[, 1:4]
+temp$Status
+dim(lgf  <-  temp$LGF)
+lgf[, 1:4]
 
 ## Read all (well, two) JSON files fom a folder
 temp <- readLGF(folder = sf)
 length(temp)
-lapply(temp, dim)
-temp[[1]][,1:4]
-temp[[2]][,1:4]
+temp[[1]]$Status
+temp[[2]]$Status
+temp[[1]]$LGF[,1:4]
+temp[[2]]$LGF[,1:4]

@@ -16,7 +16,7 @@ extractOneLGF <- function(J) {
   bands <- J$iscn2016_bands # cytoband labels/names
   ## extract the status
   OUT <- J$output
-  Status <- sapply(OUT, "[", "status") # pulls out all the status information
+  Status <- unlist(sapply(OUT, "[", "status")) # pulls out all the status information
   ## extract the (sub)clone ids
   clone <- unlist(lapply(OUT, function(x){
     if((x$status)=="Success"){
@@ -67,7 +67,7 @@ extractOneLGF <- function(J) {
   df.lgf$Clones = clone
   w <- which(colnames(df.lgf) == "ID")
   df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]
-  df.lgf
+  list(Status = Status, LGF = df.lgf)
 }
 
 readLGF <- function(files = NULL, folder = NULL) {
