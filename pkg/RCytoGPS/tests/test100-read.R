@@ -19,3 +19,4 @@ temp[[1]]$Status
 temp[[2]]$Status
 temp[[1]]$LGF[,1:4]
 temp[[2]]$LGF[,1:4]
+

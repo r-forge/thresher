@@ -12,20 +12,43 @@ rnames <- function(lst, item) {
   unlist(f(lst, NULL))
 }
 
+## Make up sample names that include row number, padded with leading zeros
+padnames <- function(prefix, values, ndigits = NULL) {
+  M <- max(values)
+  if (is.null(ndigits)) {
+    ndigits <- trunc(log10(M))
+  }
+  padlength <- sapply(values, function(n) sum(n < 10^(1:ndigits)))
+  pad <- sapply(padlength, function(p) paste(rep("0", p),collapse = ""))
+  paste(prefix, pad, values, sep="")
+}
+
+
 extractOneLGF <- function(J) {
   bands <- J$iscn2016_bands # cytoband labels/names
   ## extract the status
   OUT <- J$output
-  Status <- unlist(sapply(OUT, "[", "status")) # pulls out all the status information
+  KY <- matrix(NA, ncol = 2, nrow = length(OUT))
+  colnames(KY) <- c("Status", "Karyotype")
+  for (I in 1:length(OUT)) {
+    x <- OUT[[I]]
+    kary <- x$karyotype
+    stat <- x$status
+    KY[I,] <- c(stat, kary)
+  }
+  KY <- as.data.frame(KY, stringsAsFactors = FALSE)
+  rownames(KY) <- padnames("RN", 1:length(OUT))
+  KY$Status  <- factor(KY$Status)
+
   ## extract the (sub)clone ids
   clone <- unlist(lapply(OUT, function(x){
-    if((x$status)=="Success"){
+    if((x$status) %in% c("Success", "Fixable grammar error and success")) {
       1:length(lapply(x$parsing_result, "[[", "loss_gain_fusion_computing"))
     }
   }))
   ## extract the binary-mapped LGF data
   lgf <- lapply(OUT, function(x) { # Get the loss data from parsing_result
-    if((x$status) == "Success"){
+    if((x$status) %in% c("Success", "Fixable grammar error and success")) {
       lgf <- lapply(x$parsing_result, "[[","loss_gain_fusion_computing")
     }
   })
@@ -67,7 +90,7 @@ extractOneLGF <- function(J) {
   df.lgf$Clones = clone
   w <- which(colnames(df.lgf) == "ID")
   df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]
-  list(Status = Status, LGF = df.lgf)
+  list(Status = KY, LGF = df.lgf)
 }
 
 readLGF <- function(files = NULL, folder = NULL) {
