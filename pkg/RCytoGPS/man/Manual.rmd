@@ -1,0 +1,224 @@
+---
+title: "Manual"
+author: "Dwayne Tally"
+date: "5/18/2020"
+output: html_document
+---
+# `rnames`: rnames
+
+## Description
+
+
+ The purpose of this function is to recursively extract the element index of karyotypes from a list using a specific keyword found within the list to generate an ID for each karyotype. The function can also produce additional columns such as the clones which allows the function readLGF to check if there is a disagreement in the clones, a duplicate in the elements, and the length of each element.
+
+
+## Usage
+
+```r
+rnames(list, item)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+list    |     A list that contains the loss gain fusion binary model of each karyotype and their clones.list could also be in a form of a nested list.
+item    |    Item is a specific keyword that has to be able to be found in the given list. item is what rnames look for in the list to extract the element index.
+
+
+## Value
+
+
+ Returns an array of integers where a single elements is expressed in a set of 4. You can change the array into a data frame and change the dimension to have a more visually appealing format.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+ rnames(lgf, "loss")
+ x <- as.data.frame(matrix(rnames(lgf, "loss"), ncol = 4, byrow = TRUE))
+ 
+ 
+ ``` 
+# `extractOneLGF`: extractOneLGF
+
+## Description
+
+
+ The purpose of this function is to be used as a supplementary function for readLGF which is found within the RcytoGPS library.This function does all the parsing and formatting of the JSON file obtained from the website CytoGPS.org. extractOneLGF extracts the LGF data, along with the status of each karyotype, and generates the cytoData used for the image function from the JSON file. The status reports if the karyotype extracted was a 'Success' or 'Fixable grammer error and Success' or if there was another error with the karyotype such as a 'Validation error' and extracts the status of each karyotype as well as the ISCN Karyotype band. Status also uses a function called padnames to give sample row names to the statuses and karyotypes.The LGF data is extracted and converted into a data frame with new columns being generated such as the karyotype ID and Clones (rnames) along with the cytogenetic bands being produced in triple kits, each set represents the cytogenetic abnormality they are associated with. And lastly extractOneLGF produces another dataframe called cytoData by using another function called Idioformat to generate and format the data. cytoData is a dataframe that has the columns needed to run the image function as well as the column sums of each cytogenetic event.
+
+
+## Usage
+
+```r
+lapply(myJSON, extractOneLGF)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+myJSON  | A list of elements extracted from the JSON file by using lapply
+extractOneLGF | Essentially the FUN argument used in lapply, extractOneLGF is applied to every element of myJSON to extract and format Status and the LGF data.
+
+## Value
+
+
+ Returns a nested list of the binary LGF model for each element of a karyotype as well as a list of which karyotype had a 'success' or 'fail' cytogenetic event.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+ myJSON <- lapply(filenames, function(x) fromJSON(file = x)) # a list, one element per JSON file, uses fromJSON from the R library rjson
+ temp  <- lapply(myJSON, extractOneLGF)
+ ``` 
+
+# `readLGF`: readLGF
+
+## Description
+
+
+ A function that converts conventional karyotypes from the standard text-based notation (the International Standard for Human Cytogenetic Nomenclature; ISCN) into a binary vector with three bits (loss, gain, or fusion) per cytoband, which we call the "LGF model".There are two supplementary function that readLGF uses called 'extractOneLGF' and 'rnames' to format the lgf model and to generate IDs.
+
+
+## Usage
+
+```r
+readLGF(files = x, folder = y)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+files    |  The name of the JSON file you want to extract and format data from. If not specified then it will extract all JSON files within the folder path provided. 
+folder   |  The specified directory/folder the user wants the function to extract JSON files from. If an absolute path was not specified, then the function will look in the current working directory.
+
+## Details
+
+
+ readLGF takes the arguements of a specific file name from a specific folder. If the file name was not specified then it will take all JSON files from the specified folder. If the folder was not specified then it will look in the current working directory. The function will output a nested list having: Status of the chromosomes (a list of 'success' or 'fails'), a dataframe of the LGF model of the JSON file, and an IdioData dataframe formated for the image function.
+
+
+## Value
+
+
+ A nested list of the binary LGF model, a data frame of the LGF data with columns to include chromosome number, start and end locations of the chromosomes, chromosomal arm, cytogenetic bands, and the column sums of the loss, gains, and fusions. As well as a list of which karyotype had a 'success' or 'fail' cytogenetic event. In an event of a 'fail', it could suggestion how to fix the syntax of the inputted karyotype.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+ y <- readLGF("results.JSON", wd)
+ x <- readLGF(wd)
+ 
+ ``` 
+
+# `Idioformat`: Idioformat
+
+## Description
+
+
+ The purpose of this function is generate and format the cytoData based off of the LGF dataframe obtained from extractOneLGF. Idioformat takes the dataset from the LGF dataframe and column sums the data based off what cytogenetic event that is taking place. Idioformat also introduces new required data columns to enable the function image to generate a set of idiographs for visual comparisons and pattern recognitions. The new columns being concatinated to the dataframe are Chromosome, loc.start, loc.end, arm, and band and then the column sum of each cytogenetic event. To get the data for the required columns you have to run the Idioformat.rda file to store the new data as vectors that will be concatinated into the cytoData dataframe.
+
+
+## Usage
+
+```r
+Idioformat(df)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+df     |     A dataframe that has the numeric columns of the LGF model.
+
+## Value
+
+
+ Returns a dataframe of the binary LGF model column summed, as well as several other columns that will be used in the image function.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+ load("Idioformat.rda")
+ cytoData <- Idioformat(df.lgf)
+ ``` 
+
+
+# `Idiogram`: Idiogram Graphs
+
+## Description
+
+
+ The purpose of this function is to have a visual of any cytogentic event from any dataset as long as you specify the column name, color for the bar graph, and the chromosome number you would want to analyze. To run this function and the other idiogram functions, you have to have data that is formated for Idiograms. I.E. a dataframe that has the summed columns of the LGF mode, a column that specifies what chromosome, along with a column for the chromosome start location, a column for the end location, the arm of the chromosome that the event is taking place on, and the cytogenetic band.
+
+
+## Usage
+
+```r
+image(bandData, what = "Loss", chr = 3, pal = "blue", horiz = FALSE)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+bandData  | A dataframe that has the columns of Chromosome,  the start location of the chromosome, the end location of the chromosome, band of the chromosome,  the chromosomal arm, and the column sums of Loss, Gain, Fusion.
+what  | The colmn(us) from the data frame you want to analyze. What has to be the column name from the data set. I.E. "A.Loss", "B.Loss", "Loss", "Gain". What can also accept several data columns in a form of a list to do data comparisons on a chromosome.    
+chr  |  Chr is the specific chromosome you want to analyze, if you want to look at all the chromosomes at once then you can use the command chr = "all".   
+pal  |  Pal is the arguement if you want to change the color of the idiogram grams.Alternitavely pal can be exchanged to col depending on what visual you want to make.   
+horiz  | horiz is the parameter that rotates graph along the x and y axis. By default horiz is FALSE so the images image generates is vertical, but if horiz is TRUE then the graph is rotated to be on the x axis instead of the y axis. 
+
+
+## Value
+
+
+ Returns a nested list of the binary LGF model as well as a list of which karyotype had a 'success' or 'fail' cytogenetic event. In an event of a 'fail', it could suggestion how to fix the syntax of the inputted karyotype.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+ y <- readLGF("results.JSON", wd)
+ x <- readLGF(wd)
+ 
+ ``` 
