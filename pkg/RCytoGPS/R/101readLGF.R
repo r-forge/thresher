@@ -39,7 +39,7 @@ extractOneLGF <- function(J) {
   KY <- as.data.frame(KY, stringsAsFactors = FALSE)
   rownames(KY) <- padnames("RN", 1:length(OUT))
   KY$Status  <- factor(KY$Status)
-
+  
   ## extract the (sub)clone ids
   clone <- unlist(lapply(OUT, function(x){
     if((x$status) %in% c("Success", "Fixable grammar error and success")) {
@@ -58,7 +58,7 @@ extractOneLGF <- function(J) {
   if(any(df.ID$V2 != clone)) {
     warning("Disagreement among clone IDs.")
   }
-
+  
   fullID <- apply(df.ID[, 1:3], 1, paste, collapse=".")
   if (any(duplicated(fullID))) {
     warning("Duplicated identifiers should not happen.")
@@ -70,7 +70,7 @@ extractOneLGF <- function(J) {
   df_Loss <- as.data.frame(matrix(unlist(loss1), ncol = 916, byrow = TRUE),
                            stringsAsFactors = FALSE)
   colnames(df_Loss) <- paste("Loss", bands, sep = "_")
-
+  
   gain1 <- sapply(lgf, function(x){
     lapply(x, "[[","gain")
   })
@@ -89,8 +89,12 @@ extractOneLGF <- function(J) {
   df.lgf$ID = id
   df.lgf$Clones = clone
   w <- which(colnames(df.lgf) == "ID")
-  df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]
-  list(Status = KY, LGF = df.lgf)
+  df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]  
+  #formats and column sums the LGF dataframe for cytoData
+  cytoData <- Idioformat(df.lgf)
+  rownames(cytoData) <- cband
+  
+  list(Status = KY, LGF = df.lgf, cytoData = cytoData)
 }
 
 readLGF <- function(files = NULL, folder = NULL) {
@@ -105,14 +109,40 @@ readLGF <- function(files = NULL, folder = NULL) {
     stop("No JSON input files to read.")
   }
   message("Reading ", length(files), " file(s) from '", folder, "'.\n")
-
+  
   ## make sure that, when done,  we leave the working directory in the same state that we found it.
   home <- getwd()
   on.exit(setwd(home))
   setwd(folder)
-
+  
   ## It might get large -- not said by Davis Guggenheim
   myJSON <- lapply(files, function(x) fromJSON(file = x)) # a list, one element per JSON file
   temp  <- lapply(myJSON, extractOneLGF)
   temp
+}
+
+
+
+Idioformat <- function(df){
+  #element name will be the same as karyotype
+  #first example loss.1, loss.2
+  Chromosome <- Chromosome
+  loc.start <- loc.start
+  loc.end <- loc.end
+  arm <- arm
+  Band <- band
+  #row.names(df) <- cband
+  Loss <- df[, grepl("Loss", names(df))]
+  Gain <- df[, grepl("Gain", names(df))]
+  Fusion <- df[, grepl("Fusion", names(df))]
+  
+  
+  data.frame(Chromosome = Chromosome, 
+             loc.start = loc.start,
+             loc.end = loc.end,
+             arm = arm,
+             Band = Band, 
+             Loss = colSums(Loss), Gain = colSums(Gain), Fusion = colSums(Fusion))
+  #row.names(df) <- cband
+  
 }
