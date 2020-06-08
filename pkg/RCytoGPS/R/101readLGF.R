@@ -90,11 +90,7 @@ extractOneLGF <- function(J) {
   df.lgf$Clones = clone
   w <- which(colnames(df.lgf) == "ID")
   df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]  
-  #formats and column sums the LGF dataframe for cytoData
-  cytoData <- Idioformat(df.lgf)
-  rownames(cytoData) <- cband
-  
-  list(Status = KY, LGF = df.lgf, cytoData = cytoData)
+  list(Status = KY, LGF = df.lgf)
 }
 
 readLGF <- function(files = NULL, folder = NULL) {
@@ -122,7 +118,7 @@ readLGF <- function(files = NULL, folder = NULL) {
 }
 
 
-
+# should we use this to create an S4 object?
 Idioformat <- function(df){
   #element name will be the same as karyotype
   #first example loss.1, loss.2

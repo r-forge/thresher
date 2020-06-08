@@ -1,10 +1,13 @@
 ---
-title: "Gallery"
-author: "Dwayne Tally"
-output: 
-  html_document: default
-  word_document: default
-  pdf_document: default
+title: "RCytoGPS Gallery"
+author: "Dwayne Tally, Zacahary B. Abrams, and Kevin R. Coombes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{RCytoGPS Gallery}
+  %\VignetteKeywords{OOMPA,CytoGPS,karyotypes,idiograms,graphics}
+  %\VignetteDepends{RCytoGPS}
+  %\VignettePackage{RCytoGPS}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 
