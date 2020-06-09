@@ -118,27 +118,19 @@ readLGF <- function(files = NULL, folder = NULL) {
 }
 
 
-# should we use this to create an S4 object?
+## should we use this to create an S4 object?
+## Need error-checking to be sure bands are in the right order?
 Idioformat <- function(df){
-  #element name will be the same as karyotype
-  #first example loss.1, loss.2
-  Chromosome <- Chromosome
-  loc.start <- loc.start
-  loc.end <- loc.end
-  arm <- arm
-  Band <- band
-  #row.names(df) <- cband
+  ## element name will be the same as karyotype
+  ## first example loss.1, loss.2
   Loss <- df[, grepl("Loss", names(df))]
+  tags <- sub("Loss_", "", colnames(Loss))
   Gain <- df[, grepl("Gain", names(df))]
   Fusion <- df[, grepl("Fusion", names(df))]
-  
-  
-  data.frame(Chromosome = Chromosome, 
-             loc.start = loc.start,
-             loc.end = loc.end,
-             arm = arm,
-             Band = Band, 
-             Loss = colSums(Loss), Gain = colSums(Gain), Fusion = colSums(Fusion))
-  #row.names(df) <- cband
-  
+  temp <- data.frame(Loss = colMeans(Loss > 1),
+                     Gain = colMeans(Gain > 1),
+                     Fusion = colMeans(Fusion > 1))
+  rownames(temp) <- tags
+  CL = cytobandLocations
+  list(Frequency = data.frame(CL, temp[rownames(CL),]), N = nrow(df))
 }

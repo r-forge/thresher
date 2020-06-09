@@ -11,6 +11,8 @@ temp <- temp[[1]]
 temp$Status
 dim(lgf  <-  temp$LGF)
 lgf[, 1:4]
+dot <- RCytoGPS:::Idioformat(lgf)
+head(dot)
 
 ## Read all (well, two) JSON files fom a folder
 temp <- readLGF(folder = sf)
