@@ -175,12 +175,14 @@ Idioformat <- function(df){
 
 # Extracting JSON IdioData
 ```{r Extracting JSON data and formating to LGF model}
-wd <- ("C:/Users/firem/Documents/input_outputDirectory")
+wd <- system.file("EXamples/JSONfiles", package="RCytoGPS")
+#wd <- ("C:/Users/firem/Documents/input_outputDirectory")
 temp <- readLGF(folder = wd)
 
-cytoData <- lapply(temp, function(x){
-  return(x$cytoData)
-})
+cytoData <- lapply(temp, function(x) RCytoGPS:::Idioformat(x$LGF))
+#cytoData <- lapply(temp, function(x){
+#  return(x$cytoData)
+#})
 cytoData <- data.frame(cytoData)
 
 cytoData[,9:13] <- NULL
