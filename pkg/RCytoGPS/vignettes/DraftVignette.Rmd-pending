@@ -22,6 +22,8 @@ Modern biological experiments are increasingly producing interesting binary matr
 First, you need to load the necassary library to extract data from JSON files.
 ```{r Setup}
 library(RCytoGPS)
+```
+```{r echo=FALSE, eval=FALSE}
 library(rjson)
 #Idioformat has the additional values needed that is not obtained from readLGF
 load("Idioformat.rda")

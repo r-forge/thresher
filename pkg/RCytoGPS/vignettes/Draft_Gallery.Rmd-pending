@@ -21,6 +21,8 @@ This is the supplementary vignette for RCytoGPS and will primarily focus on the 
 First, you need to load the necassary library to extract data from JSON files.
 ```{r Setup}
 library(RCytoGPS)
+```
+```{r eval=FALSE,echo=FALSE}
 library(rjson)
 #Idioformat has the additional values needed that is not obtained from readLGF
 load("Idioformat.rda")
