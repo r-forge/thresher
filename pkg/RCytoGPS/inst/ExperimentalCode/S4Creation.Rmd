@@ -1,0 +1,241 @@
+---
+title: "Classes S4"
+author: "Dwayne Tally"
+date: "6/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r packages,echo=FALSE}
+library(rjson)
+library(RCytoGPS)
+
+## what the heck does this do?
+## I think the point is to extact/construct identifiers to use as row names.
+rnames <- function(lst, item) {
+  f <- function(ll, inds) {
+    if ((ii <- match(item, names(ll), FALSE)))
+      list(inds=c(inds, ii), len=length(ll[[ii]]))
+    else if (all(is.atomic(unlist(ll, FALSE))) || !is.list(ll))
+      NULL
+    else
+      lapply(seq_along(ll), function(i) f(ll[[i]], inds=c(inds, i)))
+  }
+  unlist(f(lst, NULL))
+}
+
+## Make up sample names that include row number, padded with leading zeros
+padnames <- function(prefix, values, ndigits = NULL) {
+  M <- max(values)
+  if (is.null(ndigits)) {
+    ndigits <- trunc(log10(M))
+  }
+  padlength <- sapply(values, function(n) sum(n < 10^(1:ndigits)))
+  pad <- sapply(padlength, function(p) paste(rep("0", p),collapse = ""))
+  paste(prefix, pad, values, sep="")
+}
+
+
+extractOneLGF <- function(J) {
+  bands <- J$iscn2016_bands # cytoband labels/names
+  ## extract the status
+  OUT <- J$output
+  KY <- matrix(NA, ncol = 2, nrow = length(OUT))
+  colnames(KY) <- c("Status", "Karyotype")
+  for (I in 1:length(OUT)) {
+    x <- OUT[[I]]
+    kary <- x$karyotype
+    stat <- x$status
+    KY[I,] <- c(stat, kary)
+  }
+  KY <- as.data.frame(KY, stringsAsFactors = FALSE)
+  rownames(KY) <- padnames("RN", 1:length(OUT))
+  KY$Status  <- factor(KY$Status)
+  
+  ## extract the (sub)clone ids
+  clone <- unlist(lapply(OUT, function(x){
+    if((x$status) %in% c("Success", "Fixable grammar error and success")) {
+      1:length(lapply(x$parsing_result, "[[", "loss_gain_fusion_computing"))
+    }
+  }))
+  ## extract the binary-mapped LGF data
+  lgf <- lapply(OUT, function(x) { # Get the loss data from parsing_result
+    if((x$status) %in% c("Success", "Fixable grammar error and success")) {
+      lgf <- lapply(x$parsing_result, "[[","loss_gain_fusion_computing")
+    }
+  })
+  ## compute row-name IDS
+  df.ID <- as.data.frame(matrix(rnames(lgf, "loss"), ncol = 4, byrow = TRUE))
+  id <- df.ID$V1
+  if(any(df.ID$V2 != clone)) {
+    warning("Disagreement among clone IDs.")
+  }
+  
+  fullID <- apply(df.ID[, 1:3], 1, paste, collapse=".")
+  if (any(duplicated(fullID))) {
+    warning("Duplicated identifiers should not happen.")
+  }
+  ## Extract the loss, gain, and fusion binary data separately
+  loss1 <- sapply(lgf, function(x){
+    lapply(x, "[[","loss")
+  })
+  df_Loss <- as.data.frame(matrix(unlist(loss1), ncol = 916, byrow = TRUE),
+                           stringsAsFactors = FALSE)
+  colnames(df_Loss) <- paste("Loss", bands, sep = "_")
+  
+  gain1 <- sapply(lgf, function(x){
+    lapply(x, "[[","gain")
+  })
+  df_Gain <- as.data.frame(matrix(unlist(gain1), ncol = 916, byrow = TRUE),
+                           stringsAsFactors = FALSE)
+  colnames(df_Gain) <- paste("Gain", bands, sep = "_")
+  fusion1 <- sapply(lgf, function(x){
+    lapply(x, "[[","fusion")
+  })
+  df_Fusion <- as.data.frame(matrix(unlist(fusion1), ncol = 916, byrow = TRUE),
+                             stringsAsFactors = FALSE)
+  colnames(df_Fusion) <- paste("Fusion", bands, sep = "_")
+  ## Put them back together
+  df.lgf <- cbind(df_Loss, df_Gain, df_Fusion)
+  rownames(df.lgf) <- fullID
+  df.lgf$ID = id
+  df.lgf$Clones = clone
+  w <- which(colnames(df.lgf) == "ID")
+  df.lgf <- df.lgf[, c(w:(w + 1), 1:(w-1))]  
+  list(Status = KY, LGF = df.lgf)
+}
+
+readLGF <- function(files = NULL, folder = NULL) {
+  ## Figure out which files we want to read
+  if (is.null(folder)) {
+    folder  <-  "."
+  }
+  if (is.null(files)) {
+    files  <- list.files(folder, pattern = "*.json", full.names = TRUE) # character vector , one file per entry
+    ##variable to hold file names
+    fname <-  files
+  }
+  if (length(files) == 1){
+    fname <- files
+  }
+  if (length(files) < 1) {
+    stop("No JSON input files to read.")
+  }
+  message("Reading ", length(files), " file(s) from '", folder, "'.\n")
+  
+  ## make sure that, when done,  we leave the working directory in the same state that we found it.
+  home <- getwd()
+  on.exit(setwd(home))
+  setwd(folder)
+  
+  ## It might get large -- not said by Davis Guggenheim
+  myJSON <- lapply(files, function(x) fromJSON(file = x)) # a list, one element per JSON file
+  temp  <- lapply(myJSON, extractOneLGF)
+  temp <- list(Source = fname, temp)
+}
+
+
+## should we use this to create an S4 object?
+## Need error-checking to be sure bands are in the right order?
+FrequencyFormat <- function(df){
+  ## element name will be the same as karyotype
+  ## first example loss.1, loss.2
+  Loss <- df[, grepl("Loss", names(df))]
+  tags <- sub("Loss_", "", colnames(Loss))
+  Gain <- df[, grepl("Gain", names(df))]
+  Fusion <- df[, grepl("Fusion", names(df))]
+  temp <- data.frame(Loss = colMeans(Loss > 1),
+                     Gain = colMeans(Gain > 1),
+                     Fusion = colMeans(Fusion > 1))
+  rownames(temp) <- tags
+  CL = RCytoGPS:::cytobandLocations
+  ##removed CL and N in list
+  ##format is more aligned to s4 frequency format
+  list(data.frame(temp[rownames(CL),]))
+}
+```
+
+## Classes
+
+You can also embed plots, for example:
+
+```{r classes, echo=FALSE}
+setClass("LGF1",
+         slots = c(
+           raw = "data.frame",         # rows = clones, columns = LGF-cytobands
+           frequency = "data.frame",   # rows = cytobands, columns = L,G,F
+           source = "character",       # file name
+           name = "character",         # user-defined data set name
+           CL = "data.frame"           # cytoband locations - Chromosome, loc.start, loc.end, Band, Stain
+         ))
+## Should the LGF frequency slot be a matrix instead of a data frame?
+
+### Suppose we read multiple JSON files. Do we create a list of LGF
+### objects, or do we instead create a classwhere the entries themselves
+### are lists instead of data frames? Part of the sticking point is the
+### CL slot, which must be the same for all LGF objects in a set.
+
+### Second try. Here we make things into lists.
+setClass("LGF2",
+         slots = c(
+           raw = "list",             # of data frame, rows = clones, columns = LGF-cytobands
+           frequency = "data.frame", # rows = cytobands, columns = L,G,F (repeat)
+           source = "character",     # file names
+           CL = "data.frame"         # cytoband locations
+         ))
+```
+
+
+```{r code}
+one <-  file.choose()
+wd <-  system.file("Examples/JSONfiles", package = "RCytoGPS")
+multiTemp <-  readLGF(folder = wd)
+singleTemp <- readLGF(files = one)
+
+#extracting filenames from output of readLGF
+multiFiles <- multiTemp[[1]]
+singleFile <-  singleTemp[[1]]
+
+#changing LGF output into frequency
+multiFreq <- lapply(multiTemp[[2]], function(x) FrequencyFormat(x$LGF))#extracing the LGF while applying Idioformat
+singleFreq <- lapply(singleTemp[[2]], function(x) FrequencyFormat(x$LGF))
+
+##Maybe turn the next two code chunks into a function?
+#pathway clean up for filename
+#when reading in multiple json file
+prefix <- sub("(.*/)","",multiFiles)
+suffix <- sub(".json","",prefix)
+names(multiFreq) <- paste(suffix)
+multiFreq <- data.frame(multiFreq)
+
+#pathway clean up for filename
+#when reading in a single json file
+prefix1 <- gsub(".*\\\\","", singleFile)
+suffix1 <- sub(".json","",prefix1)
+names(singleFreq) <- paste(suffix1)
+singleFreq <- data.frame(singleFreq)
+
+#Turning the data extracted into s4 object
+## To Do: maybe a test to make sure frequency is currectly labeled?
+multiTest <- new("LGF2", raw = lapply(multiTemp[[2]], function(x) (x$LGF)),
+             frequency = multiFreq, 
+             source = prefix, 
+             CL = RCytoGPS:::cytobandLocations)
+
+singleTest <- new("LGF2", raw = lapply(singleTemp[[2]], function(x) (x$LGF)),
+             frequency = singleFreq, 
+             source = prefix1, 
+             CL = RCytoGPS:::cytobandLocations)
+
+sessionInfo()
+
+```
