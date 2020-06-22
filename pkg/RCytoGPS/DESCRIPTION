@@ -1,6 +1,6 @@
 Package: RCytoGPS
-Version: 0.8.5
-Date: 2020-06-08
+Version: 0.9.0
+Date: 2020-06-22
 Title: Using Cytogenetics Data in R
 Author: Kevin R. Coombes, Dwayne Tally
 Maintainer: Kevin R. Coombes <krc@silicovore.com>

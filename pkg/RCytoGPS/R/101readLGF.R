@@ -1,4 +1,3 @@
-## what the heck does this do?
 ## I think the point is to extact/construct identifiers to use as row names.
 rnames <- function(lst, item) {
   f <- function(ll, inds) {
@@ -39,7 +38,7 @@ extractOneLGF <- function(J) {
   KY <- as.data.frame(KY, stringsAsFactors = FALSE)
   rownames(KY) <- padnames("RN", 1:length(OUT))
   KY$Status  <- factor(KY$Status)
-  
+
   ## extract the (sub)clone ids
   clone <- unlist(lapply(OUT, function(x){
     if((x$status) %in% c("Success", "Fixable grammar error and success")) {
@@ -58,7 +57,7 @@ extractOneLGF <- function(J) {
   if(any(df.ID$V2 != clone)) {
     warning("Disagreement among clone IDs.")
   }
-  
+
   fullID <- apply(df.ID[, 1:3], 1, paste, collapse=".")
   if (any(duplicated(fullID))) {
     warning("Duplicated identifiers should not happen.")
@@ -93,7 +92,30 @@ extractOneLGF <- function(J) {
   list(Status = KY, LGF = df.lgf)
 }
 
-readLGF <- function(files = NULL, folder = NULL) {
+setClass("LGF",
+         slots = c(
+           raw = "list",             # of data frame, rows = clones, columns = LGF-cytobands
+           frequency = "data.frame", # rows = cytobands, columns = Loss, Gain, Fusion
+           source = "character",     # file names
+           size = "numeric",         # number of clones in each file
+           CL = "data.frame"         # cytoband locations
+         ))
+
+Idioformat <- function(df, CL){
+  ## element name will be the same as karyotype
+  ## first example loss.1, loss.2
+  Loss <- df[, grepl("Loss", names(df))]
+  tags <- sub("Loss_", "", colnames(Loss))
+  Gain <- df[, grepl("Gain", names(df))]
+  Fusion <- df[, grepl("Fusion", names(df))]
+  temp <- data.frame(Loss = colMeans(Loss > 0),
+                     Gain = colMeans(Gain > 0),
+                     Fusion = colMeans(Fusion > 0))
+  rownames(temp) <- tags
+  list(Frequency = temp[rownames(CL),], N = nrow(df))
+}
+
+readLGF <- function(files = NULL, folder = NULL, verbose = TRUE) {
   ## Figure out which files we want to read
   if (is.null(folder)) {
     folder  <-  "."
@@ -104,33 +126,25 @@ readLGF <- function(files = NULL, folder = NULL) {
   if (length(files) < 1) {
     stop("No JSON input files to read.")
   }
-  message("Reading ", length(files), " file(s) from '", folder, "'.\n")
-  
+  if (verbose) {
+    message("Reading ", length(files), " file(s) from '", folder, "'.\n")
+  }
   ## make sure that, when done,  we leave the working directory in the same state that we found it.
   home <- getwd()
   on.exit(setwd(home))
   setwd(folder)
-  
+
   ## It might get large -- not said by Davis Guggenheim
   myJSON <- lapply(files, function(x) fromJSON(file = x)) # a list, one element per JSON file
-  temp  <- lapply(myJSON, extractOneLGF)
-  temp
+  raw  <- lapply(myJSON, extractOneLGF)
+  names(raw) <- sub(".json", "", basename(files))
+  ## Get the summary statistics
+  ick <- lapply(raw, function(R) {
+    Idioformat(R$LGF, CL = cytobandLocations)
+  })
+  bundle <- do.call(cbind, lapply(ick, function(F) F$Frequency))
+  size <- sapply(ick, function(F) F$N)
+  list(source = files, raw = raw, frequency = bundle, size = size, CL = cytobandLocations)
 }
 
 
-## should we use this to create an S4 object?
-## Need error-checking to be sure bands are in the right order?
-Idioformat <- function(df){
-  ## element name will be the same as karyotype
-  ## first example loss.1, loss.2
-  Loss <- df[, grepl("Loss", names(df))]
-  tags <- sub("Loss_", "", colnames(Loss))
-  Gain <- df[, grepl("Gain", names(df))]
-  Fusion <- df[, grepl("Fusion", names(df))]
-  temp <- data.frame(Loss = colMeans(Loss > 1),
-                     Gain = colMeans(Gain > 1),
-                     Fusion = colMeans(Fusion > 1))
-  rownames(temp) <- tags
-  CL = cytobandLocations
-  list(Frequency = data.frame(CL, temp[rownames(CL),]), N = nrow(df))
-}
