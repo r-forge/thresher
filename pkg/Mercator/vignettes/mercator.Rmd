@@ -18,8 +18,8 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=7,fig.height=5,echo=TRUE)
 ```
 
 # Introduction
-Modern biological experiments are increasingly producing interesting
-binary matrices. These may represent the presence or absence of
+Modern biological experiments are increasingly producing interesting matrices. 
+These may represent the presence or absence of
 specific gene mutations, copy number variants, microRNAs, or other
 molecular or clinical phenomena. We have recently developed a tool, 
 *CytoGPS* [^Abrams and colleagues],
@@ -29,15 +29,15 @@ ISCN) into a binary vector with three bits (loss, gain, or fusion) per
 cytoband, which we call the "LGF model".
 
 The <tt>Mercator</tt> package is intended to facilitate the
-exploration of binary data sets. It implements a subset of the 76
+exploration of data sets. It implements metrics for binary, continuous, 
+and categorical data, including a subset of the 76
 binary distance metrics described by [^Choi and colleagues], ensuring that
 at least one representative of each of their major clusters is
 included. Each resulting distance matrix can be combined with multiple
-visualiization techniques, providing a consistent interface to
+visualization techniques, providing a consistent interface to
 thoroughly explore the data set.
 
 # The BinaryMatrix Class
-
 First we load the package.
 ```{r library}
 suppressMessages( suppressWarnings( library(Mercator) ) )
@@ -47,9 +47,9 @@ suppressMessages( suppressWarnings( library(Mercator) ) )
 We proceed with a model dataset of karyotypes from patients with 
 Chronic Myelogenous Leukemia (CML) with 400 chromosomal features recorded over 
 740 patients, from the public
-Mitelman database. Cytogenetic abnormalities, recorded in Mitelman as text 
+Mitelman database. Cytogenetic abnormalities recorded in Mitelman as text 
 strings have been pre-processed with CytoGPS into 
-binary vectors. For the sake of clarity and efficiency, we have chosen a subset
+binary vectors. For the sake of clarity and efficiency we have chosen a subset
 of patients and features for this example.
 ```{r data}
 filename <- system.file("Examples/Mercator_Test_Data.csv", package="Mercator")
@@ -94,8 +94,8 @@ The binary feature-vectors (viewed across a population of patient
 samples) are rarely unique. 
 Having identical feature vectors can complicate some of the
 clustering and visualization routines that we want to use (often by
-introducing a division by zero). But they can also alter the
-biological implications, by automatically giving more "weight" to a
+introducing a division by zero). However, they can also alter the
+biological implications by automatically giving more "weight" to a
 single genomic event (like a trisomy or monosomy). To deal with this
 issue, the <tt>Mercator</tt> package includes a function to remove
 duplicate or redundant features.
@@ -105,7 +105,7 @@ summary(my.binmat)
 ```
 
 In the case of our data, only 136 of the 740 karyotypes are unique. 
-Some of the karyotypes are "not used", in the sense that they contain 
+Some of the karyotypes are "not used" in the sense that they contain 
 none of the abnormalities selected for this limited subset.
 ```{r}
 length(my.binmat@info$notUsed)
@@ -168,17 +168,20 @@ abline(v=pts[my.binmat@reaper@pcdim], col="forestgreen", lwd=2)
 abline(v=pts[7], col="orange", lwd=2)
 ```
 
-The default value provided by the Auer-Gervini analysis (N=2; green) is 
-somewhat conervative. The value provided by the broken-stick model (N=7; orange)
+There is no method that can definitely identify the number of clusters 
+for a "perfect" solution, leaving part of the decision to the analyst's judgment. 
+Auer-Gervini and Scree plots provide informative visualizations to facilitate this 
+interference. The default value provided by the Auer-Gervini analysis (N=2; green) is 
+somewhat conservative. The value provided by the broken-stick model (N=7; orange)
 overlaid on the scree plot is more aggressive, but is not too unreasonable
-based on the Auer-Gervini plot. We will proceed assuming that there are seven
+based on the Auer-Gervini plot. We proceed using informed judgment that there are seven
 principal components and eight clusters.
 ```{r kk}
 kk <- 8
 ```
 
 # Visualization
-The Mercator Package allows visualization of data with four methods, including both 
+The Mercator Package allows visualization of data with four methods including both 
 standard techniques (hierarchical clustering) and large-scale visualizations 
 (multidimensional scaling (MDS), 
 T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.) 
@@ -186,14 +189,14 @@ T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.)
 ## Selecting a Distance Metric
 The <tt>Mercator</tt> package implements or provides access to 10 distance metrics: 
 Jaccard, Sokal-Michener, Hamming, Russell-Rao, Pearson, Goodman-Kruskal, Manhattan,
-Canberra, Binaryand Euclidean. Although some of these metrics 
+Canberra, Binary, and Euclidean. Although some of these metrics 
 can be used for continuous or categorical data, all are appropriate for 
 some or all binary matrices. <>tt>Mercator</tt> allows the user to easily select 
 the most appropriate metric to represent similarity and difference in a 
 biologically meaningful way within a given dataset.
 
 ## Jaccard Distance
-Here, we will use the Jaccard distance, because of its ease of 
+Here, we will use the Jaccard distance because of its ease of 
 interpretability, common usage, and its appropriatness of application 
 to asymmetric binary data, such as the binary vector output of CytoGPS 
 in this dataset.
@@ -265,14 +268,14 @@ this idea can be quite useful with data sets containng tens of thousands of obje
 earlier visualizations. This operator is fast for MDS or t-SNE models, but
 is very slow for large hierarchical clustering. (It uses the implementation in the <tt>dendextend</tt>
 package, which works by removing a single leaf at a time from the tree.) In the
-next code chunk, we first throw away the dendrogram, then subset using the downsampled
-data, and then compute a new dendrogram.
+next code chunk, we <tt>downsample</tt> to create a meaningful subset, 
+and then compute a new dendrogram for each subset.
 ```{r downsample}
 X <- jacc.Vis
 N <- as.matrix(X@distance)
 set.seed(87530)
-P <- downsample(40, N, 0.1)
-J <- jacc.Vis[P]
+P <- downsample(40, N, 0.1) # create a downsampled subset
+J <- jacc.Vis[P] # compute a new dendrogram
 J <- addVisualization(J, "tsne", perplexity=5)
 names(J@view)
 par(pty="s")
@@ -293,12 +296,10 @@ plot(J, view = "graph", layout = "nicely",
      main="Graphical View of Down-sampled Jaccard Distance Matrix",
      xlim=c(-1,1))
 
-
 plot(J, view = "graph", layout = "tsne", main="T-SNE Layout")
 ```
 
 # Cluster Identities
-
 We can use the *getClusters* function to characterize each cluster and 
 use these for further manipulation.
 
@@ -324,9 +325,10 @@ sokal.Vis <- Mercator(my.binmat, "sokal", "tsne", K=kk, peplexity = 10)
 table(getClusters(sokal.Vis), getClusters(jacc.Vis))
 plot(sokal.Vis, view = "tsne", main="t-SNE; Sokal-Michener Distance; perplexity=10")
 ```
-The two larges groups get assigned the same colors (by chance) in the Jaccard and the
+
+The two largest groups get assigned the same colors (by chance) in the Jaccard and the
 Sokal-Michener clusterings. However, it is not at all clear how to align the smaller
-groups. For that purpose, we can use the <tt>remapColors</tt> function.
+groups. For that purpose we can use the <tt>remapColors</tt> function.
 ```{r recolored}
 SV <- remapColors(jacc.Vis, sokal.Vis)
 table(getClusters(SV), getClusters(jacc.Vis))
@@ -343,7 +345,8 @@ slot(jacc.Vis, "palette") <- c("red", "orange", "green", "blue",
                                "cyan", "magenta", "purple", "black")
 plot(jacc.Vis, view = "tsne")
 ```
-If the number of colors in the palette is smaller thant he numbe of clusters,
+
+If the number of colors in the palette is smaller than the number of clusters,
 they will be recycled, and other plotting symbols will be introduced.
 ```{r small}
 slot(jacc.Vis, "palette") <- c("red", "green", "blue",
