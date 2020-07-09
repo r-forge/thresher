@@ -2,9 +2,12 @@
 title: "Manual"
 author: "Dwayne Tally"
 date: "5/18/2020"
-output: html_document
+output: 
+  html_document: default
+  pdf_document: default
+  word_document: default
 ---
-# `rnames`: rnames
+# `RCytoGPS`: rnames
 
 ## Description
 
@@ -23,7 +26,7 @@ rnames(list, item)
 
 Argument      |Description
 ------------- |----------------
-list    |     A list that contains the loss gain fusion binary model of each karyotype and their clones.list could also be in a form of a nested list.
+list    |    A list that contains the loss gain fusion binary model of each karyotype and their clones.list could also be in a form of a nested list.
 item    |    Item is a specific keyword that has to be able to be found in the given list. item is what rnames look for in the list to extract the element index.
 
 
@@ -47,12 +50,12 @@ item    |    Item is a specific keyword that has to be able to be found in the g
  
  
  ``` 
-# `extractOneLGF`: extractOneLGF
+# `RCytoGPS`: extractOneLGF
 
 ## Description
 
 
- The purpose of this function is to be used as a supplementary function for readLGF which is found within the RcytoGPS library.This function does all the parsing and formatting of the JSON file obtained from the website CytoGPS.org. extractOneLGF extracts the LGF data, along with the status of each karyotype, and generates the cytoData used for the image function from the JSON file. The status reports if the karyotype extracted was a 'Success' or 'Fixable grammer error and Success' or if there was another error with the karyotype such as a 'Validation error' and extracts the status of each karyotype as well as the ISCN Karyotype band. Status also uses a function called padnames to give sample row names to the statuses and karyotypes.The LGF data is extracted and converted into a data frame with new columns being generated such as the karyotype ID and Clones (rnames) along with the cytogenetic bands being produced in triple kits, each set represents the cytogenetic abnormality they are associated with. And lastly extractOneLGF produces another dataframe called cytoData by using another function called Idioformat to generate and format the data. cytoData is a dataframe that has the columns needed to run the image function as well as the column sums of each cytogenetic event.
+The purpose of this function is to be used as a supplementary function for readLGF which is found within the RcytoGPS library. This function does all the parsing and formatting of the JSON file obtained from the website CytoGPS.org. extractOneLGF extracts the LGF data, along with the status of each karyotype, and generates the cytoData used for the image function from the JSON file. The status reports if the karyotype extracted was a ‘Success’ or ‘Fixable grammer error and Success’ or if there was another error with the karyotype such as a ‘Validation error’ and extracts the status of each karyotype as well as the ISCN Karyotype band. Status also uses a function called padnames to give sample row names to the statuses and karyotypes. The LGF data is extracted and converted into a data frame with new columns being generated such as the karyotype ID and Clones (rnames) along with the cytogenetic bands being produced in triple kits, each set represents the cytogenetic abnormality they are associated with. 
 
 
 ## Usage
@@ -88,18 +91,18 @@ extractOneLGF | Essentially the FUN argument used in lapply, extractOneLGF is ap
  temp  <- lapply(myJSON, extractOneLGF)
  ``` 
 
-# `readLGF`: readLGF
+# `RCytoGPS`: readLGF
 
 ## Description
 
 
- A function that converts conventional karyotypes from the standard text-based notation (the International Standard for Human Cytogenetic Nomenclature; ISCN) into a binary vector with three bits (loss, gain, or fusion) per cytoband, which we call the "LGF model".There are two supplementary function that readLGF uses called 'extractOneLGF' and 'rnames' to format the lgf model and to generate IDs.
+A function that converts conventional karyotypes from the standard text-based notation (the International Standard for Human Cytogenetic Nomenclature; ISCN) into a binary vector with three bits (loss, gain, or fusion) per cytoband, which we call the “LGF model”. There are several supplementary functions that readLGF uses called ‘extractOneLGF’ and ‘rnames’ which formats the LGF model and generates the IDS, and ‘Idioformat’ obtains the frequency of cytogenetic events. ReadLGF also uses a class called ‘LGF’ to format the output into a list that is similiar to a S4 object.
 
 
 ## Usage
 
 ```r
-readLGF(files = x, folder = y)
+readLGF(files = x, folder = y, verbose = TRUE)
 ```
 
 
@@ -112,14 +115,12 @@ folder   |  The specified directory/folder the user wants the function to extrac
 
 ## Details
 
-
- readLGF takes the arguements of a specific file name from a specific folder. If the file name was not specified then it will take all JSON files from the specified folder. If the folder was not specified then it will look in the current working directory. The function will output a nested list having: Status of the chromosomes (a list of 'success' or 'fails'), a dataframe of the LGF model of the JSON file, and an IdioData dataframe formated for the image function.
+ readLGF takes the arguements of a specific file name from a specific folder. If the file name was not specified then it will take all JSON files from the specified folder. If the folder was not specified then it will look in the current working directory. The function will output a nested list having: source, raw, frequency, size and CL. Source is a character array that hold the names of the files that were read-in by readLGF, raw is a list of the binary LGF model of the the karyotypes, frequency is the mean of the cytogenetic event at the cytogenetic bands, size is the total number of karyotypes including their clones, and CL is the cytobandLocations which includes chromosome number, start and end locations of the chromosomes, chromosomal arm, and cytogenetic bands.
 
 
 ## Value
 
-
- A nested list of the binary LGF model, a data frame of the LGF data with columns to include chromosome number, start and end locations of the chromosomes, chromosomal arm, cytogenetic bands, and the column sums of the loss, gains, and fusions. As well as a list of which karyotype had a 'success' or 'fail' cytogenetic event. In an event of a 'fail', it could suggestion how to fix the syntax of the inputted karyotype.
+   A nested list that has source, raw, freqeuncy, size, and CL organized in a s4 class.
 
 
 ## References
@@ -136,18 +137,17 @@ folder   |  The specified directory/folder the user wants the function to extrac
  
  ``` 
 
-# `Idioformat`: Idioformat
+# `RCytoGPS`: Idioformat
 
 ## Description
 
-
- The purpose of this function is generate and format the cytoData based off of the LGF dataframe obtained from extractOneLGF. Idioformat takes the dataset from the LGF dataframe and column sums the data based off what cytogenetic event that is taking place. Idioformat also introduces new required data columns to enable the function image to generate a set of idiographs for visual comparisons and pattern recognitions. The new columns being concatinated to the dataframe are Chromosome, loc.start, loc.end, arm, and band and then the column sum of each cytogenetic event. To get the data for the required columns you have to run the Idioformat.rda file to store the new data as vectors that will be concatinated into the cytoData dataframe.
+The purpose of this function is to generate and format the frequency based off of the LGF dataframe output from extractOneLGF. Idioformat takes the dataset from the LGF dataframe and column means the dataset, based off what cytogenetic event that is taking place. CL is the cytobandLocation object which is found within the package RCytoGPS that gives additional columns needed for frequency to generate images, and Idioformat also produces the size of the dataset so you can see the expected size of the files that are being read to aid in determining if readLGF is taking in the right input files.
 
 
 ## Usage
 
 ```r
-Idioformat(df)
+Idioformat(df, CL)
 ```
 
 
@@ -156,11 +156,13 @@ Idioformat(df)
 Argument      |Description
 ------------- |----------------
 df     |     A dataframe that has the numeric columns of the LGF model.
+CL     |     A dataframe that is obtained within the RCytoGPS package. It contains the columns for chromosome, loc.start, loc.end, the band, and the stain.
+
 
 ## Value
 
 
- Returns a dataframe of the binary LGF model column summed, as well as several other columns that will be used in the image function.
+ Returns a dataframe of the binary LGF model column mean, as well as the size of the dataset.
 
 
 ## References
@@ -172,17 +174,61 @@ df     |     A dataframe that has the numeric columns of the LGF model.
 ## Examples
 
 ```r 
- load("Idioformat.rda")
- cytoData <- Idioformat(df.lgf)
+ temp <- readLGF(folder = wd)
+ test <- lapply(temp[["raw"]], function(R) {
+  Idioformat(R$LGF, CL = RCytoGPS:::cytobandLocations)
+ })
  ``` 
-
-
-# `Idiogram`: Idiogram Graphs
+# `RCytoGPS`: CytobandData
 
 ## Description
 
 
- The purpose of this function is to have a visual of any cytogentic event from any dataset as long as you specify the column name, color for the bar graph, and the chromosome number you would want to analyze. To run this function and the other idiogram functions, you have to have data that is formated for Idiograms. I.E. a dataframe that has the summed columns of the LGF mode, a column that specifies what chromosome, along with a column for the chromosome start location, a column for the end location, the arm of the chromosome that the event is taking place on, and the cytogenetic band.
+The purpose of this function is to convert a frequency dataframe with the CL columns (chromosome, loc.start, loc.end, the band, and the stain) into a s4 object that can be used with RCytoGPS function images to generate a multitude of graphs to give you a clearer idea of what your data is expressing.
+
+
+## Usage
+
+```r
+CytobandData(data)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+data    |    A dataframe that numeric values as well as CL columns.
+
+
+## Value
+
+
+ Returns an s4 object that can be used to generate RCytoGPS images.
+
+
+## References
+
+
+ 
+
+
+## Examples
+
+```r 
+temp <- readLGF(folder = wd)
+cytoData <- data.frame(temp[["CL"]],temp[["frequency"]])
+bandData <- CytobandData(cytoData)
+ 
+ 
+ ``` 
+
+# `RCytoGPS`: Idiogram Graphs
+
+## Description
+
+
+The purpose of this function is to have a visual of any cytogentic event from any dataset as long as you specify the column name, color for the bar graph, and the chromosome number you would want to analyze. To run this function and the other idiogram functions, you have to have data that is formated for Idiograms. I.E. a dataframe that has the summed columns of the LGF mode, a column that specifies what chromosome, along with a column for the chromosome start location, a column for the end location, the arm of the chromosome that the event is taking place on, and the cytogenetic band. The dataframe also has to be transformed into an S4 object using the function CytobandData.
 
 
 ## Usage
