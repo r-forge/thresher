@@ -44,7 +44,8 @@ bandData <- CytobandData(cytoData)
 The first visual is to show the user that they can generate graphs using different data sets obtained from different karyotypes. This is important because it allows an easier visual comparison between the same cytogenetic abnormality but using different karyotype data. The arguments for the function is the dataset, a specified column name or column index from bandData, and the col or color you want the graphs to be.
 ```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=10, fig.height=5}
 opar <- par(mfrow=c(2,1))
-barplot(bandData, what = 8, col = "forestgreen")
+barplot(bandData, what = "CytoGPS_Result1.Loss", col = "forestgreen")
+barplot(bandData, what = "CytoGPS_Result1.Gain", col = "orange")
 par(opar)
 ```
 
@@ -56,11 +57,11 @@ This graph allows you to simultaneously compare multiple cytogenetic events. The
 ```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
 Acolumns <- names(temp[["frequency"]])
 multiEvents <- list(Loss = Acolumns[grep("Loss", Acolumns)], Gain = Acolumns[grep("Gain", Acolumns)], Fusion = Acolumns[grep("Fusion", Acolumns)])
-image(bandData, what = Acolumns[1:3], chr = 14)
+image(bandData, what = Acolumns[1:3], chr = 2)
 ```
 Similar graph as the previous that takes in similar parameters, with difference is that the graph is presented along the x axis instead of the y axis. The purpose is for user preference, if they want to see a visual graph on the x axis instead of the y axis.
 ```{r h.plot2Chrom, fig.width=5, fig.height=8, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
-image(bandData, Acolumns[1:3], chr = 14, horiz = TRUE)
+image(bandData, Acolumns[1:3], chr = 2, horiz = TRUE)
 ```
 
 # Idiograms
