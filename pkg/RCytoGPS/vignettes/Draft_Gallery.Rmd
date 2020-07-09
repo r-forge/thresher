@@ -1,0 +1,115 @@
+---
+title: "Gallery"
+author: "Dwayne Tally"
+output: 
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+
+```{r opts, echo=FALSE}
+knitr::opts_chunk$set(fig.width=8, fig.height=5)
+```
+# Introduction
+This is a supplementary vignette for RCytoGPS and will primarily focus on the different visuals you can generate from the datasets by changing the arguements for image(). The results of the visuals will be based off one data set, but images can accept data from multiple data sets. Also the data being used to generate the visuals is the same dataset from the main vignette.
+
+```{r Setup, echo=FALSE}
+library(RCytoGPS)
+```
+
+```{r, echo=FALSE, message=FALSE}
+wd <-  system.file("Examples/JSONfiles", package = "RCytoGPS")
+temp <- readLGF(folder = wd)
+
+cytoData <- data.frame(temp[["CL"]],temp[["frequency"]])
+```
+
+```{r, echo = FALSE}
+bandData <- CytobandData(cytoData)
+Acolumns <- names(temp[["frequency"]])
+multiEvents <- list(Loss = Acolumns[grep("Loss", Acolumns)], Gain = Acolumns[grep("Gain", Acolumns)], Fusion = Acolumns[grep("Fusion", Acolumns)])
+```
+
+# Plotting Cytoband Data Along the Genome
+The first visual is a barplot to show the frequencies of the cytogenetics event mapped to the assoicated chromosome. The parameters for the barplot is a dataset, the specific column in that dataset you want to graph, and the color of the graph.
+```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=10, fig.height=5}
+opar <- par(mfrow=c(2,1))
+barplot(bandData, what = Acolumns[1], col = "forestgreen")
+barplot(bandData, what = Acolumns[2], col="orange")
+par(opar)
+```
+
+# Single Chromosome Plots
+Note: “Horizontal” and “vertical” refer to the orientation of the chromosome with its cytoband shading.
+
+## Plotting Cytoband-Level Data Along One Chromosome
+
+The ‘vertical stacked chromosome’ allows you to see a vertical barplot and its associated chromosome on the y axis, this allows you to see multiple cytogenetic events on a specified chromosome. The parameters to produce this image is the dataset, the cyotgenetic event, and a specific chromosome.
+
+Note: unless specified horiz is set to FALSE by default.
+
+```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+image(bandData, what = Acolumns[1:3], chr = 2)
+```
+The next visual is nearly identical to ‘vertical stack chromosome’ with the exception that the visual is set along the x axis instead of the y axis.
+
+```{r h.plot2Chrom, fig.width=5, fig.height=8, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
+image(bandData, Acolumns[1:3], chr = 2, horiz = TRUE)
+```
+
+## Plotting Cytoband-Level Data Along Both Sides of One Chromosome
+This set of visuals allows the user to do a direct comparison between the cytogenetic events on a specified chromosome on the y-axis.
+```{r v.plot1Chrom, fig.width=8, fig.height=5, fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+#image(bandData, what = list("Fixed_AML_osu.Loss","Fixed_AML_osu.Gain"), chr = 1)
+image(bandData, what = list(Acolumns[1],Acolumns[2]), chr = 2)
+
+```
+The next visual is similar to the previous visual except that the orientation is switched form the y axis to the x axis.
+```{r h.plot1Chrom, fig.width=5, fig.height=8, fig.cap = "Horizontal stacked barplot of LGF frequencies on chromosome 13 for type A and B samples."}
+#image(bandData, list("CytoGPS_Result1.Loss","CytoGPS_Result2.Gain"),  chr = 2, horiz = TRUE)
+image(bandData, what = list(Acolumns[1],Acolumns[2]), chr = 2, horiz = TRUE)
+
+```
+
+# Idiograms
+
+## One Data Column
+The first idiogram is a visualization of the chromosomes with a barplot of the cytogenetic abnormalities attached to observe and possibly identify patterns. The parameters are similar to the previous visuals with the exception of chr is set to ‘all’ and col (Color) is changed to pal (pallet).
+```{r makeid, fig.width=10, fig.height=8, fig.cap="Idiogram for one data columm."}
+image(bandData, what = Acolumns[1], chr = "all", pal = "orange")
+```
+
+## Contrasting Two Data Columns
+This image allows you to do a comparison between two cytogenetic events on all the chromosomes.
+```{r biid, fig.width=10, fig.height=8, fig.cap="Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", 
+      pal=c("orange", "forestgreen"))
+```
+The next visual is the same as the previous with the exception of the user can dictate how many total rows they want to graph.
+```{r biid3, fig.width=10, fig.height=10, fig.cap="Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", nrows = 3,
+      pal=c("orange", "forestgreen"))
+```
+This visual is the same as the previous except instead of plotting on the y axis, it is instead plotted on the x axis.
+```{r hbiid, fig.width=8, fig.height=10, fig.cap="Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", 
+      pal=c("orange", "forestgreen"), horiz = TRUE)
+```
+
+## Many Data Columns
+This image allows you to graph multiple data columns of the same cytogenetic event from different karyotype datasets and create a visualization of the cytogenetic event. This image is plotted on the x axis for each idiogram graph.
+```{r stackid, fig.width=6, fig.height=14, fig.cap="Idiogram for many data columns."}
+image(bandData, what = Acolumns[1:3], chr = "all", 
+              pal=c("forestgreen", "orange", "purple"), nrows=3, horiz = FALSE)
+```
+Lastly, this image is the same as the previous with the exception of the graphs being plotted on the y axis.
+```{r hstackid, fig.width=14, fig.height=5, fig.cap="Idiogram for many data columns."}
+image(bandData, what = Acolumns, chr = "all", 
+              pal=c("forestgreen", "orange", "purple"), nrows=3, horiz= TRUE)
+```
+
+# Appendix
+```{r si}
+sessionInfo()
+```
