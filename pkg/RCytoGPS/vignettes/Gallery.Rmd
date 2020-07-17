@@ -1,0 +1,147 @@
+---
+title: "RCytoGPS Gallery"
+author: "Dwayne Tally, Zachary B. Abrams, and Kevin R. Coombes"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    theme: journal
+    highlight: kate
+  toc: true
+vignette: >
+  %\VignetteIndexEntry{RCytoGPS Gallery}
+  %\VignetteKeywords{OOMPA,CytoGPS,karyotypes,idiograms,graphics}
+  %\VignetteDepends{RCytoGPS}
+  %\VignettePackage{RCytoGPS}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r opts, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(fig.width=8, fig.height=5)
+```
+```{r mycss, results="asis", echo=FALSE}
+cat('
+<style type="text/css">
+.figure { text-align: center; }
+.caption { font-weight: bold; }
+</style>
+')
+```
+# Introduction
+In this vignette, we focus on the different visualizations you can generate by
+changing the arguments for the <tt>image</tt> and <tt>barplot</tt> methods. The main arguments
+to <tt>image</tt>, when using a <tt>CytobandData</tt> object from the package are
+
+* <tt>what</tt>: A list or vector indicating which data columns to show.
+* <tt>chr</tt>: The chromosome to plot, which can take on the value <tt>all<tt> to show the whole genome
+
+The <tt>barplot</tt> method only takes the <tt>what</tt> argument, which in this case must be a
+length-one character vector.
+
+To produce the figures in this gallery, we will use a dataset that comes with the
+package, already processed,
+```{r Setup}
+library(RCytoGPS)
+data(cytoData)
+colnames(cytoData)
+bandData <- CytobandData(cytoData)
+Acolumns <- c("A.Loss", "A.Gain", "A.Fusion")
+```
+The <tt>banddata</tt> object includes data at the resolution of a cytoband for three sets
+of samples (denoted A, B, and C), describing the frequency of loss, gain, and fusion
+events for each set.
+
+# Plotting Cytoband Data Along the Genome
+The first visual is a barplot to show the frequencies of cytogenetic events mapped to the
+associated chromosome. The main parameters for `barplot` are (1) the <tt>CytobandData</tt>
+object containing the dataset, (2) the specific data column that  you want to graph, and
+(3) the color of the graph.
+```{r gb, fig.cap="Figure 1: Cytoband level data along the genome.", fig.width=10, fig.height=5}
+opar <- par(mfrow=c(2,1))
+barplot(bandData, "A.Loss", col = "forestgreen")
+barplot(bandData, "B.Loss", col="orange")
+par(opar)
+```
+
+# Single Chromosome Plots
+Plots of the data along one chromosome can be oriented either horizontally or vertically.
+By (our) definition, "horizontal" and "vertical" refer to the orientation of the chromosome
+with its cytoband shading. Unless specified, the <tt>horiz</tt> argument is set to
+<tt>FALSE</tt> by default.
+
+## Plotting Cytoband-Level Data Along One Chromosome
+The "vertical stacked chromosome" allows you to see a vertical barplot and its associated
+chromosome on the y axis, this allows you to see multiple cytogenetic events on a specified
+chromosome. The parameters to produce this image are the dataset, the cytogenetic event, and
+a specific chromosome.
+
+```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Figure 2: Vertical stacked barplot of LGF frequencies on chromosome 2 for type A samples."}
+image(bandData, what = Acolumns[1:3], chr = 2)
+```
+The next visual is nearly identical to "vertical stack chromosome" with the exception that the visual is set along the x-axis instead of the y axis.
+
+```{r h.plot2Chrom, fig.width=5, fig.height=8, fig.cap = "Figure 3: Horizontal stacked barplot of LGF frequencies on chromosome 2 for type A samples."}
+image(bandData, Acolumns[1:3], chr = 2, horiz = TRUE)
+```
+
+## Plotting Cytoband-Level Data Along Both Sides of One Chromosome
+This set of visuals allows the user to directly compare two sets of cytogenetic events
+on a specified chromosome on the y-axis.
+```{r v.plot1Chrom, fig.width=8, fig.height=5, fig.cap = "Figure 4: Vertical stacked barplot of LGF frequencies on chromosome 5 for type A and B samples."}
+image(bandData, what = list("A.Loss", "B.Loss"), chr = 5)
+
+```
+The next visual is similar to the previous visual except that the orientation is switched
+from vertical to horizontal.
+```{r h.plot1Chrom, fig.width=5, fig.height=8, fig.cap = "Figure 5: Horizontal stacked barplot of LGF frequencies on chromosome 5 for type A and B samples."}
+image(bandData, what = list("A.Loss", "B.Loss"), chr = 5, horiz = TRUE)
+```
+
+# Idiograms
+We can also produce "idiograms" that show the data for all chromosomes at once rather than
+just one chromosome at a time.
+
+## One Data Column
+The simplest idiogram visualizes a single data colum of cytogenetic events for all
+chromosomes. The parameters are similar to the previous visuals with the exception
+that <tt>chr</tt> is set to `all` and we describe the colors using the argument
+<tt>pal</tt> (for pallete).
+```{r makeid, fig.width=10, fig.height=8, fig.cap="Figure 6: Idiogram for one data columm."}
+image(bandData, what = Acolumns[1], chr = "all", pal = "orange")
+```
+
+## Contrasting Two Data Columns
+This image allows you to do a comparison between two cytogenetic events on all the chromosomes.
+```{r biid, fig.width=10, fig.height=8, fig.cap="Figure 7: Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", 
+      pal=c("orange", "forestgreen"))
+```
+The next visual is the same as the previous with the exception that the user can dictate
+how many total rows they want to display. (The default is 2; permitted values range from
+1 to 4.)
+```{r biid3, fig.width=10, fig.height=10, fig.cap="Figure 8: Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", nrows = 3,
+      pal=c("orange", "forestgreen"))
+```
+This visual is the same as before except that we have switched from vertical to horizontal.
+```{r hbiid, fig.width=8, fig.height=10, fig.cap="Figure 9: Idiogram to contrast two data columms."}
+image(bandData, what = Acolumns[1:2], chr = "all", 
+      pal=c("orange", "forestgreen"), horiz = TRUE)
+```
+
+## Many Data Columns
+The <tt>image</tt> method also  allows you to graph more than two (up to ten) data columns.
+```{r stackid, fig.width=9, fig.height=14, fig.cap="Figure 10: Idiogram for many data columns."}
+image(bandData, what = Acolumns[1:3], chr = "all", 
+              pal=c("forestgreen", "orange", "purple"), nrows=3, horiz = FALSE)
+```
+Lastly, this image is the same as the previous with the exception of the graphs being plotted horizontally.
+```{r hstackid, fig.width=14, fig.height=9, fig.cap="Figure 11: Idiogram for many data columns."}
+image(bandData, what = Acolumns, chr = "all", 
+              pal=c("forestgreen", "orange", "purple"), nrows=3, horiz= TRUE)
+```
+
+# Appendix
+```{r si}
+sessionInfo()
+```

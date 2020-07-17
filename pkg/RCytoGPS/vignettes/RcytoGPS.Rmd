@@ -1,8 +1,11 @@
 ---
 title: "Graphing Cytoband Data with RCytoGPS"
 author: "Kevin R. Coombes"
-data: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    theme: journal
+    highlight: kate
 vignette: >
   %\VignetteIndexEntry{Graphing Tools in RCytoGPS}
   %\VignetteKeywords{OOMPA,CytoGPS,karyotypes,idiograms,graphics}
@@ -15,6 +18,15 @@ vignette: >
 knitr::opts_chunk$set(fig.width=8, fig.height=5)
 ```
 # Introduction
+In this vignette, we focus on the different visualizations you can generate by
+changing the arguments for the `image` and `barplot` methods. The main arguments
+to `image`, when using a `CytobandData` object from the package are
+
+* `chr`: The chromsome to plot, which can take on the value `all` to show the whole genome
+* `what`: A list or vector indicating which data columns to show.
+
+To produce the figures in this gallery, we will use a dataset that comes with the
+package, already processed,
 
 ```{r}
 library(RCytoGPS)
@@ -40,6 +52,7 @@ par(opar)
 
 # Single Chromosome Plots
 Note: "Horizontal" and "vertical" refer to the direction of the chromosome with its cytoband shading.
+
 ## Plotting Cytoband-Level Data Along One Chromosome
 ```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type A samples."}
 Acolumns <- c("A.Loss", "A.Gain", "A.Fusion")
