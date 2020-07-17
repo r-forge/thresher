@@ -1,0 +1,171 @@
+---
+title: "RCytoGPS: Working With LGF-Models of Karyotype in R"
+author: "Dwayne Tally, Zachary B. Abrams, and Kevin R. Coombes"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_document:
+    theme: journal
+    highlight: kate
+vignette: >
+  %\VignetteIndexEntry{Introduction to RCytoGPS}
+  %\VignetteKeywords{OOMPA,CytoGPS,karyotypes,idiograms,graphics}
+  %\VignetteDepends{RCytoGPS}
+  %\VignettePackage{RCytoGPS}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r opts, echo=FALSE}
+knitr::opts_chunk$set(fig.width=8, fig.height=5)
+```
+# Introduction
+Modern biological experiments are increasingly producing interesting binary matrices.
+These may represent the presence or absence of specific gene mutations, copy number
+variants, microRNAs, or other molecular or clinical phenomena. We recently developed
+a tool, CytoGPS [^Abrams and colleagues], that converts conventional karyotypes from
+the standard text-based notation (the International Standard for Human
+Cytogenetic/Cytogenomic Nomenclature; ISCN) into a binary vector with three bits
+(loss, gain, or fusion) per cytoband, which we call the "LGF model".
+
+The CytoGPS tool is available at the web site http://cytogps.org, where the LGF results
+of procvessing karyotype data are returned in JSON format. To complement the web site,
+we have developed <tt>RCytoGPS</tt>, an R package to  extract, format, and visualize
+genetic data at the resol;ution of cytobands. <tt>RCytoGPS</tt> can parse any JSON file
+(or set of files) produced by CytoGPS.org.
+
+## Setup
+In order to extract LGF data from JSON files, you must first load the package.
+```{r Setup}
+library(RCytoGPS)
+```
+
+# Extracting JSON data and formatting to LGF model
+We have included a pair of JSON files produced at CytoGPS.org as examples in the package.
+These are found in the following directory:
+```{r sysfile}
+wd <-  system.file("Examples/JSONfiles", package = "RCytoGPS")
+dir(wd)
+```
+The two text files contain the inputs that were uploaded to the web site; the two
+JSON files contain the outputs. You can specify the files and the folder that you
+want to read. The simplest application is to omit the files variable and read all
+filed in teh specified folder (which defaults to the current working directory).
+```{r readLGF}
+temp <- readLGF(folder = wd)
+rm(wd)
+```
+The return value is a list of five elements.
+```{r peekTemp}
+class(temp)
+names(temp)
+```
+The <tt>source</tt> element documents which JSON file(s) were read.
+```{r src}
+temp$source
+```
+The <tt>size</tt> element lists the number of rows returned from each file; each
+row represents a distinct clone.
+```{r size}
+temp$size
+```
+The <tt>CL</tt> element is a data frame describing the chromosomal locations of
+each cytoband.
+```{r CL}
+summary(temp$CL)
+```
+The <tt>raw</tt> element is itself a list, containing the binary LGF data for
+each JSON file processed. Each file produces a "Status" output along with the LGF
+data. The Status includes both the input karyotype (in ISCN format) and an indicator of
+whether CytoGPS could successfully process it.  In this example, the first karyotype
+contained an error. As a result, the LGF component does not contain any rows derived
+from that karyotype.  It does, however. contain three rows derived from the second
+karyotype, since the "forward slashes" separate the decriptions of three different
+clones that were detected in that sample.
+```{r raw}
+names(temp$raw)
+R <- temp$raw[[2]]
+names(R)
+R$Status
+dim(R$LGF)
+rownames(R$LGF)
+rm(R)
+```
+Finally, the <tt>frequency</tt> element contains summary data from each file read.
+These summaries consist of the frequencies of loss, gain, and fusion events. Each row
+of this data frame represents a cytoband. There are three columns from each JSON file,
+one each for loss, gain, and fusion
+```{r freqelt}
+F <- temp$frequency
+class(F)
+dim(F)
+colnames(F)
+```
+
+# Extracting the cytoband locations, and the frequency data
+In order to be able to work with the cytoband-level frequency data, we must combine
+it with the cytoband location data. Here we assemble them into a single data frame.
+```{r cytoData}
+cytoData <- data.frame(temp[["CL"]], temp[["frequency"]])
+```
+
+# Turning CytoData into an S4 Object
+Next, we transfrom the CytoData data frame into an S4 object using the function
+<tt.cytobandData</tt>. The newly acquired  object will then be used to generatie plots
+and will be available for further analyses. 
+```{r Turning CytoData into an S4 Object}
+bandData <- CytobandData(cytoData)
+```
+## Generating Graphs
+
+# Plotting Cytoband Data Along the Genome
+The first graphs (using <tt>barplot</tt> ]) summarizes the frequency data from one data
+column  along the genome. This provides a broad overview of the changes, and can be used
+to visually contrast the locations of changes in different data sets. Here we use barplot
+twice, showing losses and gains from the first file. 
+```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=10, fig.height=5}
+opar <- par(mfrow=c(2,1))
+barplot(bandData, what = "CytoGPS_Result1.Loss", col = "forestgreen")
+barplot(bandData, what = "CytoGPS_Result1.Gain", col = "orange")
+par(opar)
+```
+
+# Plotting Cytoband-Level Data Along One Chromosome
+The next graph allows you to simultaneously compare multiple cytogenetic events one
+chromosome at a time. 
+```{r v.plot2Chrom, fig.width=8, fig.height=5,fig.cap = "Vertical stacked barplot of LGF frequencies on chromosome 3 for type 1 samples."}
+datacolumns <- names(temp[["frequency"]])
+datacolumns
+image(bandData, what = datacolumns[1:3], chr = 2, labels = TRUE)
+```
+By adding the parameter <tt>horix=TRUE</tt>, you can rotate this graph 90 degrees. For
+more details about the parameters of the <tt>image</tt> method, see the manual pages
+and the "gallery" vignette.
+
+# Idiograms
+We can assemble all of the single-chromosome plots into a single "idiogram" graph that
+shows all chromosomes at once.
+
+
+## One Data Column
+The purpose of this graph is to visualize the chromosomes as well as a barplot of the
+cytogenetic abnormalities in orderto observe and possibly identify patterns.
+```{r makeid, fig.width=10, fig.height=8, fig.cap="Idiogram for one data columm."}
+image(bandData, what = datacolumns[1], chr = "all", pal = "orange")
+```
+
+## More Data Columns
+This graph allows the user to compare and contrast two or more cytogenetic events
+simultaneously. Here we show loss (orange), gain (green), and fusion (purple) events
+from the Type 1 samples.
+```{r biid, fig.width=10, fig.height=8, fig.cap="Idiogram to contrast two data columms."}
+image(bandData, what = datacolumns[1:3], chr = "all", 
+      pal=c("orange", "forestgreen", "purple"), horiz=TRUE)
+```
+
+# Gallery
+To see all possible visuals please go to our gallery for images.
+
+# Appendix
+```{r}
+sessionInfo()
+
+```
