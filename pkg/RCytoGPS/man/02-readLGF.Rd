@@ -70,7 +70,7 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
 }
 \author{
   Kevin R. Coombes \email{krc@silicovore.com},
-  Dwayne G. Tally
+  Dwayne G. Tally \email{dtally110@hotmail.com}
 }
 \seealso{
   \code{\link[Mercator]{Mercator-class}}

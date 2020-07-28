@@ -54,7 +54,7 @@ CytobandData(data, info, genome = NULL)
   cytoband-resolution summaries of the frequencies of
   abnormalities. These summaries can be used to create
   \code{CytobandData} objects, which can be visualized using the
-  \code{barplot} and \code{image} methods.
+  \code{\link{barplot}} and \code{\link{image}} methods.
 }
 \value{
  The \code{CytobandData} conxtructor returns an object of the
@@ -65,7 +65,7 @@ CytobandData(data, info, genome = NULL)
 }
 \author{
   Kevin R. Coombes \email{krc@silicovore.com},
-  Dwayne G. Tally
+  Dwayne G. Tally \email{dtally110@hotmail.com}
 }
 \references{
   Abrams ZB, Tally DG, Coombes KR. RCytoGPS: An R Package for Analyzing

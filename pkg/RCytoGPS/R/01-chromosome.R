@@ -52,4 +52,5 @@ setMethod("image", signature = "Chromosome", function(x,
     mtext(x@label, side=2, at=1, las=2, line=0.5)
     rect(pts[1], 0.6, pts[2], 1.4)
   }
+  invisible(x)
 })

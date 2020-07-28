@@ -1,5 +1,4 @@
-\name{cytoband-data}
-\alias{cytoband-data}
+\name{cytobandLocations}
 \alias{cytobandLocations}
 \alias{idiocolors}
 \docType{data}
@@ -38,6 +37,10 @@ data(cytobandLocations)
   consistent with the list of cytobands in ISCN 2016. We manually edited
   the source file to be compliant. It also matches the list of cytobands
   produced at \url{http://cytogps.org}.
+}
+\author{
+  Kevin R. Coombes \email{krc@silicovore.com},
+  Dwayne G. Tally \email{dtally110@hotmail.com}
 }
 \references{
   J. McGowan-Jordan, A. Simons, M. Schmid (editors).

@@ -4,7 +4,9 @@
 \alias{Idiogram Graphs}
 \title{Idiogram Graphs}
 \description{
-  The purpose of this function is to have a visual of any cytogentic event from any dataset as long as you specify the column name, color for the bar graph, and the chromosome number you would want to analyze. To run this function and the other idiogram functions, you have to have data that is formated for Idiograms. I.E. a dataframe that has the summed columns of the LGF mode, a column that specifies what chromosome, along with a column for the chromosome start location, a column for the end location, the arm of the chromosome that the event is taking place on, and the cytogenetic band. The dataframe also has to be transformed into an S4 object using the function CytobandData.
+  The \code{image} and \code{barplot} methods of the
+  \code{\link{CytobandData-class}} provide flexible displays of genome
+  wide data that has been summarized at cytoband resolution.
 }
 \usage{
 \S4method{image}{CytobandData}(x, chr, what,
@@ -16,7 +18,7 @@
                    xform = function(x) x, ...)
 }
 \arguments{
-  \item{x}{An pbject of the \code{\link{CytobandData-class}}, which
+  \item{x}{An object of the \code{\link{CytobandData-class}}, which
     combines numerical data at cytoband resolution with information on
     the chromosomal locations of the cytobands.}
   \item{chr}{The specific chromosome you want to view, typically in
@@ -51,7 +53,7 @@
   \item{debug}{Logical value; should the method print out debugging
     information. Probably best to ignore.}
 
-  \item{height}{An pbject of the \code{\link{CytobandData-class}}, which
+  \item{height}{An object of the \code{\link{CytobandData-class}}, which
     combines numerical data at cytoband resolution with information on
     the chromosomal locations of the cytobands.}
   \item{col}{a character vector containing the colors you want to use
@@ -66,8 +68,12 @@
   \item{\dots}{Ignored.}
 }
 \value{
-    Returns a nested list of the binary LGF model as well as a list of which karyotype had a 'success' or 'fail' cytogenetic event. In an event of a 'fail', it could suggestion how to fix the syntax of the inputted karyotype.
-
+  Both the \code{image} and \code{barplot} methods invisibly return
+    their first argument, and object fo the \code{CytobandData} class.
+}
+\author{
+  Kevin R. Coombes \email{krc@silicovore.com},
+  Dwayne G. Tally \email{dtally110@hotmail.com}
 }
 \references{
   Abrams ZB, Tally DG, Coombes KR. RCytoGPS: An R Package for Analyzing
