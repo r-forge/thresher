@@ -41,7 +41,7 @@ setMethod("summary", "CytobandData", function(object, ...) {
 })
 
 setMethod("barplot", "CytobandData",
-          function(height, what, col = "blue", altcol = "#FE4C4",
+          function(height, what, col = "blue", altcol = "#FED4C4",
                    ylab = "Percent", hline = NULL,
                    xform = function(x) x, ...) {
   if (is.list(what)) what <- unlist(what)

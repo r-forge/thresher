@@ -3,7 +3,7 @@
 \title{Extracting LGF karyotype data from JSON files }
 \description{
   A function to read binary karyotype data, stored in LGF format in JSON
-  files produced by the CytoGPS web site, into R for further analysis. 
+  files produced by the CytoGPS web site, into R for further analysis.
 }
 \usage{
 readLGF(files = NULL, folder = NULL, verbose = TRUE)
@@ -15,7 +15,7 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
     the folder path provided.}
   \item{folder}{The specified directory/folder from which the user
     wants to extract JSON files. If \code{NULL}, then the function
-    will look in the current working directory.} 
+    will look in the current working directory.}
   \item{verbose}{A logical value; should the function keep you informed about what it is doing?}
 }
 
