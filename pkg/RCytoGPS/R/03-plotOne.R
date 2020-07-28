@@ -127,22 +127,6 @@ makeIdiogram <- function(DATA, colname, color, axes = TRUE, legend = FALSE,
   }
 }
 
-singles  <- function(DATA, columns, chr, pal = palette()) {
-  N <- length(columns)
-  chrname <- paste("chr", chr, sep="")
-
-  opar <- par(bg="white", mfrow=c(N,1))
-  on.exit(par(opar))
-
-  for (I in c("Loss", "Gain", "Fusion")) { # for each abnormality type
-    currcol <- paste(columns, I, sep=".")
-    labels <- paste("% ", I, ", ", columns, sep="")
-    plot1Chrom(DATA, currcol, chr, labels, pal=pal)
-  }
-#  legend(0.78*par("usr")[2], 0.45*par("usr")[4], columns, col=pal, pch=15)
-  invisible(DATA)
-}
-
 stackIdiogram  <- function(DATA, columns, pal = palette(), nrows = 2,
                            horiz = FALSE, axes = TRUE, legend = FALSE,
                            sigcolumn = NA, sigcut = 0.01, alpha = 63) {

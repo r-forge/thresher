@@ -1,9 +1,5 @@
 library(RCytoGPS)
 
-try( showGenome(altcol = palette()) ) # unexpected behavior
-try( showGenome(altcol = 42) )        # unexpected behavior
-
-
 set.seed(53106)
 CL <- RCytoGPS:::cytobandLocations
 fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))

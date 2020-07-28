@@ -92,6 +92,7 @@ extractOneLGF <- function(J) {
   list(Status = KY, LGF = df.lgf)
 }
 
+if(FALSE) { # maybe later...
 setClass("LGF",
          slots = c(
            raw = "list",             # of data frame, rows = clones, columns = LGF-cytobands
@@ -100,6 +101,7 @@ setClass("LGF",
            size = "numeric",         # number of clones in each file
            CL = "data.frame"         # cytoband locations
          ))
+}
 
 Idioformat <- function(df, CL){
   ## element name will be the same as karyotype

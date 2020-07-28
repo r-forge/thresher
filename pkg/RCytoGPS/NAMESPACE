@@ -12,7 +12,4 @@ exportClasses("Chromosome", "CytobandData")
 export("Chromosome", "CytobandData")
 exportMethods("image", "barplot", "summary")
 
-export("singles", "showGenome")
 export("readLGF")
-
-exportClasses("LGF")

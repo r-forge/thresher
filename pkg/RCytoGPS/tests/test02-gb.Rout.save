@@ -17,10 +17,6 @@ Type 'q()' to quit R.
 
 > library(RCytoGPS)
 > 
-> try( showGenome(altcol = palette()) ) # unexpected behavior
-> try( showGenome(altcol = 42) )        # unexpected behavior
-> 
-> 
 > set.seed(53106)
 > CL <- RCytoGPS:::cytobandLocations
 > fake <- as.data.frame(matrix(runif(nrow(CL) * 10), ncol = 10))
@@ -48,4 +44,4 @@ Error in .local(height, ...) :
 > 
 > proc.time()
    user  system elapsed 
-   0.20    0.04    0.23 
+   0.17    0.04    0.26 

@@ -1,6 +1,6 @@
 Package: RCytoGPS
-Version: 0.9.3
-Date: 2020-07-17
+Version: 0.9.6
+Date: 2020-07-28
 Title: Using Cytogenetics Data in R
 Author: Kevin R. Coombes, Dwayne Tally
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
@@ -8,6 +8,7 @@ Description: Defines classes and methods to process text-based
   cytogenetics using the CytoGPS web site, then import the results
   into R for further analysis and graphing.
 Depends: R (>= 3.5)
+Suggests: Mercator
 Imports: methods, graphics, grDevices, rjson
 VignetteBuilder: knitr
 Suggests: knitr, rmarkdown
