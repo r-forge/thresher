@@ -2,6 +2,7 @@
 \alias{setClusters}
 \alias{recolor}
 \alias{remapColors}
+\alias{recluster}
 \title{
 Changing Cluster and Color Assignments in Mercator
 }
@@ -16,15 +17,17 @@ Changing Cluster and Color Assignments in Mercator
 setClusters(DV, clusters)
 recolor(DV, clusters)
 remapColors(fix, vary)
+recluster(DV, K)
 }
 \arguments{
-  \item{DV}{An object of eh \code{Mercator} class.}
+  \item{DV}{An object of the \code{Mercator} class.}
   \item{clusters}{An integer vector specifiny the cluster membership of
     each element.}
   \item{fix}{An object of the \code{Mercator} class, used as the source
     of color and cluster assignments.}
   \item{vary}{An object of the \code{Mercator} class, used as the target
     of color and cluster assignments.}
+  \item{K}{An integer, the number of clusters.}
 }
 \details{
   In the most general sense, clustering can be viewed as a function from
@@ -79,6 +82,9 @@ table(Pearson = getClusters(my.vis2), Euclid = getClusters(my.vis))
 # remap colors so the two methods match as well as possible
 my.vis2 <- remapColors(my.vis, my.vis2)
 table(Pearson = getClusters(my.vis2), Euclid = getClusters(my.vis))
+
+# recluster with K=4
+my.vis3 <- recluster(my.vis, K = 4)
 
 # view the results
 opar <- par(mfrow=c(1,2))

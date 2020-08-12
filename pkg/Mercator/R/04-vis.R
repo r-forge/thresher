@@ -37,7 +37,7 @@ shrinkView <- function(name, object, i) {
 }
 
 setMethod("[", signature = "Mercator", function(x, i, j, ..., drop=FALSE) {
-  # ignore j and drop, since we are thinking of this as really one-dimenaional
+  # ignore j and drop, since we are thinking of this as really one-dimensional
   if(missing(i)) i <- j
   M <- as.matrix(x@distance)[i,i]
   V <- list()
@@ -270,8 +270,21 @@ recolor <- function(DV, clusters) {
   setClusters(DV, clusters)
 }
 
-Mercator <- function(binaryMat, metric, method, K, ...) {
-  DistMat <- binaryDistance(binaryMat@binmat, metric)
+recluster <- function(DV, K) {
+  clust <- pam(DV@distance, k=K, diss=TRUE, cluster.only=TRUE)
+  DV@clusters = clust
+  DV
+}
+
+Mercator <- function(X, metric, method, K, ...) {
+  if (inherits(X, "dist")) {
+    DistMat  <-  X
+  } else if(inherits(X, "BinaryMatrix")) {
+    DistMat <- binaryDistance(X@binmat, metric)
+  }
+  if (is.null(attr(DistMat, "Labels"))) {
+    attr(DistMat, "Labels") <- paste("X", 1:attr(DistMat, "Size"), sep = "")
+  }
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
   clust <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)

@@ -3,6 +3,8 @@
 \alias{CML500}
 \alias{CML1000}
 \alias{lgfFeatures}
+\alias{fakedata}
+\alias{fakeclin}
 \docType{data}
 \title{CML Cytogenetic Data}
 \description{
@@ -13,19 +15,20 @@
 data("lgfFeatures")
 data("CML500")
 data("CML1000")
+data("fakedata") # includes "fakeclin"
 }
 \format{
   \describe{
     \item{\code{lgfFeatures}}{A data matrix with 2748 rows and 6 columns
-    listing the cytogentic bands produced as output of the CytoGPS
-    algorithm that converts text-based karyotypes into a binary
-    Loss-Gain-Fusion (LGF) model. The columns include the \code{Label}
-    (the Type and Band, joined by an underscore),
-    \code{Type} (Loss, Gain, or Fusion), \code{Band} (standard name of
-    the cytogenetic band), \code{Chr} (chromosome), \code{Arm} (the
-    chromsome arm, of the form #p or #q), and \code{Index} (an integer
-    that can be used for sorting or indexing).
-  }
+      listing the cytogentic bands produced as output of the CytoGPS
+      algorithm that converts text-based karyotypes into a binary
+      Loss-Gain-Fusion (LGF) model. The columns include the \code{Label}
+      (the Type and Band, joined by an underscore),
+      \code{Type} (Loss, Gain, or Fusion), \code{Band} (standard name of
+      the cytogenetic band), \code{Chr} (chromosome), \code{Arm} (the
+      chromsome arm, of the form #p or #q), and \code{Index} (an integer
+      that can be used for sorting or indexing).
+    }
     \item{\code{CML500}}{A \code{\link{BinaryMatrix}} object with 770
       rows (subset of LGF features) and 511 columns (patients). The
       patients were selected using the \code{\link{downsample}} function
@@ -38,8 +41,12 @@ data("CML1000")
       from the full set of more than 3000 CML karyotypes. The rows were
       selected by removing redundant and non-informative features when
       considering the full data set.}
+    \item{\code{fakedata}}{A matrix with 776 rows ("features") and 300
+      columns ("samples") containng synthetic continuos data.}
+    \item{\code{fakeclin}}{A data frame with 300 rows ("samples") and  4
+      columns of synthetic clincal data related to the \code{fakedata}.}
   }
-} 
+}
 \source{
   The cytogenetic data were obtained from the public Mitelman Database
   of Chromosomal Aberrations and Gene Fusions in Cancer on 4 April

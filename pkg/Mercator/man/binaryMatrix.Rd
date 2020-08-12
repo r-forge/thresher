@@ -6,6 +6,7 @@
 \alias{t,BinaryMatrix-method}
 \alias{dim,BinaryMatrix-method}
 \alias{hist,BinaryMatrix-method}
+\alias{print,BinaryMatrix-method}
 \alias{summary,BinaryMatrix-method}
 \alias{validBinaryMatrix}
 
@@ -53,10 +54,12 @@ BinaryMatrix(binmat, columnInfo, rowInfo)
 \section{Methods}{
   \describe{
       \item{\code{[]}:}{Subsetting by \code{[]} returns a subsetted binary matrix, 
-          including subsetted row and column names. Calling \code{@history} will 
-          return the history "Subsetted."}
+        including subsetted row and column names. Calling \code{@history} will 
+        return the history "Subsetted."}
       \item{\code{\link{dim}}:}{returns the dimensions of the \code{@binmat} component 
-      of the \code{binaryMatrix} object.}
+	of the \code{binaryMatrix} object.}
+      \item{\code{\link{print}}:}{Shows the first ten rows and columns
+	of the \code{@binmat} component.}
       \item{\code{\link{summary}}:}{For a given \code{BinaryMatrix}, returns object class,
           dimensions of the \code{@binmat} component, and \code{@history}.}
       \item{\code{\link{t}}:}{Transposes the \code{@binmat} and its associated \code{rowInfo}
@@ -86,5 +89,6 @@ my.binmat <- my.binmat[1:50, 1:30]
 my.binmat <- t(my.binmat)
 dim(my.binmat)
 my.binmat@history
+my.binmat
 }
 \keyword{ cluster }

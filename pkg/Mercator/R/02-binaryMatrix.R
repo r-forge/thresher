@@ -49,6 +49,18 @@ setMethod("[", signature = "BinaryMatrix", function(x, i, j, ..., drop=FALSE) {
       history = c(x@history, "Subsetted."))
 })
 
+setMethod("print", signature = "BinaryMatrix", function(x, ...) {
+  M <- min(R <- nrow(x), 10)
+  N <- min(C <- ncol(x), 10)
+  B <- x@binmat[1:M, 1:N]
+  if (M < R | N < C) {
+    cat("The full matrix contains", R, "rows and", C,
+        "columns.\nTo see the whole thing, use 'x@binmat'",
+        "to extract the underlying matrix.\n Here is it the upper-left corner:\n")
+  }
+  print(B, ...)
+})
+
 setMethod("dim", signature = "BinaryMatrix", function(x) {
   dim(x@binmat)
 })

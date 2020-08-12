@@ -25,7 +25,7 @@ export("binaryDistance")
 exportClasses("BinaryMatrix")
 export("BinaryMatrix", "removeDuplicateFeatures")
 
-exportMethods("[", "dim", "summary", "t")
+exportMethods("[", "dim", "summary", "t", "print")
 
 # 03-thresh
 exportClasses("ThreshedBinaryMatrix")
@@ -33,7 +33,7 @@ export("threshLGF")
 
 # 04-vis
 exportClasses("Mercator")
-export("Mercator", "addVisualization", "getClusters")
+export("Mercator", "addVisualization", "getClusters", "recluster")
 
 exportMethods("hist", "plot", "barplot", "scatter")
 

@@ -25,12 +25,12 @@ The \code{Mercator} Distance Visualization Object
   \code{\link{BinaryMatrix}} class.
 }
 \usage{
-Mercator(binaryMat, metric, method, K, ...)
+Mercator(X, metric, method, K, ...)
 addVisualization(DV, method, ...)
 getClusters(DV)
 }
 \arguments{
-  \item{binaryMat}{A \code{\link{BinaryMatrix}}.}
+  \item{X}{Either a \code{\link{BinaryMatrix}} or a \code{\link{dist}} object.}
   \item{metric}{A \code{\link{binaryDistance}} currently limited to the
     names of 10 selected distance metrics: \code{jaccard},
     \code{sokalMichener}, \code{hamming},

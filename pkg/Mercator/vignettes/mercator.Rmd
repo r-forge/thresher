@@ -4,7 +4,7 @@ author: "C.E. Coombes, Zachary B. Abrams, Suli Li, Kevin R. Coombes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Mercator}
+  %\VignetteIndexEntry{Using the Mercator Package}
   %\VignetteKeywords{Mercator,clustering,visualization,PAM,Multi-dimensional scaling,t-distributed Stochastic Neighbor Embedding}
   %\VignetteDepends{Mercator}
   %\VignettePackage{Mercator}

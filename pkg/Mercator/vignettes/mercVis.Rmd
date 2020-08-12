@@ -1,0 +1,220 @@
+---
+title: "Mercator for Continuous Data"
+author: "C.E. Coombes, Zachary B. Abrams, Kevin R. Coombes"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Mercator for Continuous Data}
+  %\VignetteKeywords{Mercator,clustering,visualization,PAM,Multi-dimensional scaling,t-distributed Stochastic Neighbor Embedding}
+  %\VignetteDepends{Mercator}
+  %\VignettePackage{Mercator}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=6, echo=TRUE)
+```
+
+# Introduction
+The <tt>Mercator</tt> package is intended to facilitate the exploratory analysis
+of data sets. It consists of two main parts, one devoted to tools
+for binary matrices, and the other focused on visualization. These visualization
+tools can be used with binary, continuous, categorical, or mixed data, since they
+only depend  on a distance matrix. Each distance matrix can be visualized
+with multiple  techniques, providing a consistent interface to
+thoroughly explore the data set. In thus vignette, we illustrate the visualization
+of a continuous data set.
+
+# The Mercator Class
+First we load the package.
+```{r library}
+suppressMessages( suppressWarnings( library(Mercator) ) )
+```
+Now we load a "fake" set of synthertic continuous data that comes with the Mercator
+package. We will use this data set to illustrate the visualization methods.
+```{r fakedata}
+set.seed(36766)
+data(fakedata)
+ls()
+dim(fakedata)
+dim(fakeclin)
+```
+
+# Visualization
+The <tt>Mercator</tt> Package currently supports visualization of data with methods
+that include standard techniques (hierarchical clustering) and large-scale visualizations 
+(multidimensional scaling (MDS),T-distributed Stochastic Neighbor Embedding (t-SNE),
+and iGraph.) 
+In order to create a <tt>Mercator</tt> object, we must provide
+
+* a distance matrix,
+* a character string describing the metric that was used,
+* a character string defining an initial visualization method,
+* and a desired number of clusters.
+
+We are going to start with hierarchical clustering, with an arbitrarily assigned
+number of 4 groups.
+```{r mercury}
+mercury <- Mercator(dist(t(fakedata)), "euclid", "hclust", 4)
+summary(mercury)
+```
+
+## Hierarchical Clustering
+Here is a "view" of the dendrogram produced by hierarchical clustering. Note that
+<tt>view</tt> is an argument to the plot function for <tt>Mercator</tt> objects.
+If omitted, the first view in the list is used.
+```{r euc-hclust, fig.cap = "Hierarchical clustering."}
+plot(mercury, view = "hclust")
+```
+
+The dendrogram suggests that there might actually be more than 4 subtypes in the data,
+but we're going to wait until we see some other views of the data before doing anything
+about that. 
+
+## t-Distributed Stochastic Neighbor Embedding
+<tt>Mercator</tt> can use t-distributed Stochastic Neighbor Embedding 
+(t-SNE) plots for visualizing large-scale, high-dimensional data in a
+2-dimensional space. 
+```{r euc-tsne5, fig.cap = "A t-SNE Plot."}
+mercury <- addVisualization(mercury, "tsne")
+plot(mercury, view = "tsne", main="t-SNE; Euclidean Distance")
+```
+
+The t-SNE plot also suggests more than four subtypes; perhaps as many as seven or eight.
+
+Optional t-SNE parameters, such as perplexity, can be used to fine-tune 
+the plot when the visualization is created. Using <tt>addVisualization</tt>
+to create a new, tuned plot of an existing type overwrites the 
+existing plot of that type.
+```{r euc-tsne10,fig.cap = "A t-SNE plot with smaller perplexity."}
+mercury <- addVisualization(mercury, "tsne", perplexity = 15)
+plot(mercury, view = "tsne",  main="t-SNE; Euclidean Distance; perplexity = 15")
+```
+
+## Multi-Dimensional Scaling
+<tt>Mercator</tt> allows visualization of multi-dimensional scaling (MDS) plots, as well.
+```{r euc-mds1, fig.cap = "Multi-dimensional scaling."}
+mercury <- addVisualization(mercury, "mds")
+plot(mercury, view = "mds", main="MDS; Euclidean Distance")
+```
+
+Interestingly, the MDS plot (which is equivalent to principal components analysis, PCA,
+when used with Euclidean distances) doesn't provide clear evidence of more than three or
+four subtypes. That's not surprising, since groups separated in high dimensions can
+easily be flattened by linear projections.
+
+## iGraph
+<tt>Mercator</tt> can visualize complex networks using iGraph. IN the next chunk of
+code, we add an iGraph visualization. We then look at the resulting graph, using three
+different "layouts". The <tt>Q</tt> parameter is a cutoff (qutoff?) on the distance used
+to include edges; if omitted, it defaults to the 10th percentile. We arrived at the value
+<tt>Q=24</tt> shown here by trial-and-error, though one could plot a histogram of the
+distances (via <tt>hist(mercury@distance)</tt>) to make a more informed choice.
+```{r igraph, fig.cap = "iGraph views."}
+set.seed(73633)
+mercury <- addVisualization(mercury, "graph", Q = 24)
+
+plot(mercury, view = "graph", layout = "tsne", main="T-SNE Layout")
+plot(mercury, view = "graph", layout = "mds", main = "MDS Layout")
+plot(mercury, view = "graph", layout = "nicely", main = "'Nicely' Layout")
+```
+
+The last layout, in this case, is possibly not so nice.
+
+# Cluster Identities
+We can use the <tt>getClusters</tt> function to determine the cluster assignments and 
+use these for further manipulation. For example, we can easily determine cluster size.
+```{r cluster1Identity}
+my.clust <- getClusters(mercury)
+table(my.clust)
+```
+We might also compare the cluster labels to the "true" subtypes in our "fake" data set.
+```{r comptrue}
+table(my.clust, fakeclin$Type)
+```
+
+## Silhouette-Width Barplots
+The <tt>barplot</tt> method produces a version of the "silhouette width" plot
+from Kaufman and Rouseeuw (and borrowed from the <tt>cluster</tt> package). 
+```{r bar, fig.cap="Silhouette widths.", fig.width=7, fig.height=5}
+barplot(mercury)
+```
+
+For each observation in the data set, the silhouette width is a measure of how much
+we believe that it is placed in the correct cluster. Here we see that about 10% to
+20% of the observations in each cluster may be incorrectly classified, since their
+silhouette widths are negative.
+
+## Reclustering
+We can "recluster" by specifying a different number of clusters. 
+```{r recluster, fig.cap ="A t-SNE plot after reclustering."}
+mercury <- recluster(mercury, K = 8)
+plot(mercury, view = "tsne")
+```
+
+The silhouette-width barplot changes with the number of clusters. In this case,
+it suggests that eight clusters may not describe the data as well as four. However,
+the previous t-SNE plot also shows that the algorithmically derived cluster labels don't
+seem to match the visible clusters very well.
+```{r bar8, fig.cap="Silhouette widths with eight clusters.", fig.width=7, fig.height=5}
+barplot(mercury)
+```
+
+## Hierarchical Clusters
+The clustering algorithm used within <tt>Mercator</tt> is partitioning around
+medoids (PAM). You can run any clustering algorithm of your choice and assign the
+resulting cluster labels to the <tt>Mercator</tt> object.  As part of our
+visualizations, we have laready pefomred hierarchcai clustering. So, we can assign
+cluster labels by cutting the branches of the dendrogram. We can use the
+<tt>cutree</tt> function after extracting the dendrogram from the view. (Note
+that we use the <tt>remapColors</tt> function here to try to keep the same color
+assignments for the PAM-defined clusters and the hierarchical clusters.)
+
+```{r hclass}
+hclass <- cutree(mercury@view[["hclust"]], k = 8)
+neptune <- setClusters(mercury, hclass)
+neptune <- remapColors(mercury, neptune)
+```
+
+```{r neptune, fig.cap="A t-SNE plot colored by heierachical clustering."}
+plot(neptune, view = "tsne")
+```
+
+The assignments by hierarchical clustering appear to more consistent thant eh PAM clusters
+with the t-SNE plot, though one suspect that the assignemnts among the pink, red, and orchid
+groups may be difficult. 
+The silhouette width barplot (below) confirms that hierarchical clustering works better than
+PAM on this data set. Only the "red" group #4 contains a large number
+of apparently misclassified samples.
+```{r hcworks}
+barplot(neptune)
+```
+
+## True Clusters
+For our fake data set, since we simulated it, we know the "true" labels. So, we can
+"recluster" using the true assignments.
+```{r truth, fig.cap = "A t-SNE plot with true cluster labels."}
+venus <- setClusters(neptune, fakeclin$Type)
+venus <- remapColors(neptune, venus)
+plot(venus, view = "tsne")
+```
+
+```{r barnone, fig.cap="Silhouette widths with true clusters.", fig.width=7, fig.height=5}
+barplot(venus)
+```
+
+We can also see how the hierarchical clustering compare to the true cluster
+assignments.
+```{r hctrue}
+table(getClusters(neptune), getClusters(venus))
+```
+
+# Appendix
+This analaysis was performed in the following environment:
+```{r si}
+sessionInfo()
+```

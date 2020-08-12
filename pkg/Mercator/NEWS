@@ -5,6 +5,21 @@
 	*						 *
 	**************************************************
 
+		CHANGES IN R VERSION 0.11.0
+
+NEW FEATURES
+
+    o	Modified the Mercator constructor to accept an arbnitrary
+        distance matrix and not just a BinaryMatrix. Also included a
+        second vignette focusing on continuous data, with an extra
+        data set included to provide an illustration.
+
+    o	Added a "print" method to the BinaryMatrix class to avoid
+        spewing the entire object onto the console.
+
+    o	Added a "recluster" function that will recluster the distance
+        matrix using PAM with a different number of clusters.
+
 		CHANGES IN R VERSION 0.10.1
 
 BUG FIX
