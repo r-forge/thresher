@@ -1,11 +1,7 @@
 # Prioritized to-do list
 
-* Make another Mercator constructor, this time for continuous
-  data. All distance matrices from 'dist' or 'distanceMatrix'
-  should be usable.
 * Decide if we want to add any more binary distance measures from the
   Choi paper.
-* Check the example RMD scripts in inst/Examples for correctness.
 * Should there be a function to compute the relative frequencies?
   (See pipeline report 305.)
 * Should the code to make the DT or ztable stuff be part of the

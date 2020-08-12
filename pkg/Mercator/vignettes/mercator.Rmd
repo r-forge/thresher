@@ -2,7 +2,9 @@
 title: "Using the Mercator Package"
 author: "C.E. Coombes, Zachary B. Abrams, Suli Li, Kevin R. Coombes"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Using the Mercator Package}
   %\VignetteKeywords{Mercator,clustering,visualization,PAM,Multi-dimensional scaling,t-distributed Stochastic Neighbor Embedding}
@@ -14,7 +16,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, results="hide"}
-knitr::opts_chunk$set(echo = TRUE, fig.width=7,fig.height=5,echo=TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.width=6,fig.height=5,echo=TRUE)
 ```
 
 # Introduction
@@ -29,8 +31,8 @@ ISCN) into a binary vector with three bits (loss, gain, or fusion) per
 cytoband, which we call the "LGF model".
 
 The <tt>Mercator</tt> package is intended to facilitate the
-exploration of data sets. It implements metrics for binary, continuous, 
-and categorical data, including a subset of the 76
+exploration of data sets. It implements metrics for continuous, 
+categorical, and binary data, including a subset of the 76
 binary distance metrics described by [^Choi and colleagues], ensuring that
 at least one representative of each of their major clusters is
 included. Each resulting distance matrix can be combined with multiple
@@ -38,12 +40,13 @@ visualization techniques, providing a consistent interface to
 thoroughly explore the data set.
 
 # The BinaryMatrix Class
-First we load the package.
+In this vignette, we focus initially on the tools for dealing with binary matrices.
+We start by loading the package.
 ```{r library}
 suppressMessages( suppressWarnings( library(Mercator) ) )
 ```
 
-## A Limited, Sample Dataset
+## A Limited Sample Dataset
 We proceed with a model dataset of karyotypes from patients with 
 Chronic Myelogenous Leukemia (CML) with 400 chromosomal features recorded over 
 740 patients, from the public
@@ -58,22 +61,19 @@ dim(my.data)
 ```
 
 ## Generating the BinaryMatrix
-The functions of the <tt>Mercator</tt> package operate on a <tt>BinaryMatrix</tt> S4 object, 
-which forms the input of the subsequent functions and visualizations. 
+Many of the functions of the <tt>Mercator</tt> package operate on a <tt>BinaryMatrix</tt>
+S4 object,  which serves as an input to subsequent functions and visualizations. 
 
 A <tt>BinaryMatrix</tt> object is formed from a matrix containing integer or numeric 
-values. Although <tt>Mercator</tt> was designed primarily for the processing and visualization of
+values. Although <tt>Mercator</tt> was intially designed for  processing and visualizing
 binary data, the <tt>BinaryMatrix</tt> object and subsequent functions accept a variety 
-of integer and numeric values. 
+of integer and numeric values. In addition, all the visualization tools work with
+an arbitrary distance matrix; see the vignette [Mercator for Continuous Data](./mercvis.html).
 
-Row and column names, along with optional annotations, can be assigned as data frames.
+Row and column names, along with optional annotations, can be assigned as for data frames.
 If no row or column headings are assigned, the <tt>BinaryMatrix</tt> takes the row and 
-column names of the inital matrix as default. Here, we wish to keep the 
-column names associated with the parent matrix, but must create row names 
-to build the BinaryMatrix. 
-
-Notice also that the object always includes a "history" element that tracks how
-it has been processed.
+column names of the input matrix by default. Notice that the resulting object always
+includes a "history" element that tracks how it has been processed.
 ```{r}
 my.data <- as.matrix(my.data)
 my.binmat <- BinaryMatrix(my.data)
@@ -117,7 +117,7 @@ By contrast, many features are *used* but are simply redundant.
 length(my.binmat@info$redundant)
 ```
 
-# Data Filtering with Thresher
+## Data Filtering with Thresher
 
 <tt>Mercator</tt> provides easy access to functions of the <tt>Thresher</tt> R package,
 which includes outlier detection and estimates of the number of clusters [^Wang and colleagues].
@@ -129,8 +129,8 @@ much useful information. We have incorporated that feature into the
 <tt>Mercator</tt>  package.
 
 We create a <tt>ThreshedBinaryMatrix</tt> to implement the algorithm. 
-In general, a delta cutoff above approximately 0.3 can be chosen as standard to 
-indicate informative feature. Then, we subset our <tt>ThreshedBinaryMatrix</tt> 
+Based on simulations described in the Thresher paper, a cutoff above approximately 0.3
+can be used to select informative features. Then, we subset our <tt>ThreshedBinaryMatrix</tt> 
 to only include features above our given cutoff.
 ```{r thresher}
 set.seed(21348)
@@ -174,33 +174,31 @@ Auer-Gervini and Scree plots provide informative visualizations to facilitate th
 interference. The default value provided by the Auer-Gervini analysis (N=2; green) is 
 somewhat conservative. The value provided by the broken-stick model (N=7; orange)
 overlaid on the scree plot is more aggressive, but is not too unreasonable
-based on the Auer-Gervini plot. We proceed using informed judgment that there are seven
-principal components and eight clusters.
+based on the Auer-Gervini plot. While one could make the argument that the correct
+number of groups is at least seven, we will begin by using the number of groups
+recommended by Thresher.
 ```{r kk}
-kk <- 8
+kk <- 5
 ```
 
 # Visualization
-The Mercator Package allows visualization of data with four methods including both 
+The <tt>Mercator</tt> package allows visualization of data with methods that include both 
 standard techniques (hierarchical clustering) and large-scale visualizations 
 (multidimensional scaling (MDS), 
-T-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.) 
+t-distributed Stochastic Neighbor Embedding (t-SNE), and iGraph.) 
 
-## Selecting a Distance Metric
 The <tt>Mercator</tt> package implements or provides access to 10 distance metrics: 
 Jaccard, Sokal-Michener, Hamming, Russell-Rao, Pearson, Goodman-Kruskal, Manhattan,
 Canberra, Binary, and Euclidean. Although some of these metrics 
-can be used for continuous or categorical data, all are appropriate for 
-some or all binary matrices. <>tt>Mercator</tt> allows the user to easily select 
-the most appropriate metric to represent similarity and difference in a 
-biologically meaningful way within a given dataset.
+can be used for continuous or categorical data, all are appropriate for
+binary matrices. <tt>Mercator</tt> allows the user to compare different metrics
+and select one that is useful for a given dataset.
 
 ## Jaccard Distance
 Here, we will use the Jaccard distance because of its ease of 
 interpretability, common usage, and its appropriatness of application 
 to asymmetric binary data, such as the binary vector output of CytoGPS 
 in this dataset.
-
 The  <tt>Mercator</tt> constructor can be called with any initial visualization, 
 and visualizations can be added in an arbitrary order.
 ```{r distance, echo=TRUE}
@@ -210,96 +208,120 @@ jacc.Vis <- Mercator(my.binmat, "jaccard", "hclust", K=kk)
 We can represent all the distances between features within the 
 dissimilarity matrix we have calculated on our data as a 
 histogram, as a visual representation of relatedness. 
-```{r jacc-hist}
+```{r jacc-hist, fig.cap = "Distribution of Jaccard distances."}
 hist(jacc.Vis, 
      xlab="Jaccard Distance", main="Histogram of Distances")
 ```
 
+### Hierarchical Clustering
 Mercator allows us to implement common, standard visualizations 
 such as hierarchical clustering...
-```{r jacc-hclust}
-names(jacc.Vis@view)
+```{r jacc-hclust, fig.cap = "Hierarchical clustering using Jaccard distances."}
 plot(jacc.Vis, view = "hclust")
 ```
 
-<tt>Mercator</tt> can used t-distributed Stochastic Neighbor Embedding 
+In this dendrogram, there appear to be at least three different "blue"
+branches, suggesting that there are more than the conservative estimate
+of five clusters obtained from <tt>Thresher</tt>. We will take a look at
+the data using another visualization technique before making a final
+decision.
+
+### t-Distributed Stochastic Neighbor Embedding
+<tt>Mercator</tt> can use t-distributed Stochastic Neighbor Embedding 
 (t-SNE) plots for visualizing large-scale, high-dimensional data in 
 2-dimensional space. 
-```{r jacc-tsne5}
-par(pty="s")
-jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
-            perplexity=5, 
-            xlab="T1", ylab="T2")
-names(jacc.Vis@view)
-plot(jacc.Vis, view = "tsne", main="t-SNE; Jaccard Distance; perplexity=5")
+```{r jacc-tsne5, fig.width=5, fig.height=5, fig.cap = "A t-SNE plot."}
+jacc.Vis <- addVisualization(jacc.Vis, "tsne", perplexity=25)
+plot(jacc.Vis, view = "tsne", main="t-SNE; Jaccard Distance")
 ```
 
 Optional t-SNE parameters, such as perplexity, can be used to fine-tune 
-the plot as the visualization is created. Using addVisualization 
+the plot as the visualization is created. Using <tt>addVisualization</tt> 
 to create a new, tuned plot of an existing type overwrites the 
 existing plot of that type.
-```{r jacc-tsne10}
-jacc.Vis <- addVisualization(jacc.Vis, "tsne", 
-            perplexity=10)
-names(jacc.Vis@view)
-plot(jacc.Vis, view = "tsne",  main="t-SNE; Jaccard Distance; perplexity=10")
-par(pty="m")
+```{r jacc-tsne10, fig.width=5, fig.height=5, fig.cap = "Another t-SNE plot."}
+temp.Vis <- addVisualization(jacc.Vis, "tsne", perplexity = 10)
+plot(temp.Vis, view = "tsne",  main="t-SNE; Jaccard Distance; perplexity=10")
 ```
 
+It does not appear that a smaller perplexity is useful for this data set.
+
+### Multi-Dimensional Scaling
 <tt>Mercator</tt> allows visualization of multi-dimensional scaling (MDS) plots, as well.
-```{r jacc-mds1}
+```{r jacc-mds1, fig.width=5, fig.height=5, fig.cap = "A multi-dimensioanl scaling plot."}
 jacc.Vis <- addVisualization(jacc.Vis, "mds")
-names(jacc.Vis@view)
 plot(jacc.Vis, view = "mds", main="MDS; Jaccard Distance")
+```
+
+### Silhouette-Width Barplots
+At this point, we still don't know if we should increase the number of clusters
+in the data set form 5 to 7.  Fortunately, we have access to the "silhouette width",
+which measures how well each element in the data set appears to be clustered.
+```{r barp, fig.width=5, fig.height=4, fig.cap = "Histogram of silhouette widths."}
+barplot(jacc.Vis)
+```
+
+Ths plot of the silhouette widths confirms our suspicion from the hierarchical
+clustering dendrogram that the "blue" group is not as coherent/consistent as the
+other grousp. So, we are going to try reclustering to label more clusters.
+```{r reclue, fig.width=5, fig.height=4, fig.cap = "Silhouette widths for different K."}
+jacc.Vis6 <- recluster(jacc.Vis, K = 6)
+barplot(jacc.Vis6)
+jacc.Vis7 <- recluster(jacc.Vis, K = 7)
+barplot(jacc.Vis7)
+```
+
+There is some improvement when K=6, but a clearly worse result when K = 7. For the rest
+of our analysis, we will switch to ooking at 6 groups.
+```{r reset}
+kk <- 6
+jacc.Vis <- jacc.Vis6
+rm(jacc.Vis6, jacc.Vis7)
 ```
 
 ### iGraph
 <tt>Mercator</tt> can be used to visualize complex networks using 
 iGraph. To improve clarity of the visualization and computational 
-time, we implement the downsample function to reduce the 
+time, we have implement the <tt>downsample</tt> function to reduce the 
 number of data points to be linked and visualized. 
 The idea goes back to Peng Qiu's implementation of the
-SPADE clustering algorithm for mass cytyometry data. The main point is to *under* sample
+SPADE clustering algorithm for mass cytometry data. The main point is to *under* sample
 the densest regions of the data space to make it more likely that rarer clusters
 will still be adequately sampled. (While not required with the current data set,
-this idea can be quite useful with data sets containng tens of thousands of objects.)
+this idea can be quite useful with data sets containing tens of thousands of objects.)
 
-**Note:** The <tt>Mercator</tt> class includes a "subset" operator that tries to preserve
-earlier visualizations. This operator is fast for MDS or t-SNE models, but
-is very slow for large hierarchical clustering. (It uses the implementation in the <tt>dendextend</tt>
-package, which works by removing a single leaf at a time from the tree.) In the
-next code chunk, we <tt>downsample</tt> to create a meaningful subset, 
+**Note:** The <tt>Mercator</tt> class includes a "subset" operator that tries to
+preserve earlier visualizations. This operator is fast for MDS or t-SNE models, but
+is very slow for large hierarchical clustering. (It uses the implementation in the
+<tt>dendextend</tt> package, which works by removing a single leaf at a time from
+the tree.) In the next code chunk, we <tt>downsample</tt> to create a meaningful subset, 
 and then compute a new dendrogram for each subset.
-```{r downsample}
+```{r downsample, fig.width=5, fig.height=5, fig.cap = "Downsample t-SNE plot."}
 X <- jacc.Vis
+X@view[["hclust"]] <- NULL # remove this view
 N <- as.matrix(X@distance)
 set.seed(87530)
 P <- downsample(40, N, 0.1) # create a downsampled subset
-J <- jacc.Vis[P] # compute a new dendrogram
-J <- addVisualization(J, "tsne", perplexity=5)
+J <- X[P]
+names(J@view) # need to compute a new dendrogram
+J <- addVisualization(J, "hclust", perplexity=5)
 names(J@view)
-par(pty="s")
 plot(J, view = "tsne", main="Down-sampled t-SNE Plot")
-par(pty="m")
 ```
 
-The densest "eyes" are heavily under-sampled.
-
-Now we can look at the resulting graph, using three different "layouts".
-```{r igraph}
-set.seed(10967)
-J <- addVisualization(J, "mds")
-J <- addVisualization(J, "graph")
-
-plot(J, view = "graph", layout = "mds")
-plot(J, view = "graph", layout = "nicely", 
-     main="Graphical View of Down-sampled Jaccard Distance Matrix",
+Because our data set is small enough, we are going to create our graphical views
+from the oriinal object rather than the downsampled one.
+We can look at the resulting graph using three different "layouts".
+```{r igraph, fig.width=4, fig.height=4, fig.cap = "Networks."}
+jacc.Vis <- addVisualization(jacc.Vis, "graph", Q =0.5)
+plot(jacc.Vis, view = "graph", layout = "tsne", main="T-SNE Layout")
+plot(jacc.Vis, view = "graph", layout = "mds", main="MDS Layout")
+plot(jacc.Vis, view = "graph", layout = "nicely", 
+     main="Laid Out 'Nicely'",
      xlim=c(-1,1))
-
-plot(J, view = "graph", layout = "tsne", main="T-SNE Layout")
 ```
 
-# Cluster Identities
+## Cluster Identities
 We can use the *getClusters* function to characterize each cluster and 
 use these for further manipulation.
 
@@ -317,9 +339,9 @@ Cl4 <- C[my.clust == 4 ,]
 Cl4
 ```
 
-# Tuning
+## Sokal-Michener Metric
 Finally, we are going to look at what happens if we use a different distance metric.
-```{r sokal}
+```{r sokal, fig.width=5, fig.height=5, fig.cap="Sokal-Michener distance t-SNE plot."}
 set.seed(8642)
 sokal.Vis <- Mercator(my.binmat, "sokal", "tsne", K=kk, peplexity = 10)
 table(getClusters(sokal.Vis), getClusters(jacc.Vis))
@@ -340,7 +362,7 @@ Now colors have been matched (as well as possible) between the two sets of visua
 # Changing the Color Palette
 Each `Mercator` object stores its own palette internally, but you can change
 the palette using the `slot` funciton.
-```{r sv2}
+```{r sv2, fig.width=5, fig.height=5, fig.cap = "Recolored Jaccard t-SNE plot."}
 slot(jacc.Vis, "palette") <- c("red", "orange", "green", "blue",
                                "cyan", "magenta", "purple", "black")
 plot(jacc.Vis, view = "tsne")
@@ -348,9 +370,8 @@ plot(jacc.Vis, view = "tsne")
 
 If the number of colors in the palette is smaller than the number of clusters,
 they will be recycled, and other plotting symbols will be introduced.
-```{r small}
-slot(jacc.Vis, "palette") <- c("red", "green", "blue",
-                               "cyan", "purple")
+```{r small,  fig.width=5, fig.height=5, fig.cap = "Recolored Jaccard t-SNE plot."}
+slot(jacc.Vis, "palette") <- c("red", "green", "blue", "purple")
 plot(jacc.Vis, view = "tsne")
 ```
 

@@ -1,11 +1,11 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.10 SERIES NEWS			 *
+	*	       0.11 SERIES NEWS			 *
 	*						 *
 	**************************************************
 
-		CHANGES IN R VERSION 0.11.0
+		CHANGES IN R VERSION 0.11.1
 
 NEW FEATURES
 
@@ -14,11 +14,12 @@ NEW FEATURES
         second vignette focusing on continuous data, with an extra
         data set included to provide an illustration.
 
-    o	Added a "print" method to the BinaryMatrix class to avoid
-        spewing the entire object onto the console.
+		CHANGES IN R VERSION 0.11.0
 
-    o	Added a "recluster" function that will recluster the distance
-        matrix using PAM with a different number of clusters.
+NEW FEATURES
+
+    o	Edited the binary vignette for clarification and better
+        examples.
 
 		CHANGES IN R VERSION 0.10.1
 
