@@ -68,7 +68,7 @@ A <tt>BinaryMatrix</tt> object is formed from a matrix containing integer or num
 values. Although <tt>Mercator</tt> was intially designed for  processing and visualizing
 binary data, the <tt>BinaryMatrix</tt> object and subsequent functions accept a variety 
 of integer and numeric values. In addition, all the visualization tools work with
-an arbitrary distance matrix; see the vignette [Mercator for Continuous Data](./mercvis.html).
+an arbitrary distance matrix; see the vignette [Mercator for Continuous Data](./mercVis.html).
 
 Row and column names, along with optional annotations, can be assigned as for data frames.
 If no row or column headings are assigned, the <tt>BinaryMatrix</tt> takes the row and 
