@@ -6,6 +6,7 @@
 \alias{t,BinaryMatrix-method}
 \alias{dim,BinaryMatrix-method}
 \alias{hist,BinaryMatrix-method}
+\alias{show,BinaryMatrix-method}
 \alias{print,BinaryMatrix-method}
 \alias{summary,BinaryMatrix-method}
 \alias{validBinaryMatrix}
@@ -59,6 +60,8 @@ BinaryMatrix(binmat, columnInfo, rowInfo)
       \item{\code{\link{dim}}:}{returns the dimensions of the \code{@binmat} component 
 	of the \code{binaryMatrix} object.}
       \item{\code{\link{print}}:}{Shows the first ten rows and columns
+	of the \code{@binmat} component.}
+      \item{\code{\link{show}}:}{Shows the first ten rows and columns
 	of the \code{@binmat} component.}
       \item{\code{\link{summary}}:}{For a given \code{BinaryMatrix}, returns object class,
           dimensions of the \code{@binmat} component, and \code{@history}.}

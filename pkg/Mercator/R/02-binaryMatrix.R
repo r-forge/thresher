@@ -50,15 +50,19 @@ setMethod("[", signature = "BinaryMatrix", function(x, i, j, ..., drop=FALSE) {
 })
 
 setMethod("print", signature = "BinaryMatrix", function(x, ...) {
-  M <- min(R <- nrow(x), 10)
-  N <- min(C <- ncol(x), 10)
-  B <- x@binmat[1:M, 1:N]
+  show(x)
+})
+
+setMethod("show", signature = "BinaryMatrix", function(object) {
+  M <- min(R <- nrow(object), 10)
+  N <- min(C <- ncol(object), 10)
+  B <- object@binmat[1:M, 1:N]
   if (M < R | N < C) {
     cat("The full matrix contains", R, "rows and", C,
         "columns.\nTo see the whole thing, use 'x@binmat'",
         "to extract the underlying matrix.\n Here is it the upper-left corner:\n")
   }
-  print(B, ...)
+  print(B)
 })
 
 setMethod("dim", signature = "BinaryMatrix", function(x) {
