@@ -4,6 +4,10 @@
 import(methods)
 import(Thresher)
 
+## Hack around bug in R-devel (4.1) that does weird things with a
+## downstream Suggested package and an onLoad funciton.
+importFrom("flexmix", "flexmix")
+
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
 importFrom("utils", "data")

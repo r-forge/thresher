@@ -1,5 +1,7 @@
 # Prioritized to-do list
 
+* When the dust setttles on R-4.1, see if we can remove the non-real
+  dependency on the "Imports: flexmix" line in DESCRIPTION.
 * Decide if we want to add any more binary distance measures from the
   Choi paper.
 * Should there be a function to compute the relative frequencies?
