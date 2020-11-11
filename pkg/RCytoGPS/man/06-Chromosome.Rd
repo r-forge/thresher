@@ -9,7 +9,7 @@
 }
 \usage{
 Chromosome(I, res = 2500, maxbase = 250000000)
-\S4method{image}{Chromosome}(x, horiz = FALSE, mai = NULL, ...)
+\S4method{image}{Chromosome}(x, horiz = FALSE, mai = NULL, showBandNames = FALSE, ...)
 }
 \arguments{
   \item{I}{A human chromosome identifier; one of the values in \code{c(1:22,"X", "Y")}.}
@@ -21,6 +21,7 @@ Chromosome(I, res = 2500, maxbase = 250000000)
   \item{horiz}{A logical value: should the image of the chromsome be
     oriented horizontally.}
   \item{mai}{margin inches, as in the usual graphical argument to \code{par}.}
+  \item{showBandNames}{logical; shold the names of the bands be written on the plot?}
   \item{\dots}{Additional arguments to the image method; ignored.}
 }
 \section{Slots}{
@@ -74,5 +75,6 @@ Chromosome(I, res = 2500, maxbase = 250000000)
 \examples{
 x <- Chromosome(6)
 image(x)
+image(x, showBandNames = TRUE)
 image(x, horiz = TRUE)
 }

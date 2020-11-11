@@ -1,18 +1,13 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.0 SERIES NEWS			 *
+	*	       1.0 SERIES NEWS			 *
 	*						 *
 	**************************************************
 
 
-		CHANGES IN R VERSION 0.0.1
+		CHANGES IN R VERSION 1.0.0
 
 NEW FEATURES
 
-    o	Initial version of the pacakge.
-
-BUG FIXES
-
-    o	
-
+    o	Initial release of the package.

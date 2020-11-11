@@ -1,11 +1,1 @@
-1. DONE (2020-02-26) Add an option to suppress labels in `plot1Chrom` so we can use it
-   in `makeIdiogram`.
-2. DONE (2020-02-26) Add an option to suppress labels in `plot2Chrom` so we can use it
-   in `biIdiogram`.
-3. DONE (2020-02-25) Decide what "horizontal" means and use it consistently. Is it the
-   orientation of the chromosome plot, or the direction of the bars?
-   ANSWER: the orientation of the chromsome.
-4. Write man pages.
-5. Expand vignette.
-6. Get JSON inputs fo test and dev elopment.
-7. Add examples (to man apges and vignette) for "axes=FALSE".
+1. Add examples (to man pages and vignette) for "axes=FALSE".

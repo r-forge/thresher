@@ -28,4 +28,11 @@ temp$raw[[2]]$Status
 summary(temp$frequency)
 temp$size
 
-
+## move about
+home  <- getwd()
+setwd(sf)
+temp <- readLGF( "CytoGPS_Result1.json")
+temp <- readLGF( "CytoGPS_Result1.json", folder = ".")
+setwd("..")
+temp <- readLGF(folder = "JSONfiles")
+setwd(home)

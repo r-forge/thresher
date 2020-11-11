@@ -1,0 +1,144 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(RCytoGPS)
+> 
+> sf <- system.file("Examples/JSONfiles", package = "RCytoGPS")
+> dir(sf)
+[1] "CytoGPS_Result1.json" "CytoGPS_Result2.json" "input1.txt"          
+[4] "input2.txt"          
+> 
+> ## Read one explicitly named JSON file
+> temp <- readLGF("CytoGPS_Result1.json", folder = sf)
+Reading 1 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
+
+C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
+
+CytoGPS_Result1.json 
+
+> class(temp)
+[1] "list"
+> names(temp)
+[1] "source"    "raw"       "frequency" "size"      "CL"       
+> temp$source
+[1] "CytoGPS_Result1.json"
+> class(temp$raw)
+[1] "list"
+> length(temp$raw)
+[1] 1
+> names(temp$raw)
+[1] "CytoGPS_Result1"
+> temp$raw[[1]]$Status
+      Status                                                    Karyotype
+RN01 Success 44-45,XX,+2,der(2;13)(q10;q10),-6,-8,+12,der(17;18)(q10;q10)
+RN02 Success                46,XY,t(14;18)(q32;q21)/46,XY,r(15)/47,XY,+12
+RN03 Success                                    47,XY,+12/49,idem,+18,+19
+> summary(temp$frequency)
+ CytoGPS_Result1.Loss CytoGPS_Result1.Gain CytoGPS_Result1.Fusion
+ Min.   :0.00000      Min.   :0.00000      Min.   :0.000000      
+ 1st Qu.:0.00000      1st Qu.:0.00000      1st Qu.:0.000000      
+ Median :0.00000      Median :0.00000      Median :0.000000      
+ Mean   :0.02573      Mean   :0.05127      Mean   :0.002688      
+ 3rd Qu.:0.00000      3rd Qu.:0.00000      3rd Qu.:0.000000      
+ Max.   :0.16667      Max.   :0.66667      Max.   :0.166667      
+> temp$size
+CytoGPS_Result1 
+              6 
+> 
+> ## Read all (well, two) JSON files fom a folder
+> temp <- readLGF(folder = sf)
+Reading 2 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
+
+C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
+
+CytoGPS_Result1.json CytoGPS_Result2.json 
+
+> class(temp)
+[1] "list"
+> names(temp)
+[1] "source"    "raw"       "frequency" "size"      "CL"       
+> temp$source
+[1] "CytoGPS_Result1.json" "CytoGPS_Result2.json"
+> class(temp$raw)
+[1] "list"
+> length(temp$raw)
+[1] 2
+> names(temp$raw)
+[1] "CytoGPS_Result1" "CytoGPS_Result2"
+> temp$raw[[1]]$Status
+      Status                                                    Karyotype
+RN01 Success 44-45,XX,+2,der(2;13)(q10;q10),-6,-8,+12,der(17;18)(q10;q10)
+RN02 Success                46,XY,t(14;18)(q32;q21)/46,XY,r(15)/47,XY,+12
+RN03 Success                                    47,XY,+12/49,idem,+18,+19
+> temp$raw[[2]]$Status
+               Status
+RN01 Validation error
+RN02          Success
+RN03          Success
+                                                                        Karyotype
+RN01                                                         46,XY,-8,+12,der(14)
+RN02 48,XY,t(10;13)(q26;q14),+12,+19/47,XY,t(9;13)(p24;q13),-10,+12,+19/45,XY,-13
+RN03                                                    47,XY,+12,dup(14)(q32q32)
+> summary(temp$frequency)
+ CytoGPS_Result1.Loss CytoGPS_Result1.Gain CytoGPS_Result1.Fusion
+ Min.   :0.00000      Min.   :0.00000      Min.   :0.000000      
+ 1st Qu.:0.00000      1st Qu.:0.00000      1st Qu.:0.000000      
+ Median :0.00000      Median :0.00000      Median :0.000000      
+ Mean   :0.02573      Mean   :0.05127      Mean   :0.002688      
+ 3rd Qu.:0.00000      3rd Qu.:0.00000      3rd Qu.:0.000000      
+ Max.   :0.16667      Max.   :0.66667      Max.   :0.166667      
+ CytoGPS_Result2.Loss CytoGPS_Result2.Gain CytoGPS_Result2.Fusion
+ Min.   :0.00000      Min.   :0.00000      Min.   :0.000000      
+ 1st Qu.:0.00000      1st Qu.:0.00000      1st Qu.:0.000000      
+ Median :0.00000      Median :0.00000      Median :0.000000      
+ Mean   :0.02247      Mean   :0.04839      Mean   :0.006624      
+ 3rd Qu.:0.00000      3rd Qu.:0.00000      3rd Qu.:0.000000      
+ Max.   :0.25000      Max.   :0.75000      Max.   :0.250000      
+> temp$size
+CytoGPS_Result1 CytoGPS_Result2 
+              6               4 
+> 
+> ## move about
+> home  <- getwd()
+> setwd(sf)
+> temp <- readLGF( "CytoGPS_Result1.json")
+Reading 1 file(s) from '.'.
+
+C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
+
+CytoGPS_Result1.json 
+
+> temp <- readLGF( "CytoGPS_Result1.json", folder = ".")
+Reading 1 file(s) from '.'.
+
+C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
+
+CytoGPS_Result1.json 
+
+> setwd("..")
+> temp <- readLGF(folder = "JSONfiles")
+Reading 2 file(s) from 'JSONfiles'.
+
+C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
+
+CytoGPS_Result1.json CytoGPS_Result2.json 
+
+> setwd(home)
+> 
+> proc.time()
+   user  system elapsed 
+   0.34    0.03    0.36 

@@ -1,4 +1,4 @@
-## I think the point is to extact/construct identifiers to use as row names.
+## I think the point is to extract/construct identifiers to use as row names.
 rnames <- function(lst, item) {
   f <- function(ll, inds) {
     if ((ii <- match(item, names(ll), FALSE)))
@@ -123,7 +123,8 @@ readLGF <- function(files = NULL, folder = NULL, verbose = TRUE) {
     folder  <-  "."
   }
   if (is.null(files)) {
-    files  <- list.files(folder, pattern = "*.json", full.names = TRUE) # character vector , one file per entry
+    files  <- list.files(folder, pattern = "*.json",
+                         full.names = FALSE) # character vector , one file per entry
   }
   if (length(files) < 1) {
     stop("No JSON input files to read.")
