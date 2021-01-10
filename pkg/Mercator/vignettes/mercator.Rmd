@@ -89,22 +89,23 @@ my.binmat <- t(my.binmat)
 summary(my.binmat)
 ```
 
-## Remove Duplicate Features
-The binary feature-vectors (viewed across a population of patient
-samples) are rarely unique. 
-Having identical feature vectors can complicate some of the
+## Remove Duplicates
+The binary vectors are rarely unique. 
+Patients who have identical vectors of features can complicate some of the
 clustering and visualization routines that we want to use (often by
-introducing a division by zero). However, they can also alter the
+introducing a division by zero). Similarly, features that have identical
+occurence vectors in a patient cohort can also alter the
 biological implications by automatically giving more "weight" to a
 single genomic event (like a trisomy or monosomy). To deal with this
 issue, the <tt>Mercator</tt> package includes a function to remove
-duplicate or redundant features.
-```{r duplicateFeatures}
-my.binmat <- removeDuplicateFeatures(my.binmat)
+duplicate or redundant binary vectors. Here we are going to remove
+duplicate patients; that is, those with identical karyotypes. 
+```{r duplicates}
+my.binmat <- removeDuplicates(my.binmat)
 summary(my.binmat)
 ```
 
-In the case of our data, only 136 of the 740 karyotypes are unique. 
+In the case of our data, only 136 of the 740 patient karyotypes are unique. 
 Some of the karyotypes are "not used" in the sense that they contain 
 none of the abnormalities selected for this limited subset.
 ```{r}

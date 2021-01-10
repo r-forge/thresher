@@ -27,7 +27,7 @@ export("binaryDistance")
 
 # 02-binaryMatrix
 exportClasses("BinaryMatrix")
-export("BinaryMatrix", "removeDuplicateFeatures")
+export("BinaryMatrix", "removeDuplicateFeatures", "removeDuplicates")
 
 exportMethods("[", "dim", "summary", "t", "print", "show")
 

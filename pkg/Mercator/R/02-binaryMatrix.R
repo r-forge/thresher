@@ -88,7 +88,7 @@ setMethod("t",  signature = "BinaryMatrix",
       )
 })
 
-removeDuplicateFeatures <- function(object) {
+removeDuplicates <- function(object) {
   I <- object@info
   neverHit <- apply(object@binmat, 2, sum) == 0 
   I$notUsed <- object@columnInfo[neverHit,]
@@ -98,7 +98,7 @@ removeDuplicateFeatures <- function(object) {
   retainBand <- !(dupstring | neverHit)
   binmat <- object@binmat[, retainBand, drop = FALSE]
   columnInfo <- object@columnInfo[retainBand,, drop = FALSE]
-  history <- c(object@history, "Duplicate features removed.")
+  history <- c(object@history, "Duplicates removed.")
   new("BinaryMatrix",
       binmat = binmat,
       columnInfo = columnInfo,
@@ -107,3 +107,4 @@ removeDuplicateFeatures <- function(object) {
       history = history)
 }
 
+removeDuplicateFeatures <- removeDuplicates
