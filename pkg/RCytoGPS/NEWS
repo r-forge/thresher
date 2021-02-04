@@ -1,9 +1,17 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       1.0 SERIES NEWS			 *
+	*	       1.1 SERIES NEWS			 *
 	*						 *
 	**************************************************
+
+
+		CHANGES IN R VERSION 1.1.0
+
+NEW FEATURES
+
+    o	Added a "preclean" function to delete recurrent non-standard
+        phrases from input karyotypes.
 
 
 		CHANGES IN R VERSION 1.0.0

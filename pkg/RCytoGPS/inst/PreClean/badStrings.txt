@@ -1,0 +1,18 @@
+/nonclonal w/clonal abnormalities[1]
+/nonclonal w/clonal abnormalities[2]
+/nonclonal w/clonal abnormalities
+/nonclonal w
+/nonclonal[1].ish
+/nonclonal[1]
+/nonclonal[2]
+[3, one is 4n]
+clonal
+/4n[1]
+/4n[2]
+/4n[3]
+/4n[4]
+(D7S486+;D7Z1+,D7S486-)
+46,XX[2].ish
+.ish
+(D13S319-,LAMP+)
+/46,XX[17].ish

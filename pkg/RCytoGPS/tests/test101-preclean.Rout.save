@@ -1,0 +1,50 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(RCytoGPS)
+> 
+> sf <- system.file("PreClean", package = "RCytoGPS")
+> dir(sf)
+[1] "Altered.StartKaryotypes.R"   "Altered.StartKaryotypes.csv"
+[3] "badStrings.txt"              "startKaryotypes.csv"        
+> 
+> bad <- read.delim(file.path(sf, "badStrings.txt"), header=FALSE)
+> bad <- as.vector(as.matrix(bad))
+> input <- read.csv(file.path(sf, "startKaryotypes.csv"))
+> colnames(input)
+[1] "X"                          "Pt..."                     
+[3] "Status"                     "Karyotype"                 
+[5] "Cytogenetics.at.start.date"
+> output <- read.csv(file.path(sf, "Altered.StartKaryotypes.csv"))[, -1]
+> 
+> myclean <- preclean(input, 4:5, bad)
+> 
+> summary(output[,4] == myclean[,4])
+   Mode   FALSE    TRUE    NA's 
+logical     124     433       2 
+> summary(output[,5] == myclean[,5])
+   Mode   FALSE    TRUE    NA's 
+logical     115     442       2 
+> 
+> if(FALSE) {
++   foo <- data.frame(IN = input[,4], OUT = output[,4], MY = myclean[,4])[output[,4] != myclean[,4],]
++   write.csv(foo, file="foo.csv")
++ }
+> 
+> proc.time()
+   user  system elapsed 
+   0.17    0.03    0.20 
