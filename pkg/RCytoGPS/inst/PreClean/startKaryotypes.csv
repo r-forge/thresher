@@ -2,8 +2,7 @@
 RN001,1,Nonfixable grammar error,"46,XX,+12[9]/46,idem, del(13)(q12q22)[5]/nonclonal w/clonal abnormalities[1]/46,XX[5]","46,XX,+12[9]/46,idem, del(13)(q12q22)[5]/nonclonal w/clonal abnormalities[1]/46,XX[5]"
 RN002,2,Success,"47,XX,+12[6]/46,XX[13]/nonclonal[1]","47,XX,+12[6]/46,XX[13]/nonclonal[1]"
 RN003,3,Success,"46,XY,der(8)t(3;8)(q21;p22)[18]/nonclonal[2]","46,XY,der(8)t(3;8)(q21;p22)[18]/nonclonal[2]"
-RN004,4,Success,"46,XY,t(1;7)(p21;q36),add(3)(p21),add(5)(q11.2),-6,?del(8)(q11.2q22),add(9)(p?24),-17,der(17)t(17;17)(p13;q11.2),-20,+der(?)t(?;3)(?;p21),+mar1,+mar2[cp2]/46,XY[18]","46,XY,t(1;7)(p21;q36),add(3)(p21),add(5)(q11.2),-6,?del(8)(q11.2q22),add(9)(p?24),-17,der(17)t(17;17)(p13;q11.2),-20,+der(?)t(?;3)(?;p21),+mar1,+mar2[cp2]/46,XY[18]
- "
+RN004,4,Success,"46,XY,t(1;7)(p21;q36),add(3)(p21),add(5)(q11.2),-6,?del(8)(q11.2q22),add(9)(p?24),-17,der(17)t(17;17)(p13;q11.2),-20,+der(?)t(?;3)(?;p21),+mar1,+mar2[cp2]/46,XY[18]","46,XY,t(1;7)(p21;q36),add(3)(p21),add(5)(q11.2),-6,?del(8)(q11.2q22),add(9)(p?24),-17,der(17)t(17;17)(p13;q11.2),-20,+der(?)t(?;3)(?;p21),+mar1,+mar2[cp2]/46,XY[18]"
 RN005,5,Success,"46,XX,del(6)(q13q21)[8]/46,XX[12]","46,XX,del(6)(q13q21)[8]/46,XX[12]"
 RN006,6,Success,"49,XY,+12,+18,+19[9]/46,XY[11]","49,XY,+12,+18,+19[9]/46,XY[11]"
 RN007,7,Success,"47,XY,+12[20]","47,XY,+12[20]"
