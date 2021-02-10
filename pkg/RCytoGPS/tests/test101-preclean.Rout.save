@@ -35,10 +35,10 @@ Type 'q()' to quit R.
 > 
 > summary(output[,4] == myclean[,4])
    Mode   FALSE    TRUE    NA's 
-logical     124     431       2 
+logical     123     430       2 
 > summary(output[,5] == myclean[,5])
    Mode   FALSE    TRUE    NA's 
-logical     117     438       2 
+logical     116     437       2 
 > 
 > if(FALSE) {
 +   foo <- data.frame(IN = input[,4], OUT = output[,4], MY = myclean[,4])[output[,4] != myclean[,4],]
@@ -47,4 +47,4 @@ logical     117     438       2
 > 
 > proc.time()
    user  system elapsed 
-   0.15    0.06    0.20 
+   0.18    0.03    0.20 
