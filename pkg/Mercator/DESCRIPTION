@@ -1,11 +1,12 @@
 Package: Mercator
-Version: 0.99.0
-Date: 2021-01-10
+Version: 1.0.0
+Date: 2021-02-10
 Title: Clustering and Visualizing Distance Matrices
 Author: Kevin R. Coombes, Caitlin E. Coombes
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: Defines the classes used to explore, cluster and
-  visualize distance matrices, especially those arising from binary data.
+  visualize distance matrices, especially those arising from binary
+  data. See Abrams et al., 2021, <doi:10.1093/bioinformatics/btab037>.
 Depends: R (>= 3.5), Thresher (>= 1.1)
 Imports: methods, stats, utils, graphics, grDevices, KernSmooth,
   cluster, Rtsne, ClassDiscovery, Polychrome, dendextend, igraph,
