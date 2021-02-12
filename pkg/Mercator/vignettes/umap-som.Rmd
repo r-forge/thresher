@@ -1,0 +1,174 @@
+---
+title: "UMAP and SOM from Distance Matrices"
+author: "C.E. Coombes, Zachary B. Abrams, Kevin R. Coombes"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{UMAP and SOM from Distance Matrices}
+  %\VignetteKeywords{Mercator,self-organizing maps,uniofrm manifold approximationa nd projection}
+  %\VignetteDepends{Mercator}
+  %\VignettePackage{Mercator}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=6, echo=TRUE)
+```
+
+# Introduction
+We recently added visualizations based on Self-Organizing Maps (SOM) and
+Uniform Manifold Approximation and Projection (UMAP) for objects in the
+<tt>Mercator</tt> package. This addition relies on the core implementations
+in the <tt>kohonen</tt> and <tt>umap</tt> packages, respectively. The main
+challenge that we faced was that both of those implementations want to
+receive the raw data as inputs, while <tt>Mercator</tt> objects only store
+a distance matrix computed from the raw data. The purpose of this vignette
+is, first, to describe how we worked around this restriction, and second,
+to illustrate how to use these methods in the package.
+
+# The Mercator Class
+First we load the package.
+```{r library}
+suppressMessages( suppressWarnings( library(Mercator) ) )
+```
+Next, we load a "fake" set of synthetic continuous data that comes with the
+Mercator package.
+```{r fakedata}
+set.seed(36766)
+data(fakedata)
+ls()
+dim(fakedata)
+dim(fakeclin)
+```
+
+# UMAP
+Let's create a UMAP visualization directly from the raw data.
+```{r udirect, fig.cap="UMAP visualization of fake data.", fig.width=7, fig.height=7}
+library(umap)
+udirect <- umap(t(fakedata))
+plot(udirect$layout, main="Original UMAP")
+```
+We aren't going to do anything fancy with labels or colors in this plot; we just
+want an idea of the main structure in the data. In particular, it looks like there
+are seven clusters, divided into one group three and two groups of two each.
+
+Next, we are going to create a <tt>Meractor</tt> object with a multi-dimensional
+scaling (MDS) visualization. Inspired by the first plot, we will arbitrarily assign
+seven groups. (This assignment uses the PAM algorithm internally.)
+```{r mercury, fig.cap="MDS visualization from a distance matrix.", fig.width=7, fig.height=7}
+mercury <- Mercator(dist(t(fakedata)), "euclid", "mds", 7)
+plot(mercury, main = "MDS")
+```
+Interestingly, here we see a possibly different number of groups. But that's a
+separate issue, and we don't want to distracted from our main thread.
+
+We want to confirm that the actual raw data is not contained in <tt>mercury</tt>,
+just the distance matrix.
+```{r peek}
+summary(mercury)
+slotNames(mercury)
+mercury@metric
+mercury@palette
+mercury@symbols
+table(mercury@clusters)
+class(mercury@view)
+names(mercury@view)
+class(mercury@view[["hclust"]])
+class(D <- mercury@distance)
+```
+
+Next, we add a "umap" visualization to this object. 
+```{r umapper, fig.cap="UMAP visualization from a distance matrix.", fig.width=7, fig.height=7}
+mercury <- addVisualization(mercury, "umap")
+plot(mercury, view = "umap", main="UMAP from distance matrix")
+```
+Notice that the <tt>plot</tt> method knows that we want to see the internal
+"<tt>layout</tt>" component of the <tt>umap</tt> object. It also automatically
+assigns axis names that (subliminally?) remind us that we computed this
+visualization with UMAP. And it colors the points using the same values
+from the initial PAM clustering assignments.
+
+As an aside, we point out that the PAM clustering doesn't really match
+the implicit UMAP clustering of the data.
+
+# Euclideanization
+We obviously constructed this plot just from the distance matrix, not from the
+raw data. It neverheless has a structure essentially the same as the original one.
+But how?
+
+Well, internally, we use this function:
+```{r me}
+Mercator:::makeEuclidean
+```
+The first four lines of code inside this function are basically the algorithm
+used by the <tt>cmdscale</tt> function to compute the eigenvalues need to create
+its dimension reduction for visualization. The count of the number of nonzero
+eigenvalues (which defines <tt>R</tt>) is careful to stay away from zero.  We do
+this to avoid round-off errors. If we miss by one or two eignevalues, than the
+final call to <tt>cmdscale</tt> will generate a confusing warning. That final line,
+by the way, creates an embedding into Euclidean space that should preserve almost
+all of the distances between pairs of points in the original data set.
+
+To see that, let's carry out that step explicitly.
+```{r newdist}
+X <- Mercator:::makeEuclidean(D)
+dim(X)
+```
+Now we compute distances between pairs of points in this new embedding.
+```{r delta}
+D2 <- dist(X)
+delta <- as.matrix(D) - as.matrix(D2)
+summary(as.vector(delta))
+```
+We see that the absolute errors between any pair of points in the two distance
+computations are less than $10^{-12}$. And that is the fundamental reason that
+we expect equivalent structures whether we apply UMAP to the original data or to
+the re-embedded data arising from the distance matrix.
+
+# Self-Organizing Maps
+The same approach works to compute self-organizing maps from a distance matrix.
+Here is the result using the data matrix.
+```{r som, fig.cap="SOM visualizations from a distance matrix.", fig.width=7, fig.height=5}
+mercury <- addVisualization(mercury, "som",
+                            grid = kohonen::somgrid(6, 5, "hexagonal"))
+plot(mercury, view = "som")
+```
+And here is the corresponding result using the original data.
+```{r oldsom}
+library(kohonen)
+mysom <- som(t(fakedata), grid = somgrid(6, 5, "hexagonal"))
+plot(mysom, type = "mapping")
+```
+This time, we will work a little harder to color the plot in the same way.
+```{r colplot, fig.cap="SOM visualizations from a distance matrix.", fig.width=7, fig.height=5}
+plot(mysom, type = "mapping", pchs=16, col=Mercator:::colv(mercury))
+```
+
+## Warning
+Qualitatively, most of the SOM plots should be similar. The fundamental exception,
+however, is the "codes" plot. This plot shows the patterns of intensities in
+each of the underlying dimensions (averaged over the assigned objects in each node).
+Because we have performed a multi-dimensional scaling analysis, we have changed the
+underlying coordinate system. Here are the corresponding plots.
+```{r codes, fig.cap="SOM codes.", fig.width=7, fig.height=5}
+plot(mysom, type = "codes", main="Original", shape = "straight")
+plot(mercury, view = "som", type="codes", main="After MDS")
+```
+
+# Conclusions
+As we have seen, when we start with a Euclidean distance matrix, we can get
+qualitatively equivalent results from the original data or from creating a
+"realization" of the distance matrix in a large Euclidean space. The major
+advantage, however, arises when we start with a completely different distance
+metric. In that case, we cannot apply SOM or UMAP at all. But we can still embed
+that distance matrix into a Eucldean space and then run SOM or UMAP.
+
+# Appendix
+This analaysis was performed in the following environment:
+```{r si}
+sessionInfo()
+```

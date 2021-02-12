@@ -1,6 +1,6 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,7 @@ Loading required package: oompaBase
 Loading required package: PCDimension
 > data("CML500")
 > 
-> # Jaccard
+> ## Jaccard
 > vis1 <- Mercator(CML500, "jacc", "mds", K=20)
 > head(Mercator:::symv(vis1)) # make sure names propagate correctly
  S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
@@ -34,26 +34,40 @@ Loading required package: PCDimension
 > head(vis1@clusters)
  S3.2.0  S4.1.0 S35.1.0 S49.1.0 S57.1.0 S59.1.0 
       1       2       2       3       2       2 
-> plot(vis1) # default MDS view
+> plot(vis1, main = "MDS") # default MDS view
 > 
 > barplot(vis1)
-> scatter(vis1, view = "mds")
+> scatter(vis1, view = "mds", main = "MDS")
 > 
+> ## t-SNE
 > vis1 <- addVisualization(vis1, "tsne", perplexity=30)
-> plot(vis1, view = "tsne")
+> plot(vis1, view = "tsne", main = "t-SNE")
 > 
-> scatter(vis1, view = "tsne", colramp = grDevices::terrain.colors)
+> scatter(vis1, view = "tsne", colramp = grDevices::terrain.colors, main = "t-SNE")
 > 
+> ## hclust
 > vis1 <- addVisualization(vis1, "hclust")
 > plot(vis1, view = "hclust")
 > 
-> # now test the igraph part
+> ## now test the igraph part
 > vis1 <- addVisualization(vis1, "graph")
 > plot(vis1, view = "graph") # default layout
 > plot(vis1, view = "graph", layout = "nicely") # default layout
 > plot(vis1, view = "graph", layout = "mds")
 > plot(vis1, view = "graph", layout = "tsne")
 > 
+> ## umap
+> vis1 <- addVisualization(vis1, "umap")
+> plot(vis1, view = "umap", main="UMAP")
+> 
+> scatter(vis1, view = "umap", main="UMAP")
+> 
+> ## som
+> vis1 <- addVisualization(vis1, "som")
+> plot(vis1, view = "som")
+> plot(vis1, view = "som", type = "counts")
+> plot(vis1, view="som", type = "dist.neighbours", palette.name = topo.colors)
+> 
 > proc.time()
    user  system elapsed 
-  32.15   36.78   69.04 
+  12.85    4.09   17.10 

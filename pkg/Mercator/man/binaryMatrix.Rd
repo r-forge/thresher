@@ -2,7 +2,7 @@
 \docType{class}
 \alias{BinaryMatrix}
 \alias{BinaryMatrix-class}
-\alias{[,BinaryMatrix-method}
+\alias{[,BinaryMatrix,ANY,ANY,ANY-method}
 \alias{t,BinaryMatrix-method}
 \alias{dim,BinaryMatrix-method}
 \alias{hist,BinaryMatrix-method}

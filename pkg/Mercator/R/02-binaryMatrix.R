@@ -1,4 +1,5 @@
 setOldClass("dist")
+setOldClass(c("dissimilarity","dist")) # S3 inheitance
 
 setClass("BinaryMatrix",
          slots = c(

@@ -90,10 +90,20 @@ setMethod("plot", signature("Mercator", "missing"),
           function(x, view = NULL, ask = NULL, ...) {
 ### known kinds of visualizations
   plotMDS <- function(x, ...) {
-    plot(x@view[["mds"]], col=colv(x), pch=symv(x), xlab = "PC1", ylab="PC2", ...)
+    plot(x@view[["mds"]], col=colv(x), pch=symv(x),
+         xlab = "PC1", ylab="PC2", ...)
   }
   plotTSNE <- function(x, ...) {
-    plot(x@view[["tsne"]]$Y, col=colv(x), pch=symv(x), xlab = "T1", ylab="T2", ...)
+    plot(x@view[["tsne"]]$Y, col=colv(x), pch=symv(x),
+         xlab = "T1", ylab="T2", ...)
+  }
+  plotUMAP <- function(x, ...) {
+    plot(x@view[["umap"]]$layout, col=colv(x), pch=symv(x),
+         xlab = "U1", ylab="U2", ...)
+  }
+  plotSOM <- function(x, type = "mapping", shape="straight",  ...) {
+    plot(x@view[["som"]], type = type, shape = shape,
+         col=colv(x), pchs=symv(x), ...)
   }
   plotHC <- function(x, ...) {
     dend <- x@view[["hclust"]]
@@ -139,6 +149,8 @@ setMethod("plot", signature("Mercator", "missing"),
            mds = plotMDS(x, ...),
            tsne = plotTSNE(x, ...),
            hclust = plotHC(x, ...),
+           umap = plotUMAP(x, ...),
+           som = plotSOM(x, ...),
            graph = plotIG(x, ...))
   }
   invisible(x)
@@ -149,10 +161,16 @@ setMethod("scatter", signature(object = "Mercator"),
                    colramp = NULL, ...) {
 ### known kinds of visualizations
   smoothMDS <- function(object, ...) {
-    smoothScatter(x = object@view[["mds"]], xlab = "PC1", ylab="PC2", ...)
+    smoothScatter(x = object@view[["mds"]],
+                  xlab = "PC1", ylab="PC2", ...)
   }
   smoothTSNE <- function(object, ...) {
-    smoothScatter(x = object@view[["tsne"]]$Y, xlab = "T1", ylab="T2", ...)
+    smoothScatter(x = object@view[["tsne"]]$Y,
+                  xlab = "T1", ylab="T2", ...)
+  }
+  smoothUMAP <- function(object, ...) {
+    smoothScatter(x = object@view[["umap"]]$layout,
+                  xlab = "U1", ylab="U2", ...)
   }
 ### implications of 'view' and 'ask' parameters
   if (is.null(view)) { # first attached view is the default
@@ -179,6 +197,7 @@ setMethod("scatter", signature(object = "Mercator"),
     switch(V,
            mds = smoothMDS(object, colramp = colramp, ...),
            tsne = smoothTSNE(object, colramp = colramp, ...),
+           umap = smoothUMAP(object, colramp = colramp, ...),
            cat("No smooth scatter plot is available for view '", V, "'.\n"))
   }
   invisible(object)
@@ -306,6 +325,8 @@ addVisualization <- function(DV, method, ...) {
               hclust = function(X, ...) hclust(X@distance, method="ward.D2"),
               tsne = function(X, ...) Rtsne(X@distance, is_distance = TRUE, ...),
               graph = function(X, ...) createGraph(X, ...),
+              umap = function(X, ...) createUMAP(X@distance, ...),
+              som = function(X, ...) createSOM(X@distance, ...),
               heat = function(X, ...) X@distance)
   method  <- match.arg(method, names(METHODS))
   if (!is.null(DV@view[[method]])) {

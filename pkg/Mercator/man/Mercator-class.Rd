@@ -2,7 +2,7 @@
 \docType{class}
 \alias{Mercator-class}
 \alias{Mercator}
-\alias{[,Mercator-method}
+\alias{[,Mercator,ANY,ANY,ANY-method}
 \alias{dim,Mercator-method}
 \alias{hist,Mercator-method}
 \alias{summary,Mercator-method}
@@ -38,8 +38,8 @@ getClusters(DV)
     \code{manhattan},
     \code{canberra}, \code{binary}, or \code{euclid}.}
   \item{method}{A visualization method, currently limited to
-    \code{hclust},
-    \code{mds}, \code{tsne}, and \code{graph}.}
+    \code{hclust}, \code{mds}, \code{tsne}, \code{graph},
+    \code{umap}, and \code{som}.}
   \item{K}{An \code{integer} specifying the number of desired clusters.}
   \item{DV}{A distance visualization produced as the output of the 
     \code{Mercator} function.}
@@ -53,6 +53,10 @@ getClusters(DV)
       \item{\code{any}}{Any arguments to the \code{\link{Rtsne}} function for a
 	\code{tsne} visualization. Common examples include \code{dims}
 	and \code{perplexity}.}
+      \item{\code{any}}{Any arguments to the \code{\link{som}} function
+	to construct or view a self-organizing map. Most commonly, this is likely to
+	include \code{somgrid}, to specify the size and layout of the
+	grid, or \code{type} to specify which data to show in the plot.}
       \item{\code{Q}}{A quantile cutoff for the creation of the IGraph visualization.
 	By default, the value is set at the 10th percentile.}
     }
@@ -84,7 +88,7 @@ getClusters(DV)
       plotting a graph view, you can use an optional \code{layout}
       parameter to select a specific layout by name.
     }
-    \item{barplot{height, maion = '', sub = NULL, border = NA, space =
+    \item{barplot{height, main = '', sub = NULL, border = NA, space =
 	0, ...}}{
       Produce a (colored) barplot of the silhouette widths for elements
       clustered in this class. Arguments are as described in te base
@@ -123,7 +127,7 @@ getClusters(DV)
   visualization object of the
   \code{Mercator} class, including a distance matrix calculated on a 
   given metric and given visualizations. It is also possible (though not
-  advisable) to construct a \code{Mercator} obecject directly using the
+  advisable) to construct a \code{Mercator} object directly using the
   \code{new} function.
   
   The \code{addVisualizations} function can be used to add additional 
@@ -132,11 +136,13 @@ getClusters(DV)
   The \code{getClusters} function returns a vector of cluster assignments.
 }
 \seealso{
-  \code{\link{silhouette}}, \code{\link{smoothScatter}}, \code{\link{topo.colors}}.
+  \code{\link{silhouette}}, \code{\link{smoothScatter}},
+  \code{\link{topo.colors}}, \code{\link{som}},
+  \code{\link{umap}}.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \examples{
-#Form a BinaryMatrix
+# Form a BinaryMatrix
 data("iris")
 my.data <- as.matrix(iris[,c(1:4)])
 my.rows <- as.data.frame(c(1:length(my.data[,1])))
@@ -160,8 +166,8 @@ scatter(my.vis, view ="mds")
 slot(my.vis, "palette") <- c("purple", "red", "orange", "green")
 scatter(my.vis, view ="mds")
 
-#Recover cluster identities
-#What species comprise cluster 1?
+# Recover cluster identities
+# What species comprise cluster 1?
 my.clust <- getClusters(my.vis)
 my.species <- iris$Species[my.clust == 1]
 my.species

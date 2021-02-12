@@ -7,6 +7,7 @@ import(Thresher)
 ## Hack around bug in R-devel (4.1) that does weird things with a
 ## downstream Suggested package and an onLoad funciton.
 importFrom("flexmix", "flexmix")
+importFrom("KernSmooth", "bkde2D") # called without import by' smoothScatter' through 'grDevices'
 
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
            "rbinom", "as.dendrogram", "as.hclust", "quantile")
@@ -20,7 +21,8 @@ importFrom("Polychrome", "dark.colors")
 importFrom("dendextend", "prune")
 importFrom("igraph", "vertex_attr", "set_vertex_attr",
            "layout_nicely", "graph_from_data_frame")
-importFrom("KernSmooth", "bkde2D") # called without import by' smoothScatter' through 'grDevices'
+importFrom("umap", "umap")
+importFrom("kohonen", "som", "somgrid")
 
 # 01-metrics
 export("binaryDistance")
