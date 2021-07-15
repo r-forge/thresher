@@ -1,11 +1,38 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.11 SERIES NEWS			 *
+	*	       1.1 SERIES NEWS			 *
 	*						 *
 	**************************************************
 
-		CHANGES IN R VERSION 0.11.2
+		CHANGES IN R VERSION 1.1.0
+
+NEW FEATURES
+
+    o	Incorporated tywo new "views": self-organizing maps (SOM) and
+        uniform manifold approximation and projection (UMAP).
+
+		CHANGES IN R VERSION 1.0.0
+
+NEWS
+
+    o	Updated versio number to coincide with publuication of manuscript.
+
+		CHANGES IN R VERSION 0.99.0
+
+BUG FIX
+
+    o	Updated vignette and manual pages in response to comments from
+        reviewer of manuscript.
+
+		CHANGES IN R VERSION 0.11.5
+
+BUG FIX
+
+    o	Added "flexmix" to dependency to work around a bug on CRAN's
+        fedora machines.
+
+		CHANGES IN R VERSION 0.11.3
 
 NEW FEATURES
 
