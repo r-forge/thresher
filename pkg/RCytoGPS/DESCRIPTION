@@ -11,6 +11,6 @@ Depends: R (>= 3.5)
 Suggests: Mercator
 Imports: methods, graphics, grDevices, rjson
 VignetteBuilder: knitr
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown, Mercator
 License: Apache License (== 2.0)
 URL: http://oompa.r-forge.r-project.org/
