@@ -3,7 +3,7 @@
 ###
 import(methods)
 importFrom("graphics", "image", "barplot", "abline", "layout",
-           "legend", "lines", "mtext", "par",
+           "legend", "lines", "mtext", "par", "title",
            "axis", "plot", "rect", "text", "box")
 importFrom("grDevices", "palette", "col2rgb", "rgb")
 importFrom("rjson", "fromJSON")

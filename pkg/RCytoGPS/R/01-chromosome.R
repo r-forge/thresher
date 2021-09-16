@@ -41,8 +41,8 @@ setMethod("image", signature = "Chromosome", function(x,
   if (horiz) {
     pts <- max(x@grid) - x@range
     image(1:1, x@grid, matrix(rev(x@stain), nrow=1), col=idiocolors, bty='n',
-          xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8),
-          main=x@label)
+          xlab='', ylab='', xaxt='n', yaxt='n', zlim=c(1, 8))
+    title(main=x@label, adj=0, xpd = NA) # clip to device
     rect(0.6, pts[1], 1.4, pts[2])
     if (showBandNames) {
       foo <- findLabels(x@name)

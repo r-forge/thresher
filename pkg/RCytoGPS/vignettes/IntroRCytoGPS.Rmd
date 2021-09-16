@@ -17,6 +17,14 @@ vignette: >
 ```{r opts, echo=FALSE}
 knitr::opts_chunk$set(fig.width=8, fig.height=5)
 ```
+```{r mycss, results="asis", echo=FALSE}
+cat('
+<style type="text/css">
+.figure { text-align: center; }
+.caption { font-weight: bold; }
+</style>
+')
+```
 # Introduction
 Modern biological experiments are increasingly producing interesting binary matrices.
 These may represent the presence or absence of specific gene mutations, copy number
@@ -27,9 +35,9 @@ Cytogenetic/Cytogenomic Nomenclature; ISCN) into a binary vector with three bits
 (loss, gain, or fusion) per cytoband, which we call the "LGF model".
 
 The CytoGPS tool is available at the web site http://cytogps.org, where the LGF results
-of procvessing karyotype data are returned in JSON format. To complement the web site,
+of processing karyotype data are returned in JSON format. To complement the web site,
 we have developed <tt>RCytoGPS</tt>, an R package to  extract, format, and visualize
-genetic data at the resol;ution of cytobands. <tt>RCytoGPS</tt> can parse any JSON file
+genetic data at the resolution of cytobands. <tt>RCytoGPS</tt> can parse any JSON file
 (or set of files) produced by CytoGPS.org.
 
 ## Setup
@@ -121,7 +129,7 @@ The first graphs (using <tt>barplot</tt> ]) summarizes the frequency data from o
 column  along the genome. This provides a broad overview of the changes, and can be used
 to visually contrast the locations of changes in different data sets. Here we use barplot
 twice, showing losses and gains from the first file. 
-```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=10, fig.height=5}
+```{r gb, fig.cap="Cytoband level data along the genome.", fig.width=14, fig.height=7}
 opar <- par(mfrow=c(2,1))
 barplot(bandData, what = "CytoGPS_Result1.Loss", col = "forestgreen")
 barplot(bandData, what = "CytoGPS_Result1.Gain", col = "orange")

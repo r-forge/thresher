@@ -10,7 +10,8 @@ showGenome <- function(altcol = "#FED4C4") {
 }
 
 
-genomeBarplot <- function(V, col = "blue", altcol = "#FED4C4", ylab="Percent", h = NULL) {
+genomeBarplot <- function(V, col = "blue", altcol = "#FED4C4", ylab="Percent",
+                          h = NULL, debug = FALSE) {
   ## get the figure size in inches
   fin = par("fin")
   ## define intenal "resolution" based on figure size
@@ -23,9 +24,17 @@ genomeBarplot <- function(V, col = "blue", altcol = "#FED4C4", ylab="Percent", h
 
 #  par(bg = "white", mai=c(0.01, 0.5412, 0.1, 0.2772))
   par(bg = "white", mai=c(17*vres, 54*hres, 3*vres, 28*hres))
+  if (debug) {
+    print(par("fin"))
+    print(par("mai"))
+  }
   barplot(V, border=NA, space=0, ylab=ylab, col=col, yaxs="i", xaxt="n")
   if (!is.null(h)) { abline(h = h) }
 #  par(new=TRUE, mai=c(0.39, 0.86, 0.01, 0.63))
   par(new=TRUE, mai=c(10*vres, 86*hres, 81*vres, 63*hres))
+  if (debug) {
+    print(par("fin"))
+    print(par("mai"))
+  }
   showGenome(altcol = altcol)
 }

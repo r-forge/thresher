@@ -1,9 +1,20 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       1.1 SERIES NEWS			 *
+	*	       1.2 SERIES NEWS			 *
 	*						 *
 	**************************************************
+
+
+		CHANGES IN R VERSION 1.2.0
+
+DOCUMENTATION
+
+    o	Minor changes to graphing routines to try to achieve better
+        automated placement of chromosome labels (see vignettes).
+
+    o	Clarified that cytoband locations are the same in several
+        genome builds.
 
 
 		CHANGES IN R VERSION 1.1.1

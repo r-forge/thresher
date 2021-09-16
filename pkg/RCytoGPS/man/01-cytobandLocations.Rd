@@ -7,7 +7,8 @@
   This data set contains the genomic locations of cytobands based on
   both the latest build of the human genome (GRch38) and the latest
   update to the International Standard for human Cytogenomic
-  Nomenclature (ISCN).
+  Nomenclature (ISCN). Note that the CRch38 locations are unchanged from
+  build GRch37 (hg19). 
 }
 \usage{
 data(cytobandLocations)

@@ -1,7 +1,8 @@
 plot1Chrom <- function(DATA, columns,  chr, labels = columns,
                        pal = palette(), horiz = FALSE, axes=TRUE,
                        legend = FALSE, resn = NULL,
-                       sigcolumn = NA, sigcut = 0.01, alpha = 63) {
+                       sigcolumn = NA, sigcut = 0.01, alpha = 63,
+                       dlim = NULL) {
   ## check sigcolumn, sigcut, alpha
   if (!is.na(sigcolumn)) {
     if (length(sigcut) == 0) stop("You must supply at least one significance cutoff!")
@@ -76,7 +77,7 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
           mai=c(vres, hres * (1 + V0[NC] + (K-1)*V1[NC]),
                 10*vres, hres * (1 + (II-1)*V1[NC])))
       barplot(rev(vals), horiz = horiz, border=NA, col = rev(shades), 
-              xlim=c(0, 1.05*resn), yaxs="i", 
+              xlim=c(0, 1.05*resn), yaxs="i", ylim = dlim,
               space=0, axes=FALSE)
       if (axes) {
         axis(3) # on top
@@ -88,8 +89,8 @@ plot1Chrom <- function(DATA, columns,  chr, labels = columns,
       par(new = TRUE,
           mai=c(vres * (1 + V0[NC] + (K-1)*V1[NC]), 10*hres,
                 vres * (1 + (II-1)*V1[NC]), hres))
-      barplot(vals, horiz = horiz, border=NA, col = shades, 
-              ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K],
+      barplot(vals, horiz = horiz, border=NA, col = shades,
+              ylim=c(0, 1.05*resn), xaxs="i", ylab = labels[K], xlim = dlim,
               space=0, axes = axes)
     }
   }
