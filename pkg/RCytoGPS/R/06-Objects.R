@@ -53,7 +53,7 @@ setMethod("barplot", "CytobandData",
 setMethod("image", "CytobandData", function(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
          horiz = FALSE, axes = chr != "all", debug = FALSE, legend = FALSE,
-         sigcolumn = NA, sigcut = 0.01, alpha = 63) {
+         sigcolumn = NA, sigcut = 0.01, alpha = 63, clip = FALSE) {
   if (length(chr) != 1) {
     stop("Invalid chromosome value.")
   }
@@ -73,7 +73,8 @@ setMethod("image", "CytobandData", function(x, chr, what,
                  chr = chr, pal = pal,
                  horiz = !horiz, # changed our minds about what "horiz" means
                  axes = axes, legend = legend,
-                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha)
+                 sigcolumn = sigcolumn, sigcut = sigcut, alpha = alpha,
+                 clip = clip)
     }
   } else { # now we must have chr equal to a character vector
     if (chr == "all") {

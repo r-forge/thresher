@@ -1,7 +1,7 @@
 plot2Chrom <- function(DATA, leftcol, rightcol, chr,
                        pal = c("blue", "red"),
                        horiz = FALSE, axes = TRUE, legend = FALSE, resn = NULL,
-                       sigcolumn = NA, sigcut = 0.01, alpha = 63) {
+                       sigcolumn = NA, sigcut = 0.01, alpha = 63, clip = FALSE) {
   ## check sigcolumn, sigcut, alpha
   if (!is.na(sigcolumn)) {
     if (length(sigcut) == 0) stop("You must supply at least one significance cutoff!")
@@ -30,10 +30,12 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
   V0 <- 15
   V1 <- 45
 
-  dumbposn <- seq(1, 250000000, length=2500)
   CL <- cytobandLocations
   clap <- CL[CL$Chromosome == chrname,]
   segset <- DATA[DATA$Chromosome == chrname,]
+  MX <- max(segset$loc.end)
+  topgun <- ifelse(clip, 1e6 * (1 + trunc(MX/1e6)), 250000000)
+  dumbposn <- seq(1, topgun, length=2500)
   if (is.null(resn)) {
     resn <- max(max(segset[, c(leftcol, rightcol)]))
   }
@@ -74,7 +76,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     ## chromosome in the middle
     par(new=TRUE,
         mai=c(vres, (V1 + 2)*hres, 15*vres, (V1 + 2)*hres))
-    image(Chromosome(chr), mai=par("mai"), horiz = TRUE)
+    image(Chromosome(chr, maxbase = topgun), mai=par("mai"), horiz = TRUE)
     ## left, pointing backwards
     par(new = TRUE,
         mai=c(vres, 2*hres, 15*vres, (1 + V0 + V1)*hres))
@@ -100,7 +102,7 @@ plot2Chrom <- function(DATA, leftcol, rightcol, chr,
     ## chromosome in the middle
     par(new=TRUE,
         mai=c((V1 + 2)*vres, 10*hres, (V1 + 2)*vres, hres))
-    image(Chromosome(chr), mai=par("mai"), horiz = horiz)
+    image(Chromosome(chr, maxbase = topgun), mai=par("mai"), horiz = horiz)
     ## left goes on the bottom, and points down
     par(new = TRUE,
         mai=c(2*vres, 10*hres, (1 + V0 + V1)*vres, hres))

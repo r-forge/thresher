@@ -12,7 +12,7 @@
 \S4method{image}{CytobandData}(x, chr, what,
          pal = palette(), nrows = 2, labels = NULL,
          horiz = FALSE, axes = chr != "all", debug = FALSE, legend = FALSE,
-         sigcolumn = NA, sigcut = 0.01, alpha = 63)
+         sigcolumn = NA, sigcut = 0.01, alpha = 63, clip = FALSE)
 \S4method{barplot}{CytobandData}(height, what, col = "blue", altcol = "#FED4C4",
                    ylab = "Percent", hline = NULL,
                    xform = function(x) x, ...)
@@ -50,6 +50,10 @@
     assigned to the color for each significance level.}
   \item{sigcut}{See \code{sigcolumn}.}
   \item{alpha}{See \code{sigcolumn}.}
+  \item{clip}{A logical value; should te length of the chromosome fill
+    the device (if TRUE) or be plotted relative to the length of Chromosome
+    1 (if FALSE). Currently only used when plotting two values, one on
+    either side of a single chromosome.}
   \item{debug}{Logical value; should the method print out debugging
     information. Probably best to ignore.}
 
