@@ -77,7 +77,7 @@ matPermutate <- function(data) {
 # B is total repeat times for randomization, alpha is significance
 # level for p-values
 rndLambdaF <- function(data, B=1000, alpha=0.05) {
-  if (class(data[1,1]) != "numeric") {
+  if (!inherits(data[1,1], "numeric")) {
     stop('data elements are not numeric')
   }
   if (sum(is.na(data)) > 0) {
