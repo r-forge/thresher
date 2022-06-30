@@ -128,7 +128,9 @@ getClusters(DV)
   \code{Mercator} class, including a distance matrix calculated on a 
   given metric and given visualizations. It is also possible (though not
   advisable) to construct a \code{Mercator} object directly using the
-  \code{new} function.
+  \code{new} function. Default clustering in \code{Mercator} is now
+  performed on the distance matrix using hierarchical clustering
+  (hclust) with the \code{wardD2} linkage method.
   
   The \code{addVisualizations} function can be used to add additional 
   visualizations to an existing \code{Mercator} object.

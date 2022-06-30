@@ -9,6 +9,5 @@
 * Should the code to make the DT or ztable stuff be part of the
   package? What about the part trying to interpret features and
   samples, especially the final heatmap?
-* Should the SOM plots be part of the package? note that these
-  depend on the actual data matrix, not just the distance matrix.
+
 

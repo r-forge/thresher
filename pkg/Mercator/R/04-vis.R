@@ -290,7 +290,8 @@ recolor <- function(DV, clusters) {
 }
 
 recluster <- function(DV, K) {
-  clust <- pam(DV@distance, k=K, diss=TRUE, cluster.only=TRUE)
+  hc <- hclust(DV@distance, method = "ward.D2")
+  clust <- cutree(hc, k = K)
   DV@clusters = clust
   DV
 }
@@ -306,7 +307,9 @@ Mercator <- function(X, metric, method, K, ...) {
   }
   M <- attr(DistMat, "comment")
   if (!is.null(M)) metric <- M
-  clust <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+### OLD#  clust <- pam(DistMat, k=K, diss=TRUE, cluster.only=TRUE)
+  hc <- hclust(DistMat, method = "ward.D2")
+  clust <- cutree(hc, k = K)
   if (is.null(names(clust))) names(clust) <- attr(DistMat, "Labels")
   view <- list()
   ob <- new("Mercator",

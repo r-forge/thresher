@@ -5,6 +5,13 @@
 	*						 *
 	**************************************************
 
+		CHANGES IN R VERSION 1.1.2
+
+CHANGES
+
+    o	Changed the default clustering algorithm internally to the
+        "Mercator" contructor to use "hclust" instead of "pam".
+
 		CHANGES IN R VERSION 1.1.0
 
 NEW FEATURES

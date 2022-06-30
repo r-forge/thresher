@@ -10,7 +10,8 @@ importFrom("flexmix", "flexmix")
 importFrom("KernSmooth", "bkde2D") # called without import by' smoothScatter' through 'grDevices'
 
 importFrom("stats", "dist", "hclust", "cmdscale", "as.dist",
-           "rbinom", "as.dendrogram", "as.hclust", "quantile")
+           "rbinom", "as.dendrogram", "as.hclust", "quantile",
+           "cutree")
 importFrom("utils", "data")
 importFrom("graphics", "hist", "par", "barplot", "smoothScatter")
 importFrom("grDevices", "dev.interactive", "devAskNewPage", "topo.colors")
