@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en   ">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>OOMPA Thresher Packages</title>
+    <link href="https://oompa.r-forge.r-project.org/bianchi.css" rel="stylesheet" type="text/css" />
+  </head>
+<body>
+
+<!-- <img src="tuba3.gif" alt="OOMPA logo" width="262px"  height="156px" /> -->
+<div id="logobar">
+  <img src="https://oompa.r-forge.r-project.org/tuba2.gif" alt="OOMPA logo" height="262px" width="156px" />
+<br />
+<br />
+<a href="https://oompa.r-forge.r-project.org/index.html">OOMPA Overview</a>
+<br />
+</div>
+<div id="mainarea">
+<h1>OOMPA PROJECT</h1>
+<h2>Thresher</h2>
+The Thresher
+<A HREF="https://r-forge.r-project.org/">R-Forge</A> project is one
+component of the broader OOMPA Project produced by the
+<A HREF = "https://gitlab.com/krcoombes/coombeslab">Coombes Lab</A>
+over the past decade. it consists of a set of packages to help with
+more advanced class discovery, clustering, and visualization.
+
+<h3>Support</h3>
+Support for all packages that are part of the OOMPA family uses a
+common set of discussion forums and bug trackers:
+<ul>
+<li><a href="https://r-forge.r-project.org/forum/forum.php?forum_id=4515&group_id=1746">
+    User Help Forum</a></li>
+<li><a href="https://r-forge.r-project.org/forum/forum.php?forum_id=4516&group_id=1746">
+    Developer Forum</a></li>
+<li><a href="https://r-forge.r-project.org/tracker/?atid=5395&group_id=1746&func=browse">
+    Feature Requests</a></li>
+<li><a href="https://r-forge.r-project.org/tracker/?atid=5394&group_id=1746&func=browse">
+    Bug Reports</a> </li>
+</ul>
+
+
+<h3>List of Packages</h3>
+<dl>
+<dt><A HREF="http://thresher.r-forge.r-project.org/packages/PCDimension.html">PCDimension<A></dt>
+<dd>The PCDiimension package, which was described in a paper by
+  <A HREF="https://pubmed.ncbi.nlm.nih.gov/29881252/">M Wang and
+  colleagures</A>, implements and automates a graphical Bayesian
+  method to determine the number of principal components that was introduced
+  by <A HREF="https://www.tandfonline.com/doi/abs/10.1080/03610910701855005">Auer
+  and Gervini</A> in 2008.  Wang's paper also introduces the idea of
+  "biological components", which shoud be thought of as an
+  intereptetable (if redundant) replacement for principal components.</dd>
+<dt><A HREF="http://thresher.r-forge.r-project.org/packages/Thresher.html">Thresher<A></dt>
+  <dd>The Thresher package uses the PCDimension package as a starting
+  point to estimate the number of clusters present in a data set. The
+  key idea is that the number <I>N</I> of clusters should lie between <I>N</I>
+  and <I>2N+1</I> where <I>N</I> is the number of PC components. More
+  details can be found in another paper
+  by <A HREF="https://pubmed.ncbi.nlm.nih.gov/29310570/">M Wang and
+  colleagues</A>. The paper also points out that Thresher can remove
+  outliers at the same time as it determines clusters.</dd>
+<dt><A HREF="http://thresher.r-forge.r-project.org/packages/Mercator.html">Mercator<A></dt>
+  <dd>The Mercator package was introduced in a paper
+  by <A HREF="https://pubmed.ncbi.nlm.nih.gov/33515233/">Abrams
+  and colleagues</A>. The package has multiple goals. First, it
+  impements a variety of binary distance metrics, Second, it provides
+  consistent interfaces to a variety of clustering and visualization
+  methods, with an emphasis on being able to color samples
+  consistently across different methods.</dd>
+<dt><A HREF="http://thresher.r-forge.r-project.org/packages/RCytoGPS.html">RCytoGPS<A></dt>
+<dd>In Zach Abrams' PhD thesis, he developed an algorithm called
+  Cytogenetics Pattern Sleuth (CytoGPS) that can parse karyotypes
+  written in a standard text form known as
+  the <A HREF="https://en.wikipedia.org/wiki/International_System_for_Human_Cytogenetic_Nomenclature">International
+  System for Human Cytogenetic Nomenclature</A> and convert them into
+  binary vectors accessible to modern machine learning methods.  That
+  algorithm is available online
+  at <A HREF="http://cytogps.org/">http://cytogps.org/</A>. The
+  RCytoGPS package (see the pair of papers by Abrams and colleagues
+  in <A HREF="https://pubmed.ncbi.nlm.nih.gov/34601554/">BMC
+  Bioinfomratics</A>
+  and <A HREF="https://pubmed.ncbi.nlm.nih.gov/33648439/">Bioinformatics</A>)
+  provides tools to import the output of the web site into R so it
+  can be analyzed and visualized.</dd>
+<dt><A HREF="http://thresher.r-forge.r-project.org/packages/SillyPutty.html">SillyPutty<A></dt>
+  <dd>The SillyPutty package introduces a novel clustering
+  algorithm, based on optimizing silhouette widths. A manuscript
+  describing and evaluating the algorithm is in preparation; the
+  package will be submitted to CRAN when the manuscript is completed.</dd>
+</dl>
+
+
+
+
+<BR />
+<BR />
+<!-- R-Forge Logo -->
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+<tr><td>
+<a href="http://r-forge.r-project.org/">
+ <img src="http://r-forge.r-project.org/themes/rforge//imagesrf/logo.png" 
+      border="0" alt="R-Forge Logo" /> </a> </td> </tr>
+</table>
+
+</div> <!-- end mainarea div-->
+
+
+</body>
+</html>

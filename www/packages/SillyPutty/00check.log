@@ -1,14 +1,14 @@
-* using log directory 'C:/Users/KRC/Desktop/RForge/thresher/pkg/Thresher.Rcheck'
+* using log directory 'C:/Users/KRC/Desktop/RForge/thresher/pkg/SillyPutty.Rcheck'
 * using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: UTF-8
 * using option '--as-cran'
-* checking for file 'Thresher/DESCRIPTION' ... OK
-* this is package 'Thresher' version '1.1.3'
-* checking CRAN incoming feasibility ... WARNING
+* checking for file 'SillyPutty/DESCRIPTION' ... OK
+* this is package 'SillyPutty' version '0.1.2'
+* checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Kevin R. Coombes <krc@silicovore.com>'
 
-Insufficient package version (submitted: 1.1.3, existing: 1.1.3)
+New submission
 
 The Date field is over a month old.
 * checking package namespace information ... OK
@@ -19,11 +19,10 @@ The Date field is over a month old.
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
 * checking serialization versions ... OK
-* checking whether package 'Thresher' can be installed ... OK
+* checking whether package 'SillyPutty' can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking for future file timestamps ... OK
-* checking 'build' directory ... OK
 * checking DESCRIPTION meta-information ... OK
 * checking top-level files ... OK
 * checking for left-over files ... OK
@@ -41,39 +40,24 @@ The Date field is over a month old.
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... OK
-* checking Rd files ... OK
-* checking Rd metadata ... OK
-* checking Rd line widths ... OK
-* checking Rd cross-references ... OK
-* checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... OK
-* checking Rd contents ... OK
-* checking for unstated dependencies in examples ... OK
-* checking contents of 'data' directory ... OK
-* checking data for non-ASCII characters ... OK
-* checking data for ASCII and uncompressed saves ... OK
-* checking sizes of PDF files under 'inst/doc' ... OK
-* checking installed files from 'inst/doc' ... OK
-* checking files in 'vignettes' ... OK
-* checking examples ... OK
+* checking R code for possible problems ... NOTE
+SillyPutty: no visible binding for '<<-' assignment to 'gack'
+* checking for missing documentation entries ... WARNING
+Undocumented code objects:
+  'RandomSillyPutty' 'SillyPutty' 'showme' 'summarizeRepeats'
+Undocumented S4 classes:
+  'RandomSillyPutty' 'SillyPutty'
+All user-level objects in a package (including S4 classes and methods)
+should have documentation entries.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.
+* checking examples ... NONE
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ... OK
-  Running '01-label.R'
-  Comparing '01-label.Rout' to '01-label.Rout.save' ... OK
-  Running '01-remap.R'
-  Comparing '01-remap.Rout' to '01-remap.Rout.save' ... OK
-  Running '02-thresh.R'
-  Comparing '02-thresh.Rout' to '02-thresh.Rout.save' ... OK
-  Running '04-reap.R'
-  Comparing '04-reap.Rout' to '04-reap.Rout.save' ... OK
-* checking for unstated dependencies in vignettes ... OK
-* checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... OK
+  Running 'test-01-sp.R'
 * checking PDF version of manual ... OK
 * skipping checking HTML version of manual: no command 'tidy' found
 * checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK
 * DONE
-Status: 1 WARNING
+Status: 1 WARNING, 2 NOTEs

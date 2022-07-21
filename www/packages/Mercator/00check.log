@@ -1,16 +1,14 @@
-* using log directory 'C:/Users/KRC/Desktop/RForge/thresher/pkg/Thresher.Rcheck'
+* using log directory 'C:/Users/KRC/Desktop/RForge/thresher/pkg/Mercator.Rcheck'
 * using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: UTF-8
 * using option '--as-cran'
-* checking for file 'Thresher/DESCRIPTION' ... OK
-* this is package 'Thresher' version '1.1.3'
+* checking for file 'Mercator/DESCRIPTION' ... OK
+* this is package 'Mercator' version '1.1.2'
 * checking CRAN incoming feasibility ... WARNING
 Maintainer: 'Kevin R. Coombes <krc@silicovore.com>'
 
-Insufficient package version (submitted: 1.1.3, existing: 1.1.3)
-
-The Date field is over a month old.
+Insufficient package version (submitted: 1.1.2, existing: 1.1.2)
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -18,8 +16,7 @@ The Date field is over a month old.
 * checking for executable files ... OK
 * checking for hidden files and directories ... OK
 * checking for portable file names ... OK
-* checking serialization versions ... OK
-* checking whether package 'Thresher' can be installed ... OK
+* checking whether package 'Mercator' can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking for future file timestamps ... OK
@@ -54,20 +51,23 @@ The Date field is over a month old.
 * checking contents of 'data' directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
-* checking sizes of PDF files under 'inst/doc' ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
 * checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ... OK
-  Running '01-label.R'
-  Comparing '01-label.Rout' to '01-label.Rout.save' ... OK
-  Running '01-remap.R'
-  Comparing '01-remap.Rout' to '01-remap.Rout.save' ... OK
-  Running '02-thresh.R'
-  Comparing '02-thresh.Rout' to '02-thresh.Rout.save' ... OK
-  Running '04-reap.R'
-  Comparing '04-reap.Rout' to '04-reap.Rout.save' ... OK
+  Running 'test-01Metrics.R'
+  Comparing 'test-01Metrics.Rout' to 'test-01Metrics.Rout.save' ... OK
+  Running 'test-02binmat.R'
+  Comparing 'test-02binmat.Rout' to 'test-02binmat.Rout.save' ... OK
+  Running 'test-03thresh.R' [13s]
+  Comparing 'test-03thresh.Rout' to 'test-03thresh.Rout.save' ... OK
+  Running 'test-04vis.R' [18s]
+  Comparing 'test-04vis.Rout' to 'test-04vis.Rout.save' ... OK
+  Running 'test-05recolor.R'
+  Comparing 'test-05recolor.Rout' to 'test-05recolor.Rout.save' ... OK
+  Running 'test-06names.R'
+  Comparing 'test-06names.Rout' to 'test-06names.Rout.save' ... OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
 * checking re-building of vignette outputs ... OK

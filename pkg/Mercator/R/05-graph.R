@@ -1,5 +1,5 @@
 ### Based on the code from SPADE by Peng Qiu, which was implemented
-### specifically for masa cyteometry data stored in FCS files.
+### specifically for masa cytometry data stored in FCS files.
 downsample <- function(target, distanceMat, cutoff) {
   localDensity <- function(distanceMat, epsilon) {
     apply(distanceMat, 1, function(x) mean(x < epsilon))
