@@ -1,3 +1,5 @@
+spDebug <- NULL
+
 setOldClass("silhouette")
 
 setClass("SillyPutty",
@@ -32,7 +34,7 @@ SillyPutty <- function(labels, dissim, maxIter = 1000, loopSize = 15, verbose = 
     if (L > loopSize) {
       if (min(tempnew[,3]) %in% minis[(L - loopSize):L]) {
         minis <- c(minis, min(tempnew[,3]))
-        gack <<- list(refined=refined, minis=minis)
+        spDebug <- list(refined=refined, minis=minis)
         warning("Early halt because of possible infinite loop.")
         break
       }
