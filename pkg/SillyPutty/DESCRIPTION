@@ -1,8 +1,8 @@
 Package: SillyPutty
-Version: 0.1.3
-Date: 2023-06-20
+Version: 0.1.4
+Date: 2023-06-26
 Title: Silly Putty Clustering
-Author: Kevin R. Coombes
+Author: Kevin R. Coombes, Dwayne Tally
 Maintainer: Kevin R. Coombes <krc@silicovore.com>
 Description: Implements a simple, novel clustering algorithm based on
   optimizing the silhouette width.

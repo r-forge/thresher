@@ -13,6 +13,6 @@ makeEuclidean <- function(D) {
   M <- as.matrix(D)
   X <- scale(t(scale(t(M^2), scale = FALSE)), scale = FALSE)
   E <- eigen(-X/2, symmetric = TRUE)$values
-  R <- sum(E > 1e-10)
+  R <- min(sum(E > 1e-10), nrow(M) - 1)
   cmdscale(D, k = R)
 }
