@@ -14,3 +14,5 @@ export("SillyPutty")
 
 exportClasses("RandomSillyPutty")
 export("RandomSillyPutty", "summarizeRepeats", "showme")
+
+export("findClusterNumber")
