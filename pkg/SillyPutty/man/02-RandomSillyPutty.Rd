@@ -7,7 +7,7 @@
   from N iterations.
 }
 \usage{
-RandomSillyPutty(distobj, K, N = 100)
+RandomSillyPutty(distobj, K, N = 100, \dots)
 }
 \arguments{
   \item{distobj}{An object of class \code{\link{dist}}.}

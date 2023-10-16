@@ -5,20 +5,21 @@
   A function that is designed to find an approximation of the true
   number. K, of clusters in a dataset. the \code{findClusterNumber}
   function calls \code{RandomSillyPutty} for each value of K in the
-  range fro \code{start} to \code{end}, performing \code{N} random
-  starts eacyh time.
+  range from \code{start} to \code{end}, performing \code{N} random
+  starts each time.
 
   NOTE: start must be > 1, and the function can be slow depending on how
   complex the dataset is and the number of N iterations. 
 }
 \usage{
-  findClusterNumber(distobj, start,end, N = 100)
+  findClusterNumber(distobj, start,end, N = 100, \dots)
 }
 \arguments{
   \item{distobj}{An object of class {distance matrix}}
   \item{start}{The minimum cluster number for the range of clusters}
   \item{end}{The maximum cluster number for the range of clusters}
   \item{N}{Number of iterations}
+  \item{\dots}{Extra arguments tote \code{SillyPutty} function.}
 }
 
 \value{
