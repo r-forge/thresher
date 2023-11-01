@@ -7,7 +7,7 @@
   from N iterations.
 }
 \usage{
-RandomSillyPutty(distobj, K, N = 100, \dots)
+RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
 }
 \arguments{
   \item{distobj}{An object of class \code{\link{dist}}.}
@@ -54,7 +54,7 @@ RandomSillyPutty(distobj, K, N = 100, \dots)
 
 }
 \examples{
-data(spExample)
+data(eucdist)
 # 'eucdist' is the Euclidean distane matrix (i.e., 'dist' object) from
 # a simulated data set with 500 elements and 5 groups.
 set.seed(12)

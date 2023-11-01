@@ -52,7 +52,7 @@
 
 }
 \examples{
-data(spExample)
+data(eucdist)
 set.seed(12)
 hc  <- hclust(eucdist, "ward.D2")
 clues <- cutree(hc, k = 5)

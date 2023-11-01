@@ -43,7 +43,7 @@
   
 }
 \examples{
-data(spExample)
+data(eucdist)
 set.seed(12)
 y <- findClusterNumber(eucdist, start = 3, end = 7)
 plot(names(y), y, xlab = "K", ylab = "Mean Silhouette Width",

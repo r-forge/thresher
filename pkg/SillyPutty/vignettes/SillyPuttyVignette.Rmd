@@ -160,7 +160,7 @@ names(labels) <- rownames(tdis)
 dataset <- tdis
 eucdist <- dis
 trueGroups <- labels
-save(dataset, eucdist, trueGroups, file="spExample.rda")
+save(eucdist, file="eucdist.rda")
 ```
 
 ## Mercator Visualization
