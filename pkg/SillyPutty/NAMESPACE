@@ -1,8 +1,9 @@
-###
+#stats##
 ### NAMESPACE
 ###
 import(methods)
 importFrom("graphics", "par", "plot")
+importFrom("stats", "hclust", "cutree")
 importFrom("cluster", "silhouette")
 importFrom("Thresher", "remap")
 importFrom("oompaBase", "cyanyellow")

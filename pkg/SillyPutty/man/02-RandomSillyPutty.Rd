@@ -1,10 +1,12 @@
-\name{RandomSillyPutty}
+\name{RandomSillyPutty-class}
+\docType{class}
+\alias{RandomSillyPutty-class}
 \alias{RandomSillyPutty}
 \title{Running SillyPutty From Multiple Random Initial Clusterings}
 \description{
-  A function to perform cluster assignments on a distance matrix based on optimizing silhouette width. The cluster 
-  assignments are based on maximum and minimum silhouette width scores obtained 
-  from N iterations.
+  A function to perform cluster assignments on a distance matrix based
+  on optimizing silhouette width. The cluster assignments are based on
+  maximum and minimum silhouette width scores obtained from N iterations.
 }
 \usage{
 RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
@@ -17,20 +19,23 @@ RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
   \item{\dots}{Extra arguments tote \code{SillyPutty} function.}
 }
 
-\value{
-  An s4 object containing five elements:
-  \itemize{
-    \item{\code{MX}:} {An integer vector containing cluster assignment that had
+\section{Slots}{
+  \describe{
+    \item{\code{MX}:}{An integer vector containing cluster assignment that had
       the best silhouette width from running the iterations}
-    \item{\code{MN}:} {An integer vector containing cluster assignment that had
+    \item{\code{MN}:}{An integer vector containing cluster assignment that had
       the worst silhouette width from running the iterations}
-    \item{\code{ave}:} {An integer vector of average distribution of the 
+    \item{\code{ave}:}{An integer vector of average distribution of the 
       silhouette width scores throughout N iterations}
-    \item{\code{labels}:} {A data frame of the cluster assignments of the best 
+    \item{\code{labels}:}{A data frame of the cluster assignments of the best 
       silhouette width score.}
-    \item{\code{minItemSW}:} {A list of silhouette width scores of all N 
+    \item{\code{minItemSW}:}{A list of silhouette width scores of all N 
       iterations}
   }
+}
+\value{
+  The constructor fnuction, \code{RandomSillyPutty}, returns an object
+  of the \code{RandomSillyPutty} class.
 }
 \details{
   The \code{RandomSillyPutty} function reads and processes one distance matrix

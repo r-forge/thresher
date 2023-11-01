@@ -1,9 +1,11 @@
-\name{SillyPutty}
+\name{SillyPutty-class}
+\docType{class}
+\alias{SillyPutty-class}
 \alias{SillyPutty}
-\title{Running SillyPutty }
+\title{Running SillyPutty}
 \description{
-  A function that takes in an already existing starting location based on 
-  unsupervised clustering attempts. I.G. Kmeans or Hieriarchical cluster 
+  A function that takes in an already existing starting location based on
+  unsupervised clustering attempts. I.G. Kmeans or Hieriarchical cluster
   assignment. SillyPutty optimizes the pre-exisitng cluster assignments based on
   the best silhouette width score.
 }
@@ -20,19 +22,20 @@
   \item{verbose}{A logical vector of length one; should you output a lot
     of information while running?}
 }
-  
-\value{
-  A s4 containing four elements:
-    \itemize{
-      \item{\code{cluster}:} {A list containing the adjusted cluster 
-        assignment that had the best silhouette width.}
-      \item{\code{silhouette}:} {A dataframe containing the silhouette 
-        width scores.}
-      \item{\code{minSW}:} {A silhouette double vector that contains the 
-        positive and negative version of the minimum silhouette width value.}
-      \item{\code{meanSW}:} {A double vector that contains the average
-        silhouette width value.}
-    }
+\section{Slots}{
+  \describe{
+    \item{\code{cluster}:}{A list containing the adjusted cluster
+      assignment that had the best silhouette width.}
+    \item{\code{silhouette}:}{A dataframe containing the silhouette
+      width scores.}
+    \item{\code{minSW}:}{A silhouette double vector that contains the
+      positive and negative version of the minimum silhouette width value.}
+    \item{\code{meanSW}:}{A double vector that contains the average
+      silhouette width value.}
+  }
+}
+\value{The constructor function \code{SillyPutty}, returns an object of
+  the \code{SillyPutty} class.
 }
 \details{
   The \code{SillyPutty} function processes a pre-computed cluster assignment

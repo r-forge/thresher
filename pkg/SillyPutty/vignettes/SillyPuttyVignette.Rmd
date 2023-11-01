@@ -306,8 +306,8 @@ RangeSillyPutty <- function(distobj, start,end, N = 100, verbose = FALSE, ...) {
 overall value occurs when K = 5, which is the true number of clusters.
 
 ```{r fig06, fig.width=6, fig.height=5, fig.cap=.tag(6, "Best mean siilhouette width, by number of clusters, found with Silly Putty.")}
-y <- suppressWarnings( RangeSillyPutty(dis, start = 2, end = 12) )
-plot(names(y), y, xlab = "K", ylab = "Silhouette Width", type = "b", lwd=2,pch = 16)
+y <- suppressWarnings( RangeSillyPutty(dis, start = 2, end = 12, method = "HCSP") )
+plot(names(y), y, xlab = "K", ylab = "Silhouette Width", type = "b", lwd = 2, pch = 16)
 ```
 
 

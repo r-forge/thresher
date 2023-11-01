@@ -12,16 +12,19 @@
   complex the dataset is and the number of N iterations. 
 }
 \usage{
-  findClusterNumber(distobj, start,end, N = 100, \dots)
+  findClusterNumber(distobj, start,end, N = 100,
+                    method = c("SillyPutty", "HCSP"), \dots)
 }
 \arguments{
   \item{distobj}{An object of class {distance matrix}}
   \item{start}{The minimum cluster number for the range of clusters}
   \item{end}{The maximum cluster number for the range of clusters}
   \item{N}{Number of iterations}
+  \item{method}{whether to use the full \code{RandomSillyPutty}
+    algorithm or use the hybrid method of hierarchical clustering followed
+    by SillyPutty.}
   \item{\dots}{Extra arguments tote \code{SillyPutty} function.}
 }
-
 \value{
   List:
     \itemize{
@@ -45,7 +48,7 @@
 \examples{
 data(eucdist)
 set.seed(12)
-y <- findClusterNumber(eucdist, start = 3, end = 7)
+y <- findClusterNumber(eucdist, start = 3, end = 7, method = "HCSP")
 plot(names(y), y, xlab = "K", ylab = "Mean Silhouette Width",
      type = "b", lwd = 2, pch = 16)
 }
