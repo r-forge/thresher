@@ -123,10 +123,9 @@ object <- CancerEngine(cm, "eng", "altered")
 ```
 
 ## Simulate Data
-Now we can take a random sample of 1000 elements from the distribution that we just defined.
+Now we can take a random sample of 150 elements from the distribution that we just defined.
 ```{r simData}
-set.seed(111544)
-trueN <- 300
+trueN <- 150
 dset <- rand(object, trueN, keepall = TRUE) # contains two objects
 labels <- dset$clinical$CancerSubType # the true clusters/types
 d1 <- dset$data # the noise-free simulated data
@@ -140,7 +139,7 @@ SpecialNoise <- function(nFeat, nu = 0.1, shape = 1.02, scale = 0.05/shape) {
              tau = rgamma(nFeat, shape = shape, scale = scale),
              phi = 0)
 }
-nm <- SpecialNoise(nrow(d1))
+nm <- SpecialNoise(nrow(d1), nu = 0)
 d1 <- blur(nm, d1)
 dim(d1)
 ```
@@ -156,11 +155,11 @@ dis <- dist(tdis)   ## This step is the rate-liomiting factor. Only way to speed
 names(labels) <- rownames(tdis)
 ```
 
-```{r echo=FALSE, results='hide'}
+```{r eval=FALSE, echo=FALSE, results='hide'}
 dataset <- tdis
 eucdist <- dis
 trueGroups <- labels
-save(eucdist, file="eucdist.rda")
+save(eucdist, trueGroups, file="../data/eucdist.rda")
 ```
 
 ## Mercator Visualization
@@ -204,7 +203,7 @@ palette <- vis@palette[c(1:3, 7, 8, 6, 10, 4, 11, 5, 15, 14, 17:18, 9, 12, 16, 1
 vis@palette <- palette
 vis <- addVisualization(vis, "mds")
 vis <- addVisualization(vis, "tsne")
-mercViews(vis, "Hierarchical Clustering, Six Clusters")
+mercViews(vis, "Hierarchical Clustering, Five Clusters")
 ```
 The adjusted Rand index isn't very good, either.
 ```{r ari}
