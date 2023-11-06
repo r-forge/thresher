@@ -52,7 +52,7 @@
   Dwayne G. Tally \email{dtally110@hotmail.com}
 }
 \references{
-
+  Pending
 }
 \examples{
 data(eucdist)

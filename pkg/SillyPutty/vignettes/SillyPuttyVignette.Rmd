@@ -1,4 +1,3 @@
----
 title: "Introduction to Silly Putty"
 author: "Dwayne Tally, Zachary B. Abrams, and Kevin R. Coombes"
 date: "`r Sys.Date()`"
@@ -65,23 +64,23 @@ suppressMessages( library(mclust) ) # for adjusted rand index
 ```
 
 # Generating and Formatting Data
-We use the Umpire R package (version `packageVersion("Umpire")`) to generate more complex and realistic
-synthetic data. We then compute the Euclidean distances between elements. Finally, we use the Mercator 
-R package (version `packageVersion("Mercator")`) to visualize the data. We use the mclust R package
-(version `r packageVersion("mclust")`) to compute the adjusted Rand index, a measure of cluster quality
+We use the Umpire R package (version `r packageVersion("Umpire")`) to generate more complex and realistic
+synthetic data. We then compute the Euclidean distances between elements. Then, we use the Mercator 
+R package (version `r packageVersion("Mercator")`) to visualize the data. Finally, we use the mclust R package
+(version `r packageVersion("mclust")`) to compute the Adjusted Rand index (ARI), a measure of cluster quality
 that compares clusters to externally known truth.
 
 ## Assign Umpire Model Parameters
 The next chunk of code creates the objects that we will use to simulate a data set. We set things
-up to represent a kind of cancer with five subtypes corresponding to recurrent sets of "hits", where
+up to represent a kind of cancer with four subtypes corresponding to recurrent sets of "hits", where
 each hit can be thought of as an abstract "mutation" that affects the expression of a pathway of related
 genes.
 ```{r genData}
 set.seed(21315)
-trueK <- 5
+trueK <- 4
 ## Set up survival outcome; baseline is exponential
 sm <- SurvivalModel(baseHazard=1/5, accrual=5, followUp=1)
-## Build a CancerModel with 5 subtypes
+## Build a CancerModel with four subtypes
 nBlocks <- 20    
 cm <- CancerModel(name="cansim",
                   nPossible=nBlocks,
@@ -120,12 +119,13 @@ eng <- Engine(base)
 altered <- alterMean(eng, normalOffset, delta=0, sigma=1)
 ## Build the CancerEngine using character strings
 object <- CancerEngine(cm, "eng", "altered")
+rm(sm, nBlocks, cm, nTotalBlocks, blockSize, mu0, sigma0, rate, shape, p, w, rho, basem, eng, altered)
 ```
 
 ## Simulate Data
-Now we can take a random sample of 150 elements from the distribution that we just defined.
+Now we can take a random sample of 144 elements from the distribution that we just defined.
 ```{r simData}
-trueN <- 150
+trueN <- 144
 dset <- rand(object, trueN, keepall = TRUE) # contains two objects
 labels <- dset$clinical$CancerSubType # the true clusters/types
 d1 <- dset$data # the noise-free simulated data
@@ -192,11 +192,11 @@ we know that we started with `r trueK` clusters, we chose that as the number to 
 of hierarchical clustering with Ward's linkage rule. (We will later illustrate how to use SillyPutty
 to find the number of clusters.)
 
-The silhouette width plot in the upper left panel indicates that each of the six clusters contains
-some poorly-classified elements with negative silhouette widths. Both the multidimensional scaling
+The silhouette width plot in the upper left panel indicates that each of the clusters contains
+some poorly-classified elements, identified by their negative silhouette widths. Both the multidimensional scaling
 (MDS) plot in the lower right and the t-stochastic neighbor embedding (t-SNE) plot in the upper right
 clearly display colored points that appear to be in the wrong regions.
-```{r fig01, fig.cap = .tag(1, "Hierachical Clustering, with 5 clusters.")}
+```{r fig01, fig.cap = .tag(1, "Hierachical Clustering, with four clusters.")}
 set.seed(1987)
 vis <- Mercator(dis, "euclid", "hclust", K = trueK)
 palette <- vis@palette[c(1:3, 7, 8, 6, 10, 4, 11, 5, 15, 14, 17:18, 9, 12, 16, 19:24)]
@@ -225,10 +225,10 @@ mercViews(truebin, main = "True Cluster Types",
 ## PAM Clustering
 Here we apply PAM clustering to the same distance matrix (**Figure 3**). These results are
 clearly much worse than hierarchical clustering.
-```{r fig03, fig.cap = .tag(3, "PAM Clustering, K = 5.")}
+```{r fig03, fig.cap = .tag(3, "PAM Clustering, K = 4.")}
 pc <- pam(dis, k = trueK, diss=TRUE)
 pamc <- remapColors(vis, setClusters(vis, pc$clustering))
-mercViews(pamc, main = "PAM, K = 5", 
+mercViews(pamc, main = "PAM, K = 4", 
           tag = paste("P", 1:trueK, sep = ""))
 ari.pam <- adjustedRandIndex(labels, pamc@clusters)
 ari.pam
@@ -249,20 +249,28 @@ ari.min <- adjustedRandIndex(truebin@clusters, y2@MN)
 ari.max
 ari.min
 ```
-The adjusted rand index of the best SillyPutty clustering is 1, meaning that we  have
+The adjusted rand index of the best SillyPutty clustering is 0.98, meaning that we have almost completely
 recovered the true cluster assignments present in the data. Note that even the worst result that
-we obtained from SillyPutty has a better ARI (0.78) than either hierarchical clustering (0.53) or
-PAM (0.23). 
+we obtained from SillyPutty has a better ARI (0.61) than PAM (0.43), though not quite as good as 
+hierarchical clustering (0.71).
 
 We can now update the Mercator object using the cluster assignments defined by the best SillyPutty
 result (**Figure 4**). The silhouette width plot now says that it thinks all elements are in good
 clusters, and both the MDS and t-SNE plots support that conclusion.
-```{r fig04, fig.cap = .tag(4, "Random SillyPutty clustering,  K = 5.")}
+```{r fig04, fig.cap = .tag(4, "Random SillyPutty clustering,  K = 4.")}
 randSillyBin <- remapColors(vis, setClusters(vis, y2@MX))
-mercViews(randSillyBin, main = "SillyPutty Cluster Types, K = 5", 
+mercViews(randSillyBin, main = "SillyPutty Cluster Types, K = 4", 
           tag = paste("C", 1:trueK, sep = ""))
 ```
 
+We can also plot the cluster assignments that had the maximum and minimum silhouette widths from
+running the \code{RandokmSillyPutty} algorithm. We will use the multidimensional scaling layout and
+the color palette from the Mercator object.
+
+```{r fig05, fig.cap = .tag(5, "Cluster assignements with best and worst silhouette widths after random starts.")}
+plot(y2, randSillyBin@view[["mds"]], distobj = dis, col = randSillyBin@palette)
+summary(y2)
+```
 
 ## Combining SillyPutty With Hierarchical Clustering
 Since SillyPutty can start with any existing cluster assignments (even random ones, as we just saw),
@@ -272,10 +280,10 @@ already precomputed clustering algorithm, you have to have the cluster identitie
 algorithm and the distance matrix of the data set. SillyPutty will then recalculate the clusters from
 a starting point within the post-clustered clusters and return the best silhouette width score and
 the new cluster identities.
-```{r fig05, fig.cap = "Hierarchical Clustering + SillyPutty, K = 5."}
+```{r fig06, fig.cap = .tag(6, "Hierarchical Clustering + SillyPutty, K = 4.")}
 hierSilly <- SillyPutty(vis@clusters, dis)
 hierSillyBin <- remapColors(vis, setClusters(vis, hierSilly@cluster))
-mercViews(hierSillyBin, main = "HClust + Silly, k = 5",tag = paste("C", 1:trueK, sep = ""))
+mercViews(hierSillyBin, main = "HClust + Silly, k = 4",tag = paste("C", 1:trueK, sep = ""))
 ari.Sillyhier <- adjustedRandIndex(labels, hierSillyBin@clusters)
 ari.Sillyhier
 ```
@@ -286,27 +294,11 @@ of clusters values. Then you can use the best silhouette widths to apporximate t
 of clusters within the dataset.
 
 
-```{r RangeSillyPutty}
-# should add this to the package
-RangeSillyPutty <- function(distobj, start,end, N = 100, verbose = FALSE, ...) {
-  set.seed(110)
-  res <- list()
-  for (k in start:end){
-    #k = i
-    resMX <- RandomSillyPutty(distobj,k,N)
-    tmp <- max(resMX@ave)
-    res <- append(res,list(tmp))
-  }
-  names(res) <- start:end
-  res
-}
-```
-
 **Figure 6** shows the best silhouette width achieved with each possible number of clusters. The best
-overall value occurs when K = 5, which is the true number of clusters.
+overall value occurs when K = 4, which is the true number of clusters.
 
-```{r fig06, fig.width=6, fig.height=5, fig.cap=.tag(6, "Best mean siilhouette width, by number of clusters, found with Silly Putty.")}
-y <- suppressWarnings( RangeSillyPutty(dis, start = 2, end = 12, method = "HCSP") )
+```{r fig07, fig.width=6, fig.height=5, fig.cap=.tag(7, "Best mean siilhouette width, by number of clusters, found by combining huierarchical clustering with Silly Putty.")}
+y <- findClusterNumber(dis, start = 2, end = 12, method = "HCSP")
 plot(names(y), y, xlab = "K", ylab = "Silhouette Width", type = "b", lwd = 2, pch = 16)
 ```
 

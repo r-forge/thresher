@@ -17,4 +17,5 @@ plot(mds, pch=16, col=x@cluster, cex=2)
 set.seed(8732)
 y <- RandomSillyPutty(dis, 6, N = 100)
 
-sr <- summarizeRepeats(y)
+sr <- summary(y)
+sr

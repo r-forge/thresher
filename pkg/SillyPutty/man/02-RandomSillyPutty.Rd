@@ -2,6 +2,13 @@
 \docType{class}
 \alias{RandomSillyPutty-class}
 \alias{RandomSillyPutty}
+\alias{plot,RandomSillyPutty,matrix-method}
+\alias{plot,RandomSillyPutty,missing-method}
+\alias{summary,RandomSillyPutty-method}
+\alias{plot,RSPSummary,missing-method}
+\alias{plot,RSPSummary,matrix-method}
+
+
 \title{Running SillyPutty From Multiple Random Initial Clusterings}
 \description{
   A function to perform cluster assignments on a distance matrix based
@@ -10,13 +17,23 @@
 }
 \usage{
 RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
+\S4method{plot}{RandomSillyPutty,matrix}(x, y, distobj, col = NULL, \dots)
+\S4method{plot}{RandomSillyPutty,missing}(x, y, \dots)
+\S4method{summary}{RandomSillyPutty}(object, \dots)
+\S4method{plot}{RSPSummary,missing}(x, y, \dots)
 }
 \arguments{
   \item{distobj}{An object of class \code{\link{dist}}.}
   \item{K}{The number of clusters.}
   \item{N}{The number of iterations you want to run.}
   \item{verbose}{A logical value; should you print info while working}
-  \item{\dots}{Extra arguments tote \code{SillyPutty} function.}
+  \item{\dots}{Extra arguments to the \code{SillyPutty} function or to
+    generic methods.}
+  \item{x}{An object of the \code{RandomSillyPutty} or \code{RSPSummary}
+    class.}
+  \item{object}{An object of the \code{RandomSillyPutty} class.}
+  \item{y}{A layout matrix.}
+  \item{col}{A character vector containing color names.}
 }
 
 \section{Slots}{
@@ -31,6 +48,13 @@ RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
       silhouette width score.}
     \item{\code{minItemSW}:}{A list of silhouette width scores of all N 
       iterations}
+  }
+}
+\section{Methods}{
+  \describe{
+    \item{plot}{\code{signature(x = "RandomSillyPutty", y = "matrix")}: Plot the
+  clusterings with the maximum and minimum global silhouette widths.}
+    \item{summary}{\code{signature(x = "RandomSillyPutty")}: .}
   }
 }
 \value{
@@ -56,7 +80,7 @@ RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
 }
 
 \references{
-
+  Pending.
 }
 \examples{
 data(eucdist)

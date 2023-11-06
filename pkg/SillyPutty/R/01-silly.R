@@ -87,6 +87,12 @@ RandomSillyPutty <- function(distobj, K, N = 100, verbose = FALSE, ...) {
       minItemSW = lapply(res, function(R) R@minSW))
 }
 
+setClass("RSPSummary", contains = "RandomSillyPutty",
+         slots = c(MODE = "numeric",
+                   u = "matrix",
+                   weight = "integer",
+                   rsc = "character"))
+
 summarizeRepeats <- function(multiple) {
   lab <- multiple@labels
   ave <- multiple@ave[which(!duplicated(lab))]
@@ -97,28 +103,36 @@ summarizeRepeats <- function(multiple) {
   common <- u[which.max(weight)[1],]
   rsc <- cyanyellow(16)[cut(ave, 16, labels=FALSE)]
   rsc[which.max(weight)] <- "red"
-  list(MODE = common, MIN = multiple@MN, MAX=multiple@MX,
-       u = u, ave = ave, lab = lab, weight = weight, rsc = rsc)
+  new("RSPSummary",
+      multiple,
+      MODE = common,
+      u = u,
+      weight = weight,
+      rsc = rsc)
 }
 
-showme <- function(clue1, clue2, visual, distobj, palette = NULL) {
+setMethod("summary", signature(object="RandomSillyPutty"),  function(object, ...) {
+  summarizeRepeats(object)
+})
+
+showme <- function(clue1, clue2, visual, distobj, col = NULL) {
   NG1 <- length(unique(clue1))
   NG2 <- length(unique(clue2))
   M <- max(NG1, NG2)
-  if (is.null(palette)) {
+  if (is.null(col)) {
     if (M > 44) {
       stop("Unable to generate a palette with more than 44 colors.")
     } else if (M > 36) {
       D <- dark.colors(24)
       L <- light.colors(24)
-      palette <- sortByHue(c(D,L))
-      names(palette) <- colorNames(palette)
-      palette <-palette[!duplicated(palette)]
+      col <- sortByHue(c(D,L))
+      names(col) <- colorNames(col)
+      col <-col[!duplicated(col)]
     } else {
-      palette <- palette36.colors(M)
+      col <- palette36.colors(M)
     }
   } else {
-    if (M > length(palette)) {
+    if (M > length(col)) {
       stop("Palette does not contain enough colors.")
     } # else, use what you've got
   }
@@ -126,9 +140,29 @@ showme <- function(clue1, clue2, visual, distobj, palette = NULL) {
   n2 <- deparse(substitute(clue2))
   opar <- par(mfcol=c(2, 2))
   on.exit(par(opar))
-  plot(visual, pch=16, col=palette[clue1], cex=1.7, main=n1)
-  plot(silhouette(clue1, dist = distobj), col=palette[1:NG1])
-  plot(visual, pch=16, col=palette[clue2], cex=1.7, main=n2)
-  plot(silhouette(clue2, dist = distobj), col=palette[1:NG2])
+  plot(visual, pch=16, col=col[clue1], cex=1.7, main=n1)
+  plot(silhouette(clue1, dist = distobj), col=col[1:NG1])
+  plot(visual, pch=16, col=col[clue2], cex=1.7, main=n2)
+  plot(silhouette(clue2, dist = distobj), col=col[1:NG2])
 }
 
+setMethod("plot", c("RandomSillyPutty", "matrix"), function(x, y, distobj, col = NULL, ...) {
+  showme(x@MX, x@MN, y, distobj, col)
+  invisible(x)
+})
+
+setMethod("plot", c("RSPSummary", "matrix"), function(x, y, distobj, col = NULL, ...) {
+  showme(x@MX, x@MODE, y, distobj, col)
+  invisible(x)
+})
+
+setMethod("plot", c("RSPSummary", "missing"), function(x, y, ...) {
+  plot(x@ave, x@weight, pch=16,
+       xlab="Average Silhouette Width", ylab="Frequency")
+  invisible(x)
+})
+
+setMethod("show", "RSPSummary", function(object) {
+  cat("Mean Silhouette Widths:\n", file = stdout())
+  print(summary(object@ave))
+})
