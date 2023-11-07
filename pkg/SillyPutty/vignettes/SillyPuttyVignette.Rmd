@@ -119,7 +119,7 @@ eng <- Engine(base)
 altered <- alterMean(eng, normalOffset, delta=0, sigma=1)
 ## Build the CancerEngine using character strings
 object <- CancerEngine(cm, "eng", "altered")
-rm(sm, nBlocks, cm, nTotalBlocks, blockSize, mu0, sigma0, rate, shape, p, w, rho, basem, eng, altered)
+rm(sm, nBlocks, cm, nTotalBlocks, blockSize, mu0, sigma0, rate, shape, p, w, rho, base, eng, altered)
 ```
 
 ## Simulate Data

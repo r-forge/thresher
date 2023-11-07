@@ -9,29 +9,26 @@
   starts each time.
 
   NOTE: start must be > 1, and the function can be slow depending on how
-  complex the dataset is and the number of N iterations. 
+  complex the dataset is and the number of N iterations.
 }
 \usage{
   findClusterNumber(distobj, start,end, N = 100,
                     method = c("SillyPutty", "HCSP"), \dots)
 }
 \arguments{
-  \item{distobj}{An object of class {distance matrix}}
+  \item{distobj}{An object of class \code{dist} representing a distance matrix.}
   \item{start}{The minimum cluster number for the range of clusters}
   \item{end}{The maximum cluster number for the range of clusters}
   \item{N}{Number of iterations}
   \item{method}{whether to use the full \code{RandomSillyPutty}
     algorithm or use the hybrid method of hierarchical clustering followed
     by SillyPutty.}
-  \item{\dots}{Extra arguments tote \code{SillyPutty} function.}
+  \item{\dots}{Extra arguments to the \code{SillyPutty} function.}
 }
 \value{
-  List:
-    \itemize{
-      \item{\code{list:} {A list containing the maximum silhouette width values per K clusters.}
-      }
-    }
-  }
+  A list containing the maximum silhouette width values per K clusters for
+  each K in the range of possible cluster numbers.
+}
 \details{
   The \code{findClusterNumber} function processes one distance matrix at
   a time, through N iterations. It returns a list. The \code{list} is a
