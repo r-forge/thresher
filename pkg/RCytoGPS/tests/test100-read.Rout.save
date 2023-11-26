@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.3.2 (2023-10-31 ucrt) -- "Eye Holes"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -25,10 +25,6 @@ Type 'q()' to quit R.
 > ## Read one explicitly named JSON file
 > temp <- readLGF("CytoGPS_Result1.json", folder = sf)
 Reading 1 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
-
-C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
-
-CytoGPS_Result1.json 
 
 > class(temp)
 [1] "list"
@@ -62,10 +58,6 @@ CytoGPS_Result1
 > ## Read all (well, two) JSON files fom a folder
 > temp <- readLGF(folder = sf)
 Reading 2 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
-
-C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
-
-CytoGPS_Result1.json CytoGPS_Result2.json 
 
 > class(temp)
 [1] "list"
@@ -118,27 +110,15 @@ CytoGPS_Result1 CytoGPS_Result2
 > temp <- readLGF( "CytoGPS_Result1.json")
 Reading 1 file(s) from '.'.
 
-C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
-
-CytoGPS_Result1.json 
-
 > temp <- readLGF( "CytoGPS_Result1.json", folder = ".")
 Reading 1 file(s) from '.'.
-
-C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
-
-CytoGPS_Result1.json 
 
 > setwd("..")
 > temp <- readLGF(folder = "JSONfiles")
 Reading 2 file(s) from 'JSONfiles'.
 
-C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles
-
-CytoGPS_Result1.json CytoGPS_Result2.json 
-
 > setwd(home)
 > 
 > proc.time()
    user  system elapsed 
-   0.34    0.03    0.36 
+   0.35    0.07    0.43 
