@@ -22,9 +22,9 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
 \value{
   A list containing five elements:
   \itemize{
-    \item{\code{source}:} {A character vector containing the names of the
+    \item{\code{source}:}{A character vector containing the names of the
       JSON files from which data was read.}
-    \item{\code{raw}:} {A list of lists, one per JSON source file. Each
+    \item{\code{raw}:}{A list of lists, one per JSON source file. Each
       internal list contains two elements, \code{Status} and
       \code{LGF}. \code{Status} is a data frame with one row per
       karyotype in the input file, describing the results of CytoGPS
@@ -37,14 +37,14 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
       rows are clones from the successfully processed input karyotypes;
       each karyotype can have multiple clones. Entries are zero or one
       indicating the absence or presence of an abnormality.}
-    \item{\code{frequency}:} {A data frame, where the rows are cytobands
+    \item{\code{frequency}:}{A data frame, where the rows are cytobands
       and the columns are Loss, Gain, and Fusion, with three columns per
       input file. Entries are the fraction of karyotype clones with
       that abnormality.}
-    \item{\code{size}:} {An integer vector containing the total number of
+    \item{\code{size}:}{An integer vector containing the total number of
       clones per input file. These values can be used to turn fractions
       back into counts.}
-    \item{\code{CL}:} {A data frame with one row per cytoband detailing
+    \item{\code{CL}:}{A data frame with one row per cytoband detailing
       the chromosomal location and (grayscale) color of the band
       produced by Giemsa staining.}
   }
