@@ -37,7 +37,7 @@ CytobandData(data, info, genome = NULL)
 }
 \section{Methods}{
   \describe{
-    \item{summary:}{\code{signature(object = "RCytoGPS")}}{
+    \item{summary:}{\code{signature(object = "RCytoGPS")}
       Returns a summary of the \code{DATA} slot.
     }
   }

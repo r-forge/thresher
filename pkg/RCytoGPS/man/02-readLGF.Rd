@@ -21,7 +21,7 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
 
 \value{
   A list containing five elements:
-  \itemize{
+
     \item{\code{source}:}{A character vector containing the names of the
       JSON files from which data was read.}
     \item{\code{raw}:}{A list of lists, one per JSON source file. Each
@@ -47,7 +47,7 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
     \item{\code{CL}:}{A data frame with one row per cytoband detailing
       the chromosomal location and (grayscale) color of the band
       produced by Giemsa staining.}
-  }
+
 }
 \details{
 

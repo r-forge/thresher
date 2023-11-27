@@ -41,7 +41,7 @@ Chromosome(I, res = 2500, maxbase = 250000000)
 }
 \section{Methods}{
   \describe{
-    \item{image:}{\code{signature(object = "RCytoGPS")}}{
+    \item{image:}{\code{signature(object = "RCytoGPS")}
       Creates an image of the chromosme, with bands colored according
       to Giemsa staining.
     }
