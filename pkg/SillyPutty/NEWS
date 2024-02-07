@@ -1,10 +1,45 @@
 			Dear Emacs, please make this -*-Text-*- mode!
 	**************************************************
 	*						 *
-	*	       0.0 SERIES NEWS			 *
+	*	       0.4 SERIES NEWS			 *
 	*						 *
 	**************************************************
 
+
+		CHANGES IN R VERSION 0.4.2
+
+UPDATES
+
+    o	Brought the "NEWS" file up-to-date.
+
+		CHANGES IN R VERSION 0.4.0
+
+NEW FEATURES
+
+    o	Created and exported a function, "HCSP", that implements the
+        combination of hierarchical clustering with Ward's linkage
+        followed by SillyPutty, which turned out to be both the fastest
+        and most accurate method in our simulations.
+
+		CHANGES IN R VERSION 0.3.0
+
+UPDATES
+
+    o	Expanded and improved man pags an vignettes. First version
+        that passed "R CMD check" withut errors or warnings.
+
+		CHANGES IN R VERSION 0.2.2
+
+UPDATES
+
+    o	Added a "three dot" pass-through argument to
+        `findLCusterNumber' to control the SillyPutty algorithm.
+
+		CHANGES IN R VERSION 0.2.0
+
+NEW FEATURES
+
+    o	Exported the 'showme''findClusterNumber' function.
 
 		CHANGES IN R VERSION 0.1.1
 
