@@ -3,7 +3,7 @@
 ###
 import(methods)
 importFrom("graphics", "par", "plot")
-importFrom("stats", "hclust", "cutree")
+importFrom("stats", "hclust", "cutree", "dist")
 importFrom("cluster", "silhouette")
 importFrom("Thresher", "remap")
 importFrom("oompaBase", "cyanyellow")
@@ -18,4 +18,4 @@ exportClasses("RandomSillyPutty")
 export("RandomSillyPutty")
 exportMethods("plot", "summary")
 
-export("findClusterNumber")
+export("findClusterNumber", "HCSP")
