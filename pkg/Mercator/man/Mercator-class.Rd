@@ -88,8 +88,8 @@ getClusters(DV)
       plotting a graph view, you can use an optional \code{layout}
       parameter to select a specific layout by name.
     }
-    \item{barplot{height, main = '', sub = NULL, border = NA, space =
-	0, ...}}{
+    \item{barplot(height, main = '', sub = NULL, border = NA, space =
+	0, ...)}{
       Produce a (colored) barplot of the silhouette widths for elements
       clustered in this class. Arguments are as described in te base
       function \code{\link{barplot}}. 
@@ -106,18 +106,18 @@ getClusters(DV)
       otherwise the same as the \code{\link{smoothScatter}} function,
       execpt that the default color ramp is \code{topo.colors}.
     }
-    \item{hist:}{\code{signature(object = "Mercator")}}{
+    \item{hist(x, breaks=123, ...):}{
       Produce a histogram of distances calculated in the dissimilarity 
       matrix generated in the \code{Mercator} object.
     }
-    \item{summary:}{\code{signature(object = "Mercator")}}{
+    \item{summary(object, ...):}{
       Returns the chosen distance metric, dimensions of the distance 
       matrix, and available, calculated visualizations in this object.
     }
-    \item{dim:}{\code{signature(object = "Mercator")}}{
+    \item{dim(x):}{
       Returns the dimensions of the distance matrix of this object.
     }
-    \item{[:}{\code{signature(object = "Mercator")}}{
+    \item{[:}{
       Subsets the distance matrix of this object.
     }
   }

@@ -14,14 +14,14 @@
 data(savedSims)
 }
 \format{
-  \enumerate{
-  \item \code{sigma}{: A list of length five; each entry is a covariance matrix
+  \describe{
+  \item{\code{sigma}}{: A list of length five; each entry is a covariance matrix
     used to simulate data.}
-  \item \code{savedSims}{: A list of length five; each entry is a
+  \item{\code{savedSims}}{: A list of length five; each entry is a
     \code{\link{SimThresher}} object obtained by simulating data from
     one of the covariance matrices and running the \code{\link{Thresher}}
     algorithm.}
-  \item \code{savedReap}{: A list of length five; each entry is a
+  \item{\code{savedReap}}{: A list of length five; each entry is a
     \code{\link{Reaper}} object obtained by applying the \code{Reaper}
     function.}
   }

@@ -18,8 +18,7 @@ R-package within Mercator.
 threshLGF(object, cutoff = 0)
 }
 \arguments{
-  \item{object}{An object of class {BinaryMatrix}
-  }
+  \item{object}{An object of class \code{BinaryMatrix}}
   \item{cutoff}{The value of \code{delta} set to demarcate an 
   uninformative feature. Features with a value greater than the 
   cutoff will be kept.
