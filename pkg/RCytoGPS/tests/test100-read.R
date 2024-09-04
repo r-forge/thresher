@@ -4,7 +4,7 @@ sf <- system.file("Examples/JSONfiles", package = "RCytoGPS")
 dir(sf)
 
 ## Read one explicitly named JSON file
-temp <- readLGF("CytoGPS_Result1.json", folder = sf)
+temp <- readLGF("CytoGPS_Result1.json", folder = sf, verbose = FALSE)
 class(temp)
 names(temp)
 temp$source
@@ -16,7 +16,7 @@ summary(temp$frequency)
 temp$size
 
 ## Read all (well, two) JSON files fom a folder
-temp <- readLGF(folder = sf)
+temp <- readLGF(folder = sf, verbose = FALSE)
 class(temp)
 names(temp)
 temp$source

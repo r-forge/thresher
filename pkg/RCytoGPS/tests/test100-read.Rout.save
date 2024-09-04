@@ -1,7 +1,7 @@
 
-R version 4.3.2 (2023-10-31 ucrt) -- "Eye Holes"
-Copyright (C) 2023 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 4.4.1 (2024-06-14 ucrt) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -23,9 +23,7 @@ Type 'q()' to quit R.
 [4] "input2.txt"          
 > 
 > ## Read one explicitly named JSON file
-> temp <- readLGF("CytoGPS_Result1.json", folder = sf)
-Reading 1 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
-
+> temp <- readLGF("CytoGPS_Result1.json", folder = sf, verbose = FALSE)
 > class(temp)
 [1] "list"
 > names(temp)
@@ -56,9 +54,7 @@ CytoGPS_Result1
               6 
 > 
 > ## Read all (well, two) JSON files fom a folder
-> temp <- readLGF(folder = sf)
-Reading 2 file(s) from 'C:/Users/KRC/Desktop/RForge/thresher/pkg/RCytoGPS.Rcheck/RCytoGPS/Examples/JSONfiles'.
-
+> temp <- readLGF(folder = sf, verbose = FALSE)
 > class(temp)
 [1] "list"
 > names(temp)
@@ -121,4 +117,4 @@ Reading 2 file(s) from 'JSONfiles'.
 > 
 > proc.time()
    user  system elapsed 
-   0.35    0.07    0.43 
+   0.31    0.01    0.35 
