@@ -35,7 +35,7 @@
 \arguments{
   \item{stepLength}{A numeric vector}
   \item{method}{A character string describing a method supported by the
-    \code{\link{detectChangePointBatch}} function in the \code{cpm}
+    \code{\link[cpm]{detectChangePointBatch}} function in the \code{cpm}
     package.}
   \item{extra}{Just ignore this. Don't use it. It's a hack to avoid
     having to maintain two different versions of the same code.}
@@ -44,7 +44,7 @@
   The \code{agDimTwiceMean} function implements a simple and naive rule:
   a step is considered long if it as least twice the mean length.
 
-  The \code{agDimKmeans} uses the \code{\link{kmeans}} algorithm with
+  The \code{agDimKmeans} uses the \code{\link[stats]{kmeans}} algorithm with
   \eqn{k=2} to divide the step lengths into two classes.  Starting
   centers for the groups are taken to be the minimum and maximum
   values.
@@ -54,7 +54,7 @@
   considered "short".
 
   The \code{agDimSpectral} applies spectral clustering (as implemented
-  by the \code{\link{specc}} function from the \code{kernlab} package)
+  by the \code{\link[kernlab]{specc}} function from the \code{kernlab} package)
   to divide the steps lengths into two groups.
 
   The \code{agDimTtest} and \code{agDimTtest2} functions implement two
@@ -70,10 +70,10 @@
   The novel method just described can also be viewed as a way to detect
   a particular kind of change point.  So, we also provide the
   \code{agDimCPT} function that uses the changepoint detection
-  algorithm implement by the \code{\link{cpt.mean}} function in the
+  algorithm implement by the \code{\link[changepoint]{cpt.mean}} function in the
   \code{changepoint} package.  More generally, the \code{makeAgCpmFun}
   allows you to use any of the changepoint models implemented as part
-  of the \code{\link{detectChangePointBatch}} function in the \code{cpm}
+  of the \code{\link[cpm]{detectChangePointBatch}} function in the \code{cpm}
   package.
 }
 \value{
@@ -105,9 +105,9 @@
   compute the number of significant principal components based on the
   \code{\link{AuerGervini}} approach.  Several of these functions are
   wrappers around functions defined in other packages, including
-  \code{\link{specc}} in the \code{kernlab} package,
-  \code{\link{cpt.mean}} in the \code{changepoint} package, and
-  \code{\link{detectChangePointBatch}} in the \code{cpm} package.
+  \code{\link[kernlab]{specc}} in the \code{kernlab} package,
+  \code{\link[changepoint]{cpt.mean}} in the \code{changepoint} package, and
+  \code{\link[cpm]{detectChangePointBatch}} in the \code{cpm} package.
 }
 \examples{
 # simulate variances

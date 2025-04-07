@@ -17,7 +17,7 @@ bsDimension(lambda, FUZZ = 0.005)
   \item{n}{An integer; the total number of principal components.}
   \item{lambda}{The set of variances from each component from a principal
     components analysis.  These are assumed to be already sorted in
-    decreasing order. You can also supply a \code{\link{SamplePCA}}
+    decreasing order. You can also supply a \code{\link[ClassDiscovery]{SamplePCA}}
     object, and the variances will be automatically extracted.}
   \item{FUZZ}{A real number; anything smaller than \code{FUZZ} is
     assumed to equal zero for all practical purposes.}

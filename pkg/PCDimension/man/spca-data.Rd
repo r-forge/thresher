@@ -4,7 +4,7 @@
 \docType{data}
 \title{Sample PCA Dataset}
 \description{
-  This data set contains an object of the class \code{\link{SamplePCA}}.
+  This data set contains an object of the class \code{\link[ClassDiscovery]{SamplePCA}}.
   This object results from performing a principal components analysis on
   a simulated data set.
 }
@@ -20,7 +20,7 @@ data(spca)
   which depends on the \code{PCDimension} package.
 }
 \seealso{
-  The ClassDiscovery package contains the \code{\link{SamplePCA}}
+  The ClassDiscovery package contains the \code{\link[ClassDiscovery]{SamplePCA}}
   class and functions.
 }
 \keyword{datasets}
