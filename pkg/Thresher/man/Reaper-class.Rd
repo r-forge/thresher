@@ -36,9 +36,9 @@ Reaper(thresher, useLoadings = FALSE, cutoff = 0.3,
   \item{cutoff}{A real number; what length loading vector should be used
     to separate outliers from significant contributers.}
   \item{metric}{A character string containing the name of a clustering metric
-    recognized by either \code{\link{dist}} or \code{\link{distanceMatrix}}.} 
+    recognized by either \code{\link[stats]{dist}} or \code{\link[ClassDiscovery]{distanceMatrix}}.} 
   \item{linkage}{A character string containing the name of a linkage rule
-    recognized by \code{\link{hclust}}.}
+    recognized by \code{\link[stats]{hclust}}.}
   \item{maxSampleGroups}{An integer; the maximum number of sample groups
     to be indicated by color in plots of the object.}
   \item{\dots}{Additional arguments to be passed to the
@@ -137,7 +137,7 @@ Class \code{"\linkS4class{Thresher}"}, directly.
  Kevin R. Coombes <krc@silicovore.com>, Min Wang.
 }
 \seealso{
-  \code{\link{PCDimension}}, \code{\link{SignalSet}}.
+  \code{\link[PCDimension]{PCDimension}}, \code{\link{SignalSet}}.
 }
 \examples{
 # Simulate  a data set with some structure

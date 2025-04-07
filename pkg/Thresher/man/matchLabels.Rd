@@ -35,7 +35,7 @@ remap(fix, vary)
     clustering.}
   \item{labels}{A factor (or character vector) of class labels for the
     objects in the \code{data} matrix.}
-  \item{linkage}{A linkage rule accepted by the \code{\link{hclust}}
+  \item{linkage}{A linkage rule accepted by the \code{\link[stats]{hclust}}
     function.}
   \item{fix}{A vector of cluater assignments.}
   \item{vary}{A vector of cluater assignments.}
@@ -106,10 +106,10 @@ remap(fix, vary)
   to supply a list of distance metrics instead of relying on the
   hard-coded list internally.}
 \seealso{
-  Hierarchical clustering is implemented in the \code{\link{hclust}}
+  Hierarchical clustering is implemented in the \code{\link[stats]{hclust}}
   function.  We use the extended set of distance metrics provided by the
-  \code{\link{distanceMatrix}} function from the ClassDiscovery package.
-  This set includes all of the  metrics from the \code{\link{dist}}
+  \code{\link[ClassDiscovery]{distanceMatrix}} function from the ClassDiscovery package.
+  This set includes all of the  metrics from the \code{\link[stats]{dist}}
   funciton. 
 }
 \examples{

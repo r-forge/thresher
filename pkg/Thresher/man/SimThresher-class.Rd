@@ -24,7 +24,7 @@ SimThresher(ss, nSample, nm = deparse(substitute(ss)), rho = NULL,
   \item{rho}{A numeric vector; the correlation between different
     variables. If NULL, then these are obtained from the covariance
     matrix.}
-  \item{agfun}{A function used by the \code{\link{AuerGervini}}
+  \item{agfun}{A function used by the \code{\link[PCDimension]{AuerGervini}}
     function to determine the number of principal components.}
   \item{\dots}{Parameters to be passed to the \code{\link{Thresher}}
     constructor.}

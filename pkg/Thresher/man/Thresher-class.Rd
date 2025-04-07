@@ -34,16 +34,16 @@ Thresher(data, nm = deparse(substitute(data)),
   \item{data}{A data matrix.}
   \item{nm}{A character string; the name of this object.}
   \item{metric}{A character string containing the name of a clustering metric
-    recognized by either \code{\link{dist}} or
-    \code{\link{distanceMatrix}}.} 
+    recognized by either \code{\link[stats]{dist}} or
+    \code{\link[ClassDiscovery]{distanceMatrix}}.} 
   \item{linkage}{A character string containing the name of a linkage rule
-    recognized by \code{\link{hclust}}.}
+    recognized by \code{\link[stats]{hclust}}.}
   \item{method}{A character string describing the algorthim used from the
     \code{PCDimension} package to compute the number of
     significant components.}
   \item{scale}{A logical value; should the data be scaled before use?}
   \item{agfun}{A function that will be accepted by the
-    \code{\link{AuerGervini}} function in the
+    \code{\link[PCDimension]{AuerGervini}} function in the
     \code{PCDimension} package.}
 }
 \section{Slots}{
@@ -108,7 +108,7 @@ Thresher(data, nm = deparse(substitute(data)),
   default, though this can be overridden with the \code{scale}
   parameter) standardizes the data columns. It then performs a principal
   components analysis, and uses the Auer-Gervini method, as automated in
-  the \code{\link{PCDimension}} package, to determine the number, \code{D}, of
+  the \code{\link[PCDimension]{PCDimension}} package, to determine the number, \code{D}, of
   statistically significant principal components. For each
   column-feature, it computes and remembers the length of its loading
   vector in D-dimensional space. (In case the Auer-Gervini method finds
@@ -138,7 +138,7 @@ Thresher(data, nm = deparse(substitute(data)),
 Kevin R. Coombes <krc@silicovore.com>, Min Wang.
 }
 \seealso{
-  \code{\link{Thresher}}, \code{\link{Reaper-class}}, \code{\link{AuerGervini-class}}
+  \code{\link{Thresher}}, \code{\link{Reaper-class}}, \code{\link[PCDimension]{AuerGervini-class}}
 }
 \examples{
 set.seed(3928270)
