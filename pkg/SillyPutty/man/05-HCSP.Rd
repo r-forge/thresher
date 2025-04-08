@@ -14,7 +14,7 @@
 \arguments{
   \item{dis}{An object of class \code{dist} representing a distance matrix.}
   \item{K}{The desired number of clusters.}
-  \item{method}{Sane as the corresponding argument for \code{\link{hclust}}.
+  \item{method}{Sane as the corresponding argument for \code{\link[stats]{hclust}}.
     We recommend not changing it.}
   \item{\dots}{Extra arguments to the \code{SillyPutty} function.}
 }

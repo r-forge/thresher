@@ -1,13 +1,14 @@
 Package: SillyPutty
-Version: 0.4.1
-Date: 2024-02-07
+Version: 0.4.2
+Date: 2025-04-07
 Title: Silly Putty Clustering
-Author: Kevin R. Coombes, Dwayne Tally
-Maintainer: Kevin R. Coombes <krc@silicovore.com>
+Authors@R: c(person(given = "Dwayne", family = "Tally", role = "aut"),
+	    person(given = c("Kevin", "R."), family = "Coombes",
+                   role = c("aut", "cre"), email = "krc@silicovore.com"))
 Description: Implements a simple, novel clustering algorithm based on
   optimizing the silhouette width. See <doi:10.1101/2023.11.07.566055>
   for details.
-Depends: R (>= 3.5)
+Depends: R (>= 4.4)
 Imports: methods, cluster, Thresher, oompaBase, Polychrome (>= 1.2)
 Suggests: knitr, rmarkdown, Mercator, Umpire, mclust
 VignetteBuilder: knitr

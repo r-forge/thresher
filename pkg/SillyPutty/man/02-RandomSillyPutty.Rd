@@ -23,7 +23,7 @@ RandomSillyPutty(distobj, K, N = 100, verbose = FALSE, \dots)
 \S4method{plot}{RSPSummary,missing}(x, y, \dots)
 }
 \arguments{
-  \item{distobj}{An object of class \code{\link{dist}}.}
+  \item{distobj}{An object of class \code{\link[stats]{dist}}.}
   \item{K}{The number of clusters.}
   \item{N}{The number of iterations you want to run.}
   \item{verbose}{A logical value; should you print info while working}
