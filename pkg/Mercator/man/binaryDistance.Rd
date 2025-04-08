@@ -31,7 +31,7 @@ binaryDistance(X, metric)
   }
 }
 \value{
-Returns an object of class \code{\link{dist}} corresponding to the distance
+Returns an object of class \code{\link[stats]{dist}} corresponding to the distance
 \code{metric} provided.
 }
 \details{
@@ -67,7 +67,7 @@ are explicitly offered for use on matrices of binary vectors, some metrics may
 return useful distances when applied to non-binary matrices.
 }
 \seealso{
-  This set includes all of the  metrics from the \code{\link{dist}} function. 
+  This set includes all of the  metrics from the \code{\link[stats]{dist}} function. 
 }
 \examples{
 my.matrix <- matrix(rbinom(50*100, 1, 0.15), ncol=50)

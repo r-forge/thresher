@@ -57,15 +57,15 @@ BinaryMatrix(binmat, columnInfo, rowInfo)
       \item{\code{[]}:}{Subsetting by \code{[]} returns a subsetted binary matrix, 
         including subsetted row and column names. Calling \code{@history} will 
         return the history "Subsetted."}
-      \item{\code{\link{dim}}:}{returns the dimensions of the \code{@binmat} component 
+      \item{\code{\link[base]{dim}}:}{returns the dimensions of the \code{@binmat} component 
 	of the \code{binaryMatrix} object.}
-      \item{\code{\link{print}}:}{Shows the first ten rows and columns
+      \item{\code{\link[base]{print}}:}{Shows the first ten rows and columns
 	of the \code{@binmat} component.}
-      \item{\code{\link{show}}:}{Shows the first ten rows and columns
+      \item{\code{\link[methods]{show}}:}{Shows the first ten rows and columns
 	of the \code{@binmat} component.}
-      \item{\code{\link{summary}}:}{For a given \code{BinaryMatrix}, returns object class,
+      \item{\code{\link[base]{summary}}:}{For a given \code{BinaryMatrix}, returns object class,
           dimensions of the \code{@binmat} component, and \code{@history}.}
-      \item{\code{\link{t}}:}{Transposes the \code{@binmat} and its associated \code{rowInfo}
+      \item{\code{\link[base]{t}}:}{Transposes the \code{@binmat} and its associated \code{rowInfo}
           and \code{columnInfo}. Calling \code{@history} will return the history 
           "Subsetted."}
   }

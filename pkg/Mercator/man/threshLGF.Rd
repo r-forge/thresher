@@ -10,8 +10,9 @@ The \code{threshLGF} function produces an object of class
 \code{ThreshedBinaryMatrix} from threshing on an object of class 
 \code{\link{BinaryMatrix}}. 
 
-The function \code{\link{threshLGF}} and the \code{\link{ThreshedBinaryMatrix}} 
-object can be used to access the functionality of the \code{\link{Thresher}} 
+The function \code{\link{threshLGF}} and the
+\code{\link{ThreshedBinaryMatrix}} object can be used to access the
+functionality of the \code{\link[Thresher]{Thresher}}  
 R-package within Mercator.
 }
 \usage{
@@ -25,7 +26,7 @@ threshLGF(object, cutoff = 0)
   }
 }
 \details{
-  The \code{\link{Thresher}} R-package provides a variety of functionalities
+  The \code{\link[Thresher]{Thresher}} R-package provides a variety of functionalities
   for data filtering and the identification of and reduction to "informative" features.
   It performs clustering using a combination of outlier detection, principal
   component analysis, and von Mises Fisher mixture models. By identifying 
@@ -43,10 +44,10 @@ threshLGF(object, cutoff = 0)
 \section{Additional Slots}{
   \describe{
     \item{\code{thresher}:  }{Returns the functions of the \code{Thresher} 
-    object class of the \code{\link{Thresher}} R-package.
+    object class of the \code{\link[Thresher]{Thresher}} R-package.
     }
     \item{\code{reaper}: }{Returns the functions of the \code{Reaper} 
-    object class of the \code{\link{Thresher}} R-package.
+    object class of the \code{\link[Thresher]{Thresher}} R-package.
     }
   }
 }
@@ -57,7 +58,7 @@ determining the number of clusters while removing outliers. BMC bioinformatics,
 }
 \author{Kevin R. Coombes <krc@silicovore.com>, Caitlin E. Coombes}
 \note{
-The \code{\link{Thresher}} R-package applies the Auer-Gervini statistic 
+The \code{\link[Thresher]{Thresher}} R-package applies the Auer-Gervini statistic 
 for principal component analysis, outlier detection, and identification 
 of uninformative features on a \code{matrix} of class \code{integer} or 
 \code{numeric}.

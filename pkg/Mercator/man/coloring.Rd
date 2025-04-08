@@ -44,7 +44,8 @@ recluster(DV, K)
   The functions \code{setClusters} and \code{remapColors} solve this problem
   in the context of \code{Mercator} objects. They accaomplish this task
   using the greedy algorithm implemented and described in the
-  \code{\link{remap}} function in the \code{\link{Thresher}} package.
+  \code{\link[Thresher]{remap}} function in the
+  \code{\link[Thresher]{Thresher}} package. 
 }
 \value{
 Both \code{setClusters} and \code{remapColors} return an object of class
@@ -57,7 +58,7 @@ The \code{recolor} function is currently an alias for
 alias will likely be removed in the next version of the package.
 }
 \author{Kevin R. Coombes <krc@silicovore.com>}
-\seealso{ \code{\link{remap}} }
+\seealso{ \code{\link[Thresher]{remap}} }
 \examples{
 #Form a BinaryMatrix
 data("iris")
