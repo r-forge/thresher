@@ -31,7 +31,7 @@ preclean(x, targetColumns, dirt)
   lexer and parser. As a result, many karyotypes are rejected by the
   system.
 
-  The \code{preclean} function uses \code{\link{gsub}} to delete a list
+  The \code{preclean} function uses \code{\link[base]{gsub}} to delete a list
   of known (local) comments from all karyotypes, making it more likley
   that they will be successfully processed by the lexer and parser. We
   provide an example list derived from experience at our own

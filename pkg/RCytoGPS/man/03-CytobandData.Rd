@@ -54,7 +54,7 @@ CytobandData(data, info, genome = NULL)
   cytoband-resolution summaries of the frequencies of
   abnormalities. These summaries can be used to create
   \code{CytobandData} objects, which can be visualized using the
-  \code{\link{barplot}} and \code{\link{image}} methods.
+  \code{\link[graphics]{barplot}} and \code{\link[graphics]{image}} methods.
 }
 \value{
  The \code{CytobandData} conxtructor returns an object of the
