@@ -13,6 +13,10 @@ shrinkView <- function(name, object, i) {
     tis$Y <- tis$Y[i,]
     tis
   }
+  shrinkUMAP <- function(U, i) {
+    U$Y <- U$layout[i,]
+    U
+  }
   snipTree <- function(hc, i) {
     dend <- as.dendrogram(hc)
     L <- labels(dend)
@@ -31,6 +35,7 @@ shrinkView <- function(name, object, i) {
   switch(name,
          mds = object[i,],
          tsne = shrinkTSNE(object, i),
+         umap = shrinkUMAP(object, i),
          hclust = snipTree(object, i),
          heat = object
          )
