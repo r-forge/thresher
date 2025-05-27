@@ -1,6 +1,6 @@
 Package: Mercator
 Version: 1.1.7
-Date: 2025-05-15
+Date: 2025-05-27
 Title: Clustering and Visualizing Distance Matrices
 Authors@R: c(person(given = c("Kevin", "R."),
                     family = "Coombes",
