@@ -11,8 +11,12 @@ output <- read.csv(file.path(sf, "Altered.StartKaryotypes.csv"))[, -1]
 
 myclean <- preclean(input, 4:5, bad)
 
-summary(output[,4] == myclean[,4])
-summary(output[,5] == myclean[,5])
+C4 <- summary(output[,4] == myclean[,4])
+names(C4) <- gsub("NA's", "NAs", names(C4))
+C4
+C5 <- summary(output[,5] == myclean[,5])
+names(C5) <- gsub("NA's", "NAs", names(C5))
+C5
 
 if(FALSE) {
   foo <- data.frame(IN = input[,4], OUT = output[,4], MY = myclean[,4])[output[,4] != myclean[,4],]

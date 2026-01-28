@@ -1,7 +1,7 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 4.5.2 (2025-10-31 ucrt) -- "[Not] Part in a Rumble"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -33,11 +33,15 @@ Type 'q()' to quit R.
 > 
 > myclean <- preclean(input, 4:5, bad)
 > 
-> summary(output[,4] == myclean[,4])
-   Mode   FALSE    TRUE    NA's 
+> C4 <- summary(output[,4] == myclean[,4])
+> names(C4) <- gsub("NA's", "NAs", names(C4))
+> C4
+   Mode   FALSE    TRUE     NAs 
 logical     123     430       2 
-> summary(output[,5] == myclean[,5])
-   Mode   FALSE    TRUE    NA's 
+> C5 <- summary(output[,5] == myclean[,5])
+> names(C5) <- gsub("NA's", "NAs", names(C5))
+> C5
+   Mode   FALSE    TRUE     NAs 
 logical     116     437       2 
 > 
 > if(FALSE) {
@@ -47,4 +51,4 @@ logical     116     437       2
 > 
 > proc.time()
    user  system elapsed 
-   0.18    0.03    0.20 
+   0.07    0.07    0.15 

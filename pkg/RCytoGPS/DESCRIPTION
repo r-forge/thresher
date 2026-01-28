@@ -1,6 +1,6 @@
 Package: RCytoGPS
-Version: 1.2.9
-Date: 2025-04-07
+Version: 1.2.10
+Date: 2026-01-27
 Title: Using Cytogenetics Data in R
 Authors@R: c(person(given = c("Kevin", "R."),
                       family = "Coombes",
