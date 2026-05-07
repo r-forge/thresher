@@ -37,7 +37,8 @@ data(cytobandLocations)
   (hg19), and GRCh38. However, the list of cytobands from UCSC was not
   consistent with the list of cytobands in ISCN 2016. We manually edited
   the source file to be compliant. It also matches the list of cytobands
-  produced at \url{http://cytogps.org}.
+  produced at
+  \url{https://cytogps-app.mangograss-a1cf8a6c.westus2.azurecontainerapps.io/}.
 }
 \author{
   Kevin R. Coombes \email{krc@silicovore.com},

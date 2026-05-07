@@ -55,7 +55,9 @@ readLGF(files = NULL, folder = NULL, verbose = TRUE)
   standard text-based notation (the International Standard for Human
   Cytogenetic/Cytogenomic Nomenclature; ISCN) into binary vectors with
   three bits (loss, gain, or fusion) per cytoband, which we call the LGF
-  model. The web site \url{http://cytogps.org} provides an
+  model. The web site
+  \url{https://cytogps-app.mangograss-a1cf8a6c.westus2.azurecontainerapps.io/}
+  provides an
   implementation that allows users to upload text files containing one
   karyotype per line. It produces its output as a file in JavaScript
   Object Notation (JSON).

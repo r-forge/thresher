@@ -27,7 +27,9 @@ preclean(x, targetColumns, dirt)
   cases, these karyotypes are simply stored as text strings in a local
   database. In particular, they are not checked for synatx or grammar
   errors. By contrast, the implementation of the CytoGPS algorithm at
-  the web site \url{http://cytogps.org} uses a formal approach with
+  the web site
+  \url{https://cytogps-app.mangograss-a1cf8a6c.westus2.azurecontainerapps.io/}
+  uses a formal approach with
   lexer and parser. As a result, many karyotypes are rejected by the
   system.
 

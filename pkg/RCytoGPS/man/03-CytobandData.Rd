@@ -48,7 +48,8 @@ CytobandData(data, info, genome = NULL)
   microsope. Karyotyping relies on a technique known as Giemsa staining,
   which creates a banding pattern along the chromosome of different
   shades of gray. The Loss-Gain-Fusion (LGF) model implemented at the
-  \url{http://cytogps.org} web site converts text-based karyotypes into
+  \url{https://cytogps-app.mangograss-a1cf8a6c.westus2.azurecontainerapps.io/}
+  web site converts text-based karyotypes into
   binary vectors, stored in JSON files. Our \code{\link{readLGF}}
   function parses the JSON files to create R data structures, including
   cytoband-resolution summaries of the frequencies of
